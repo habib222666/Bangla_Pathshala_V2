@@ -1473,3 +1473,26 @@ body.dark .paper h1 {
 .paper #poet{
   font-family:"TeeshtaMJ-Regular" !important;
 }
+
+/* Mobile: keep Home and Library on the same row */
+@media (max-width: 720px) {
+  .side-nav {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+
+  .side-nav > #navHome,
+  .side-nav > #navLibrary {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  .side-nav > #navClasses {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+  }
+}
