@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>বাংলা পাঠশালা</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-wrap">
+      <div class="brand-logo" aria-hidden="true">
+        <span class="book">📖</span><span class="leaf">🌿</span>
+      </div>
+      <div>
+        <div class="brand-name">বাংলা পাঠশালা</div>
+        <div class="brand-tagline">কবিতা দিয়ে মন হোক রঙিন</div>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <div class="top-action-row">
+        <button id="topFavorites" class="top-action" type="button"><span>♡</span><small>প্রিয় কবিতা</small></button>
+        <button id="topSettings" class="top-action" type="button"><span>🌙</span><small>ডার্ক মোড</small></button>
+      </div>
+      <div class="top-search-row">
+        <input id="topSearchTitle" class="search-box top-search" placeholder="⌕ কবিতার নামে কবিতা খুঁজুন" autocomplete="off">
+        <input id="topSearchPoet" class="search-box top-search" placeholder="⌕ কবির নামে কবিতা খুঁজুন" autocomplete="off">
+      </div>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <nav class="side-nav" aria-label="প্রধান মেনু">
+        <button class="nav-item active" id="navHome" type="button"><span class="nav-icon">⌂</span><span>হোম</span></button>
+        <button class="nav-item" id="navLibrary" type="button"><span class="nav-icon">▣</span><span>লাইব্রেরি</span></button>
+        <div class="nav-classes" id="navClasses"></div>
+      </nav>
+      <div class="sidebar-art" aria-hidden="true">
+        <div class="books">📚</div>
+        <div>পড়ি&nbsp; · &nbsp;জানি&nbsp; · &nbsp;বড় হই</div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section id="home" class="dashboard">
+        <div class="class-banner">
+          <div class="banner-icon">🎓</div>
+          <div>
+            <h1 id="homeClassTitle">প্রথম শ্রেণি</h1>
+            <p id="homeClassCount">মোট কবিতা: ৬ টি</p>
+          </div>
+          <div class="banner-art">☁️ ☀️ 🌿</div>
+        </div>
+        <div class="section-tools">
+          <div class="welcome">আজ কী পড়বে?</div>
+          <input id="homeSearch" class="search-box" placeholder="⌕ সব শ্রেণির কবিতা খুঁজুন" autocomplete="off">
+<button id="homeFavoriteBtn" class="soft-btn" type="button">♡ প্রিয় কবিতা</button>
+          <button id="homeDarkModeBtn" class="soft-btn" type="button">🌙 ডার্ক মোড</button>
+          <button id="homeContentsBtn" class="soft-btn" type="button">📖 সূচিপত্র</button>
+        </div>
+        <div id="homeList" class="poem-grid"></div>
+      </section>
+
+      <section id="contents" class="hidden dashboard">
+        <div class="section-tools">
+          <h2 id="contentsHeading">📖 সূচিপত্র</h2>
+          <div id="contentsClassName"></div>
+        </div>
+        <div id="contentsTableWrap"></div>
+      </section>
+
+      <section id="library" class="hidden dashboard">
+        <div class="class-banner">
+          <div class="banner-icon">🎓</div>
+          <div>
+            <h1 id="classTitle">প্রথম শ্রেণি</h1>
+            <p id="classCount">মোট কবিতা: ০ টি</p>
+          </div>
+          <div class="banner-art">☁️ ☀️ 🌿</div>
+        </div>
+        <div class="section-tools">
+<button id="classContentsBtn" class="soft-btn" type="button">📖 সূচিপত্র</button>
+        </div>
+        <div id="list" class="poem-grid"></div>
+      </section>
+
+      <section id="reader" class="hidden reader-view">
+        <div class="reader-actions">
+          <button id="back" class="soft-btn" type="button">← কবিতার তালিকা</button>
+          <button id="editBtn" class="soft-btn" type="button">✎ সম্পাদনা করুন</button>
+        </div>
+        <div id="reciteControls" class="hidden recite-controls">
+          <button id="speakBtn" type="button">🎙 আবৃত্তি শুরু</button>
+          <button id="pauseBtn" type="button">Ⅱ বিরতি</button>
+          <button id="resumeBtn" type="button">▶ আবার চালাও</button>
+          <button id="stopBtn" type="button">■ বন্ধ করো</button>
+        </div>
+        <article class="paper">
+          <div id="meta" class="muted"></div>
+          <h1 id="title"></h1>
+          <div id="poet" class="muted"></div>
+          <pre id="text"></pre>
+          <div id="editArea" class="hidden">
+            <textarea id="editText"></textarea>
+            <div class="editActions">
+              <button id="saveBtn" type="button">💾 সংরক্ষণ করুন</button>
+              <button id="cancelBtn" type="button">↩ বাতিল</button>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+
+
+
+</body>
+</html>

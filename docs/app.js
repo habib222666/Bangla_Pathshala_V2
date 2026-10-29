@@ -11,8 +11,8 @@ const VIEWER_MODE =
   typeof Android !== "undefined" &&
   typeof Android.isViewer === "function" &&
   Android.isViewer();
-const SUPABASE_URL = "https://ugdrciphpwceufjiywei.supabase.co";
-const SUPABASE_KEY = "sb_publishable_B8Lnn_hdd_w2obG2_eWvfA_TwLLRUE9";
+const SUPABASE_URL = "https://gycyxkieruvqvlucxzkl.supabase.co";
+const SUPABASE_KEY = "sb_publishable_xDwG72KglVj5qT6fF9Utig_zepfttD2";
 
 
 
