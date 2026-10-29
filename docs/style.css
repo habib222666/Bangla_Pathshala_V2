@@ -38,7 +38,7 @@ button{cursor:pointer}
 .brand-logo{width:68px;height:68px;position:relative;display:flex;align-items:center;justify-content:center}
 .brand-logo .book{font-size:49px;filter:saturate(.9)}
 .brand-logo .leaf{position:absolute;top:3px;right:7px;font-size:25px}
-.brand-name{font-size:32px;line-height:1.05;font-weight:900;color:#15519a;letter-spacing:-.8px}
+.brand-name{font-size:32px;line-height:1.05;font-weight:900;color:#ff0000;letter-spacing:-.8px}
 .brand-tagline{font-size:16px;color:#5f7da4;margin-top:5px}
 .top-actions{display:flex;gap:30px;align-items:center}
 .top-action{border:0;background:transparent;color:#2d5e98;display:flex;flex-direction:column;align-items:center;gap:0;padding:5px 4px;box-shadow:none}
