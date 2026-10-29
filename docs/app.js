@@ -1175,9 +1175,9 @@ window.addEventListener("beforeunload",()=>{
 
     const btn = document.createElement("button");
     btn.id = "addPoemBtn";
-    btn.textContent = "➕ নতুন কবিতা যোগ করুন";
+    btn.textContent = "📚 ➕ নতুন কবিতা যোগ করুন";
     btn.style.cssText =
-      "display:block;margin:12px 0;padding:12px 18px;border:0;border-radius:12px;font-size:16px;cursor:pointer;background:#ffe0ec;";
+      "display:inline-block;flex:1;min-width:0;margin:0;padding:12px 10px;border:0;border-radius:12px;font-size:16px;cursor:pointer;background:#ffe0ec;";
 
     const bar = library.querySelector(".bar");
     if (bar) bar.after(btn);
@@ -1191,8 +1191,12 @@ window.addEventListener("beforeunload",()=>{
     oldBookBtn.id = "oldBookPoemBtn";
     oldBookBtn.textContent = "📚 পুরোনো বইয়ের কবিতা যোগ করুন";
     oldBookBtn.style.cssText =
-      "display:block;margin:0 0 12px 0;padding:12px 18px;border:0;border-radius:12px;font-size:16px;cursor:pointer;background:#e8e0ff;";
-    btn.after(oldBookBtn);
+      "display:inline-block;flex:1;min-width:0;margin:0;padding:12px 10px;border:0;border-radius:12px;font-size:16px;cursor:pointer;background:#e8e0ff;";
+
+    const buttonRow = document.createElement("div");
+    buttonRow.style.cssText = "display:flex;gap:10px;width:100%;margin:12px 0;";
+    btn.parentNode.insertBefore(buttonRow, btn);
+    buttonRow.append(btn, oldBookBtn);
 
     oldBookBtn.onclick = function () {
       showOldBookPoemForm();
