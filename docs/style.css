@@ -1497,16 +1497,62 @@ body.dark .paper h1 {
   }
 }
 
-/* Class selection heading above all class buttons */
-.nav-class-heading {
-  display: block;
-  width: 100%;
+
+
+
+/* Full Bangla Pathshala card in the sidebar */
+.side-nav > .class-banner {
   box-sizing: border-box;
-  padding: 10px 12px 8px;
-  margin: 8px 0 4px;
-  color: #b91c1c;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.5;
-  text-align: left;
+  width: 100%;
+  height: auto;
+  min-height: 82px;
+  padding: 10px;
+  margin: 10px 0 12px;
+  gap: 6px;
+  border-radius: 16px;
+}
+
+.side-nav > .class-banner .banner-icon {
+  flex: 0 0 36px;
+  width: 36px;
+  margin: 0;
+  font-size: 32px;
+}
+
+.side-nav > .class-banner h1 {
+  font-size: 18px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.side-nav > .class-banner p {
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+.side-nav > .class-banner .banner-art {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .side-nav > .class-banner {
+    order: 2;
+    flex: 0 0 100%;
+    width: 100%;
+    min-height: 76px;
+    margin: 6px 0 8px;
+    padding: 9px 12px;
+  }
+
+  .side-nav > #navHome,
+  .side-nav > #navLibrary {
+    order: 1;
+  }
+
+  .side-nav > #navClasses {
+    order: 3;
+    flex: 0 0 100%;
+    width: 100%;
+  }
 }
