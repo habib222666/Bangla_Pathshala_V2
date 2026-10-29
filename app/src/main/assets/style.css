@@ -1375,3 +1375,17 @@ body.dark .paper h1 {
   color: #666 !important;
   border-color: rgba(100,100,100,.25) !important;
 }
+
+/* Class selection heading above all class buttons */
+.nav-class-heading {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px 8px;
+  margin: 8px 0 4px;
+  color: #b91c1c;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: left;
+}

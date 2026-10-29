@@ -1496,3 +1496,17 @@ body.dark .paper h1 {
     width: 100% !important;
   }
 }
+
+/* Class selection heading above all class buttons */
+.nav-class-heading {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px 8px;
+  margin: 8px 0 4px;
+  color: #b91c1c;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: left;
+}
