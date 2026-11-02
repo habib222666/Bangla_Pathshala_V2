@@ -843,6 +843,17 @@ function updateClassNavCounts(){
     const countEl = btn.querySelector(".class-count");
     if(countEl) countEl.textContent = `কবিতা: ${toBanglaNumber(total)}টি`;
   });
+
+  const totalPoems = Object.values(classData).reduce(
+    (sum, poems) => sum + (poems || []).length, 0
+  );
+  const summary = document.getElementById("navClasses");
+  if(summary) {
+    summary.setAttribute(
+      "data-summary",
+      `১০টি শ্রেণি উপলব্ধ\n(${toBanglaNumber(totalPoems)}) টি কবিতা উপলব্ধ`
+    );
+  }
 }
 
 function updateNav(c){

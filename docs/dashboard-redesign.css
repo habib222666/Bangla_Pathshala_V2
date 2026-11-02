@@ -1434,7 +1434,9 @@ body.dark .top-search-row .poet-filter {
 }
 
 #navClasses::after {
-  content: "১০টি শ্রেণি উপলব্ধ";
+  content: attr(data-summary);
+  white-space: pre-line;
+  text-align: right;
   position: absolute;
   top: 0;
   right: 0;
