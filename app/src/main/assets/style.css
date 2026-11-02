@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "SolaimanLipi";
+  src: url("./fonts/SolaimanLipi.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 *{box-sizing:border-box}
 :root{
   --blue:#24569a;
@@ -10,7 +18,7 @@
   --page:#fbfcff;
   --sidebar:#ffffff;
 }
-html,body{margin:0;min-height:100%;background:var(--page);color:var(--text);font-family:"Noto Sans Bengali","Noto Sans",system-ui,sans-serif}
+html,body{margin:0;min-height:100%;background:var(--page);color:var(--text);font-family:"SolaimanLipi",sans-serif}
 body{overflow-x:hidden}
 button,input,textarea{font:inherit}
 button{cursor:pointer}
@@ -79,7 +87,7 @@ button{cursor:pointer}
 .reader-view{max-width:900px;margin:0 auto}
 .reader-actions{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px}
 .paper{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px 32px;box-shadow:0 8px 24px rgba(39,65,100,.07)}
-.paper h1{text-align:center;color:#1747a6;font-size:34px;margin:8px 0}.paper #poet{text-align:center;margin:0 0 24px}.paper pre{white-space:pre-wrap;font-family:"Noto Sans Bengali",sans-serif;font-size:19px;line-height:1.9;margin:0;color:#172338}
+.paper h1{text-align:center;color:#1747a6;font-size:34px;margin:8px 0}.paper #poet{text-align:center;margin:0 0 24px}.paper pre{white-space:pre-wrap;font-family:"SolaimanLipi",sans-serif;font-size:19px;line-height:1.9;margin:0;color:#172338}
 .recite-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.recite-controls button{border:0;border-radius:16px;padding:9px 12px;background:#eef5ff;color:#245da1}
 #editText{width:100%;min-height:300px;border:1px solid #dce5ef;border-radius:16px;padding:14px;line-height:1.8;resize:vertical}.editActions{display:flex;gap:10px;margin-top:10px}.editActions button{flex:1;border:0;border-radius:14px;padding:11px}.editActions #saveBtn{background:#e2f7e7;color:#28713d}.editActions #cancelBtn{background:#f4f4f4;color:#555}
 .empty{grid-column:1/-1;background:#fff;border:1px dashed #d9e2ed;border-radius:20px;padding:35px;text-align:center;color:#718096}

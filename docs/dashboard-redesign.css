@@ -18,7 +18,7 @@
 body {
   background: var(--bp-bg);
   color: var(--bp-navy);
-  font-family: "Noto Sans Bengali", "Noto Sans", system-ui, sans-serif;
+  font-family: "SolaimanLipi", sans-serif;
   transition: background .25s ease, color .25s ease;
 }
 
@@ -1573,5 +1573,27 @@ body.dark .top-search-row .poet-filter {
   #home .class-banner {
     min-height: 135px !important;
     padding: 15px 16px !important;
+  }
+}
+
+/* ===== HOME BANNER FIXED 120PX EVERYWHERE ===== */
+#home .class-banner {
+  height: 120px !important;
+  min-height: 120px !important;
+  max-height: 120px !important;
+  box-sizing: border-box !important;
+  padding: 10px 20px !important;
+}
+
+#home .class-banner-content {
+  min-height: 0 !important;
+}
+
+@media (max-width: 520px) {
+  #home .class-banner {
+    height: 120px !important;
+    min-height: 120px !important;
+    max-height: 120px !important;
+    padding: 8px 16px !important;
   }
 }

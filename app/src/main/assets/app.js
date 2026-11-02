@@ -423,7 +423,7 @@ if(editBtn){
     if(!editor) return;
 
     editor.style.fontFamily =
-      '"Nirmala UI","Noto Sans Bengali",sans-serif';
+      '"SolaimanLipi",sans-serif';
 
     const existing = savedText(currentPoem);
 
@@ -1014,7 +1014,7 @@ function show(x){
   const displayText = savedText(x);
 
   poemTextEl.style.fontFamily =
-    '"Nirmala UI","Noto Sans Bengali",sans-serif';
+    '"SolaimanLipi",sans-serif';
 
   poemTextEl.innerHTML =
     /<[^>]+>/.test(displayText)
