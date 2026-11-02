@@ -2144,3 +2144,17 @@ body.dark .card .excerpt * {
   -webkit-text-fill-color: #e2e8f0 !important;
   background: transparent !important;
 }
+
+/* ===== DARK MODE: ADD POEM BUTTON TEXT ===== */
+body.dark #addPoemBtn,
+body.dark #oldBookPoemBtn {
+  background: #2563a8 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1px solid #60a5fa !important;
+}
+
+body.dark #addPoemBtn:hover,
+body.dark #oldBookPoemBtn:hover {
+  background: #1d4ed8 !important;
+}
