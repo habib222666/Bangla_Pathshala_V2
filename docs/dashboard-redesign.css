@@ -2090,3 +2090,57 @@ body.dark select:disabled {
   color: #94a3b8 !important;
   opacity: .75;
 }
+
+
+/* ===== DARK MODE: CLASS BUTTONS + POEM PREVIEW READABILITY ===== */
+
+body.dark #navClasses .nav-class,
+body.dark #navClasses .nav-class:nth-child(n) {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
+  border-color: #475569 !important;
+}
+
+body.dark #navClasses .nav-class .nav-label {
+  color: #f8fafc !important;
+  font-weight: 800 !important;
+}
+
+body.dark #navClasses .nav-class .class-count {
+  color: #cbd5e1 !important;
+  font-weight: 700 !important;
+}
+
+body.dark #navClasses .nav-class .nav-icon {
+  color: #bfdbfe !important;
+}
+
+body.dark #navClasses .nav-class.active,
+body.dark #navClasses .nav-class:hover {
+  background: #334155 !important;
+  color: #ffffff !important;
+  border-color: #60a5fa !important;
+}
+
+body.dark .card {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #475569 !important;
+}
+
+body.dark .card h3 {
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+}
+
+body.dark .card .poet {
+  color: #86efac !important;
+  -webkit-text-fill-color: #86efac !important;
+}
+
+body.dark .card .excerpt,
+body.dark .card .excerpt * {
+  color: #e2e8f0 !important;
+  -webkit-text-fill-color: #e2e8f0 !important;
+  background: transparent !important;
+}

@@ -738,6 +738,16 @@ function poemCardExcerpt(x){
 
   blocks.slice(0, 3).forEach(block => {
     const clone = block.cloneNode(true);
+
+    if(document.body.classList.contains("dark")){
+      [clone, ...clone.querySelectorAll("*")].forEach(el => {
+        el.style.removeProperty("color");
+        el.style.removeProperty("background");
+        el.style.removeProperty("background-color");
+        el.style.removeProperty("-webkit-text-fill-color");
+      });
+    }
+
     previewBox.appendChild(clone);
   });
 
@@ -748,9 +758,10 @@ function poemCardExcerpt(x){
 function poemCardHTML(x, i){
   const image = x.image ? `<img src="${x.image}" alt="" onerror="this.style.display='none'">` : "📚";
   const realIndex=(classData[String(x.class)]||[]).indexOf(x);
-  const cardColor = poemCardColor(x, i);
-  const titleColor = ["#7a159b","#0574d0","#dc214f","#6c18be","#e86b00","#cf0a8b","#168b39","#006bb9","#8a3ffc","#b44b00","#087f5b","#9c2c77","#3454d1","#a23e48","#2b9348","#7b2cbf","#c44536","#15616d","#9a031e","#4f772d","#6a4c93","#9c6644","#386641","#7f5539","#3a506b","#5f0f40","#3d405b","#8338ec","#006d77","#9b5de5"][(Number(i)) % 30];
-  const poetColor = ["#00695c","#ad1457","#283593","#ef6c00","#2e7d32","#6d4c41","#00838f","#c62828","#4527a0","#558b2f","#5d4037","#0277bd","#6a1b9a","#9e9d24","#37474f","#d84315","#1b5e20","#1565c0","#880e4f","#4e342e","#00897b","#bf360c","#303f9f","#33691e","#795548","#00796b","#e65100","#512da8","#827717","#263238"][(Number(i)) % 30];
+  const isDark = document.body.classList.contains("dark");
+  const cardColor = isDark ? "#1e293b" : poemCardColor(x, i);
+  const titleColor = isDark ? "#f8fafc" : ["#7a159b","#0574d0","#dc214f","#6c18be","#e86b00","#cf0a8b","#168b39","#006bb9","#8a3ffc","#b44b00","#087f5b","#9c2c77","#3454d1","#a23e48","#2b9348","#7b2cbf","#c44536","#15616d","#9a031e","#4f772d","#6a4c93","#9c6644","#386641","#7f5539","#3a506b","#5f0f40","#3d405b","#8338ec","#006d77","#9b5de5"][(Number(i)) % 30];
+  const poetColor = isDark ? "#86efac" : ["#00695c","#ad1457","#283593","#ef6c00","#2e7d32","#6d4c41","#00838f","#c62828","#4527a0","#558b2f","#5d4037","#0277bd","#6a1b9a","#9e9d24","#37474f","#d84315","#1b5e20","#1565c0","#880e4f","#4e342e","#00897b","#bf360c","#303f9f","#33691e","#795548","#00796b","#e65100","#512da8","#827717","#263238"][(Number(i)) % 30];
   return `<div class="card" data-i="${i}" data-class="${x.class}" style="background:${cardColor} !important;">
     <button class="favoriteBtn" data-fav="${i}" aria-label="প্রিয় কবিতা">${isFavorite(x) ? "♥" : "♡"}</button>
     ${VIEWER_MODE ? "" : `<button class="deleteUserPoem" data-index="${realIndex}" data-class="${x.class}" type="button" onclick="event.preventDefault();event.stopPropagation();deleteUserPoem(this.dataset.class,this.dataset.index);return false;">🗑</button>`}
