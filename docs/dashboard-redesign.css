@@ -1725,56 +1725,66 @@ body.dark .top-search-row .poet-filter {
   }
 }
 
-/* ===== FINAL MOBILE BANNER CENTER FIX ===== */
+/* ===== FINAL HOME BANNER CENTER ALIGNMENT ===== */
+
+/* Desktop and web */
+#home .class-banner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 120px !important;
+  min-height: 120px !important;
+  max-height: 120px !important;
+  padding: 8px 20px !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+}
+
+#home .class-banner-content {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 2px !important;
+  text-align: center !important;
+}
+
+#home .class-banner-content h2,
+#home .class-banner-content h1,
+#home .class-banner-content p {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+}
+
+/* Phone: same center alignment, shorter banner */
 @media (max-width: 720px) {
   #home .class-banner {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    height: 120px !important;
-    min-height: 120px !important;
-    max-height: 120px !important;
-    padding: 6px 12px !important;
-    box-sizing: border-box !important;
-    text-align: center !important;
-  }
-
-  #home .class-banner-content {
-    display: flex !important;
-    flex: 1 1 100% !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    gap: 2px !important;
-    text-align: center !important;
-  }
-
-  #home .class-banner-content h2,
-  #home .class-banner-content h1,
-  #home .class-banner-content p {
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    text-align: center !important;
+    height: 100px !important;
+    min-height: 100px !important;
+    max-height: 100px !important;
+    padding: 5px 12px !important;
   }
 
   #home .class-banner-content h2 {
-    font-size: 14px !important;
-    line-height: 1.3 !important;
+    font-size: 13px !important;
+    line-height: 1.25 !important;
   }
 
   #home .class-banner-content h1 {
-    font-size: 18px !important;
-    line-height: 1.3 !important;
+    font-size: 16px !important;
+    line-height: 1.25 !important;
   }
 
   #home .class-banner-content p {
-    font-size: 11px !important;
-    line-height: 1.35 !important;
+    font-size: 9px !important;
+    line-height: 1.3 !important;
   }
 }
