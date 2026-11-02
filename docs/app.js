@@ -1869,7 +1869,7 @@ function bpPrintPoems(poems, documentTitle) {
       <section class="bp-print-poem">
         <div class="bp-print-meta">${esc(classLabel)}</div>
         <h2>${esc(poem.title || "নাম নেই")}</h2>
-        ${poem.poet ? `<div class="bp-print-poet">কবি: ${esc(poem.poet)}</div>` : ""}
+        ${poem.poet ? `<div class="bp-print-poet">${esc(poem.poet)}</div>` : ""}
         <div class="bp-print-text">${poemBody(poem)}</div>
       </section>`;
   }).join("");
@@ -1910,7 +1910,11 @@ function bpPrintPoems(poems, documentTitle) {
         font-weight: bold;
         margin: 12px 0;
       }
-      #bpPrintRoot .bp-print-meta,
+      #bpPrintRoot .bp-print-meta {
+        text-align: left;
+        font-size: 15px;
+        margin: 5px 0 12px;
+      }
       #bpPrintRoot .bp-print-poet {
         text-align: center;
         font-size: 15px;
