@@ -476,12 +476,11 @@ if(favoriteFilter){
 
 const homeSearch=document.querySelector("#homeSearch");
 const topSearchTitle=document.querySelector("#topSearchTitle");
-const topSearchPoet=document.querySelector("#topSearchPoet");
+const topSearchPoetSelect=document.querySelector("#topSearchPoetSelect");
 const homeFavoriteBtn=document.querySelector("#homeFavoriteBtn");
 const homeDarkModeBtn=document.querySelector("#homeDarkModeBtn");
 
 /* ===== Top-right controls ===== */
-
 const topFavorites=document.querySelector("#topFavorites");
 const topSettings=document.querySelector("#topSettings");
 
@@ -497,41 +496,102 @@ if(topSettings && homeDarkModeBtn){
   });
 }
 
+/* Populate poet dropdown from all classes */
+function populatePoetDropdown(){
+  if(!topSearchPoetSelect) return;
+
+  const poetMap = new Map();
+
+  Object.keys(classData).forEach(function(key){
+    (classData[key] || []).forEach(function(poem){
+      const poet = String(poem.poet || "").trim();
+      if(poet && !poetMap.has(poet.toLowerCase())){
+        poetMap.set(poet.toLowerCase(), poet);
+      }
+    });
+  });
+
+  const poets = Array.from(poetMap.values())
+    .sort(function(a,b){ return a.localeCompare(b, "bn"); });
+
+  topSearchPoetSelect.innerHTML = '<option value="">সকল কবি</option>';
+
+  poets.forEach(function(poet){
+    const option = document.createElement("option");
+    option.value = poet;
+    option.textContent = poet;
+    topSearchPoetSelect.appendChild(option);
+  });
+}
+
 function runTopSearch(type, value){
-  const q=(value||"").trim().toLowerCase();
+  const q = String(value || "").trim().toLowerCase();
 
   if(!q){
-    home.classList.remove("hidden");
-    library.classList.add("hidden");
-    reader.classList.add("hidden");
+    globalSearchMode = false;
+    globalSearchResults = [];
+    showHome();
     return;
   }
 
-  const results=[];
+  const results = [];
 
-  for(let c=1;c<=12;c++){
-    (classData[String(c)]||[]).forEach(function(poem){
+  Object.keys(classData).forEach(function(key){
+    (classData[key] || []).forEach(function(poem){
       const field = type === "poet"
-        ? String(poem.poet||"")
-        : String(poem.title||"");
+        ? String(poem.poet || "")
+        : String(poem.title || "");
 
       if(field.toLowerCase().includes(q)){
         results.push(poem);
       }
     });
-  }
+  });
 
   home.classList.add("hidden");
   reader.classList.add("hidden");
   library.classList.remove("hidden");
 
-  globalSearchMode=true;
-  globalSearchResults=results;
-  selectedClasses=[1];
+  globalSearchMode = true;
+  globalSearchResults = results;
+  selectedClasses = [1];
 
   document.querySelector("#classTitle").textContent =
-    type === "poet" ? "কবির নামে সার্চ ফলাফল" : "কবিতার নামে সার্চ ফলাফল";
+    "কবিতার নামে সার্চ ফলাফল";
+  document.querySelector("#classCount").textContent =
+    `পাওয়া গেছে: ${toBanglaNumber(results.length)} টি`;
 
+  renderPoems(list, results);
+}
+
+function showPoetResults(poet){
+  if(!poet){
+    globalSearchMode = false;
+    globalSearchResults = [];
+    showHome();
+    return;
+  }
+
+  const selected = poet.trim().toLowerCase();
+  const results = [];
+
+  Object.keys(classData).forEach(function(key){
+    (classData[key] || []).forEach(function(poem){
+      if(String(poem.poet || "").trim().toLowerCase() === selected){
+        results.push(poem);
+      }
+    });
+  });
+
+  home.classList.add("hidden");
+  reader.classList.add("hidden");
+  library.classList.remove("hidden");
+
+  globalSearchMode = true;
+  globalSearchResults = results;
+  selectedClasses = [1];
+
+  document.querySelector("#classTitle").textContent = "কবি: " + poet;
   document.querySelector("#classCount").textContent =
     `পাওয়া গেছে: ${toBanglaNumber(results.length)} টি`;
 
@@ -540,15 +600,15 @@ function runTopSearch(type, value){
 
 if(topSearchTitle){
   topSearchTitle.addEventListener("input", function(){
-    if(topSearchPoet) topSearchPoet.value="";
+    if(topSearchPoetSelect) topSearchPoetSelect.value = "";
     runTopSearch("title", this.value);
   });
 }
 
-if(topSearchPoet){
-  topSearchPoet.addEventListener("input", function(){
-    if(topSearchTitle) topSearchTitle.value="";
-    runTopSearch("poet", this.value);
+if(topSearchPoetSelect){
+  topSearchPoetSelect.addEventListener("change", function(){
+    if(topSearchTitle) topSearchTitle.value = "";
+    showPoetResults(this.value);
   });
 }
 
@@ -761,7 +821,7 @@ function buildClassNav(){
 
     btn.type = "button";
 
-    btn.innerHTML = `<span class="nav-icon">📚</span><span>${group.label} শ্রেণি</span>`;
+    btn.innerHTML = `<span class="nav-icon">📚</span><span class="nav-label">${group.label} শ্রেণি</span><small class="class-count">কবিতা: ০টি</small>`;
 
     btn.addEventListener("click", function(){
 
@@ -774,6 +834,17 @@ function buildClassNav(){
   });
 
 }
+function updateClassNavCounts(){
+  document.querySelectorAll("#navClasses .nav-class").forEach(btn => {
+    const classes = btn.dataset.class.split("-").map(Number);
+    const total = classes.reduce((sum, cls) => {
+      return sum + (classData[String(cls)] || []).length;
+    }, 0);
+    const countEl = btn.querySelector(".class-count");
+    if(countEl) countEl.textContent = `কবিতা: ${toBanglaNumber(total)}টি`;
+  });
+}
+
 function updateNav(c){
 
   const classes = c == null
@@ -868,14 +939,14 @@ function showHome(){
 
   reader.classList.add('hidden');
 
-  document.querySelector('#homeClassTitle').textContent="বাংলা পাঠশালা";
+  document.querySelector('#homeClassTitle').textContent="শ্রেণি ভিত্তিক কবিতা সমূহ";
 
-  document.querySelector('#homeClassCount').textContent="শ্রেণি নির্বাচন করুন";
+  document.querySelector('#homeClassCount').textContent="পছন্দের শ্রেণি নির্বাচন করুন";
 
   const homeList = document.querySelector('#homeList');
 
   if(homeList){
-    homeList.innerHTML='<div class="empty">উপরের All Class থেকে একটি শ্রেণি নির্বাচন করুন।</div>';
+    homeList.innerHTML='<div class="empty">উপরের সকল শ্রেণি থেকে যেকোনো একটি শ্রেণি নির্বাচন করুন।</div>';
   }
 
   updateNav(null);
@@ -1668,8 +1739,10 @@ async function initializeCloudSync() {
   console.log("Cloud sync starting...");
 
   const loaded = await loadPoemsFromSupabase();
+  populatePoetDropdown();
 
   if (loaded) {
+    updateClassNavCounts();
     items = classData[1] || [];
 
     if (!home.classList.contains("hidden")) {
