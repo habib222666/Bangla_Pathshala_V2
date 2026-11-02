@@ -1817,3 +1817,276 @@ body.dark .top-search-row .poet-filter {
     flex: 0 0 30px !important;
   }
 }
+
+
+
+/* =====================================================
+   FINAL DARK MODE READABILITY FIX - ALL MAIN SECTIONS
+   Light Mode remains unchanged
+   ===================================================== */
+
+body.dark {
+  color-scheme: dark;
+  --text: #e2e8f0;
+  --muted: #aab8ce;
+  --line: #334155;
+  --panel: #1e293b;
+  --page: #0f172a;
+  --sidebar: #111b2a;
+  --bp-bg: #0f172a;
+  --bp-muted: #aab8ce;
+  --bp-border: #334155;
+  --bp-card: #1e293b;
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+/* Main layout and navigation */
+body.dark .topbar,
+body.dark .sidebar,
+body.dark .paper {
+  background: #111b2a !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+
+body.dark .content,
+body.dark .app-shell {
+  background: #0f172a !important;
+}
+
+body.dark .brand-tagline,
+body.dark .welcome,
+body.dark .global-class-label,
+body.dark .muted,
+body.dark #meta {
+  color: #aab8ce !important;
+}
+
+body.dark .top-action,
+body.dark .top-action small,
+body.dark .nav-item,
+body.dark .nav-class {
+  color: #dbeafe !important;
+}
+
+body.dark .nav-item:hover,
+body.dark .nav-class:hover {
+  background: #263750 !important;
+}
+
+body.dark .nav-item.active,
+body.dark .nav-class.active {
+  background: #293b60 !important;
+  color: #ffffff !important;
+}
+
+/* Class banner */
+body.dark .class-banner {
+  background: linear-gradient(105deg, #1b2940, #18263b) !important;
+}
+
+body.dark .class-banner h1,
+body.dark .class-banner p,
+body.dark .class-banner .class-banner-description {
+  color: #e2e8f0 !important;
+}
+
+/* Search fields and filters */
+body.dark input,
+body.dark select,
+body.dark textarea,
+body.dark .search-box,
+body.dark .poet-filter {
+  background-color: #172438 !important;
+  color: #f1f5f9 !important;
+  border-color: #475569 !important;
+}
+
+body.dark input::placeholder,
+body.dark textarea::placeholder {
+  color: #aab8ce !important;
+  opacity: 1 !important;
+}
+
+body.dark select option,
+body.dark select optgroup {
+  background: #172438 !important;
+  color: #f1f5f9 !important;
+}
+
+body.dark input:focus,
+body.dark select:focus,
+body.dark textarea:focus {
+  border-color: #60a5fa !important;
+}
+
+/* General buttons */
+body.dark .soft-btn,
+body.dark .recite-controls button {
+  background: #263b57 !important;
+  color: #dbeafe !important;
+  border-color: #475569 !important;
+}
+
+body.dark .soft-btn:hover,
+body.dark .recite-controls button:hover {
+  background: #344d70 !important;
+}
+
+/* Poem cards */
+body.dark .card {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+
+body.dark .card h3 {
+  color: #e9d5ff !important;
+}
+
+body.dark .card .poet {
+  color: #86efac !important;
+}
+
+body.dark .card .excerpt {
+  color: #e2e8f0 !important;
+  -webkit-text-fill-color: #e2e8f0 !important;
+}
+
+body.dark .card .read-btn {
+  background: #334155 !important;
+  color: #bfdbfe !important;
+}
+
+body.dark .card .favoriteBtn {
+  filter: brightness(1.2);
+}
+
+/* Reader */
+body.dark .paper {
+  background: #111b2a !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+body.dark .paper h1 {
+  color: #93c5fd !important;
+  -webkit-text-fill-color: #93c5fd !important;
+}
+
+body.dark .paper #poet {
+  color: #86efac !important;
+  -webkit-text-fill-color: #86efac !important;
+}
+
+body.dark .paper pre,
+body.dark #text {
+  color: #f1f5f9 !important;
+  -webkit-text-fill-color: #f1f5f9 !important;
+}
+
+/* Editor toolbar */
+body.dark .richToolbar {
+  background: #172438 !important;
+  border-color: #334155 !important;
+}
+
+body.dark .richToolbar button,
+body.dark .richToolbar select {
+  background: #263b57 !important;
+  color: #f1f5f9 !important;
+  border-color: #475569 !important;
+}
+
+body.dark .richToolbar button:hover {
+  background: #344d70 !important;
+}
+
+/* Editable poem area */
+body.dark #editText {
+  background: #172438 !important;
+  color: #f1f5f9 !important;
+  border-color: #475569 !important;
+  caret-color: #ffffff !important;
+}
+
+body.dark #editText:focus {
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, .18) !important;
+}
+
+/* Save and cancel buttons */
+body.dark .editActions #saveBtn {
+  background: #14532d !important;
+  color: #dcfce7 !important;
+}
+
+body.dark .editActions #cancelBtn {
+  background: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Empty states */
+body.dark .empty,
+body.dark .contents-empty {
+  background: #1e293b !important;
+  color: #cbd5e1 !important;
+  border-color: #475569 !important;
+}
+
+/* Contents table: override Light Mode row colors */
+body.dark .contents-table {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #475569 !important;
+}
+
+body.dark .contents-table th,
+body.dark .contents-table td {
+  color: #e2e8f0 !important;
+  border-color: #475569 !important;
+}
+
+body.dark .contents-table thead th {
+  background: #263b57 !important;
+  color: #bfdbfe !important;
+}
+
+body.dark .contents-table thead th:first-child,
+body.dark .contents-table thead th:nth-child(2),
+body.dark .contents-table thead th:nth-child(3) {
+  color: #bfdbfe !important;
+}
+
+body.dark .contents-table tbody tr:nth-child(6n+1),
+body.dark .contents-table tbody tr:nth-child(6n+2),
+body.dark .contents-table tbody tr:nth-child(6n+3),
+body.dark .contents-table tbody tr:nth-child(6n+4),
+body.dark .contents-table tbody tr:nth-child(6n+5),
+body.dark .contents-table tbody tr:nth-child(6n+6) {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark .contents-table tbody tr:nth-child(even) {
+  background: #243247 !important;
+}
+
+body.dark .contents-table tbody tr:active {
+  background: #334b68 !important;
+}
+
+/* Sidebar artwork and secondary text */
+body.dark .sidebar-art {
+  background: linear-gradient(180deg, #111b2a, #172438) !important;
+  color: #bfdbfe !important;
+}
+
+/* Keep disabled and secondary text readable */
+body.dark button:disabled,
+body.dark input:disabled,
+body.dark select:disabled {
+  color: #94a3b8 !important;
+  opacity: .75;
+}
