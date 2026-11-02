@@ -1818,3 +1818,188 @@ if(classContentsBtn){
     renderContents();
   });
 }
+
+
+// ===== Bangla Pathshala: PDF / Print =====
+function bpPrintPoems(poems, documentTitle) {
+  if (!Array.isArray(poems) || poems.length === 0) {
+    alert("প্রিন্ট করার মতো কোনো কবিতা পাওয়া যায়নি।");
+    return;
+  }
+
+  let root = document.getElementById("bpPrintRoot");
+  if (!root) {
+    root = document.createElement("div");
+    root.id = "bpPrintRoot";
+    document.body.appendChild(root);
+  }
+
+  function esc(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) {
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+    });
+  }
+
+  function poemBody(poem) {
+    const raw = String(savedText(poem) || "");
+    const holder = document.createElement("div");
+
+    if (/<[a-z][\s\S]*>/i.test(raw)) {
+      holder.innerHTML = raw;
+    } else {
+      holder.textContent = raw;
+      return esc(holder.textContent).replace(/\r?\n/g, "<br>");
+    }
+
+    holder.querySelectorAll("script,iframe,object,embed,form,button").forEach(el => el.remove());
+    holder.querySelectorAll("*").forEach(el => {
+      Array.from(el.attributes).forEach(attr => {
+        if (/^on/i.test(attr.name) || (attr.name === "href" && /^\s*javascript:/i.test(attr.value))) {
+          el.removeAttribute(attr.name);
+        }
+      });
+    });
+    return holder.innerHTML;
+  }
+
+  const poemHtml = poems.map(function(poem, index) {
+    const classNo = Number(poem.class);
+    const classLabel = (classNames[classNo] || classNo) + " শ্রেণি";
+    return `
+      <section class="bp-print-poem">
+        <div class="bp-print-meta">${esc(classLabel)}</div>
+        <h2>${esc(poem.title || "নাম নেই")}</h2>
+        ${poem.poet ? `<div class="bp-print-poet">কবি: ${esc(poem.poet)}</div>` : ""}
+        <div class="bp-print-text">${poemBody(poem)}</div>
+      </section>`;
+  }).join("");
+
+  root.innerHTML = `
+    <style>
+      @font-face {
+        font-family: "BPPrintFont";
+        src: url("fonts/SolaimanLipi.ttf") format("truetype");
+        font-weight: 400;
+      }
+      #bpPrintRoot {
+        display: none;
+        background: #fff;
+        color: #111;
+        font-family: "BPPrintFont", "SolaimanLipi", sans-serif;
+      }
+      #bpPrintRoot .bp-print-heading {
+        text-align: center;
+        font-size: 25px;
+        margin: 0 0 24px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #bbb;
+      }
+      #bpPrintRoot .bp-print-poem {
+        break-after: page;
+        page-break-after: always;
+        padding: 0;
+        color: #111;
+      }
+      #bpPrintRoot .bp-print-poem:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+      #bpPrintRoot h2 {
+        text-align: center;
+        font-size: 25px;
+        font-weight: bold;
+        margin: 12px 0;
+      }
+      #bpPrintRoot .bp-print-meta,
+      #bpPrintRoot .bp-print-poet {
+        text-align: center;
+        font-size: 15px;
+        margin: 5px 0 12px;
+      }
+      #bpPrintRoot .bp-print-text {
+        font-size: 19px;
+        line-height: 1.9;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+      #bpPrintRoot .bp-print-text p {
+        margin: 0 0 8px;
+      }
+      #bpPrintRoot .bp-print-text img {
+        max-width: 100%;
+        height: auto;
+      }
+      @page { size: A4; margin: 18mm 16mm; }
+      @media print {
+        html, body {
+          display: block !important;
+          background: #fff !important;
+          color: #111 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        body > *:not(#bpPrintRoot) {
+          display: none !important;
+        }
+        body > #bpPrintRoot {
+          display: block !important;
+          visibility: visible !important;
+          position: static !important;
+          width: 100% !important;
+          background: #fff !important;
+          color: #111 !important;
+        }
+        #bpPrintRoot * {
+          visibility: visible !important;
+          color: #111 !important;
+          text-shadow: none !important;
+          box-shadow: none !important;
+        }
+      }
+    </style>
+    <h1 class="bp-print-heading">${esc(documentTitle)}</h1>
+    ${poemHtml}
+  `;
+
+  const startPrint = function() {
+    if (window.Android && typeof window.Android.printPage === "function") {
+      window.Android.printPage();
+    } else {
+      window.print();
+    }
+  };
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(startPrint).catch(startPrint);
+  } else {
+    setTimeout(startPrint, 250);
+  }
+}
+
+document.getElementById("printAllBtn")?.addEventListener("click", function() {
+  const allPoems = [];
+  for (let c = 1; c <= 12; c++) {
+    allPoems.push(...(classData[String(c)] || []));
+  }
+  bpPrintPoems(allPoems, "বাংলাপাঠশালা — সকল শ্রেণির কবিতা");
+});
+
+document.getElementById("printClassBtn")?.addEventListener("click", function() {
+  if (!selectedClasses || selectedClasses.length === 0) {
+    alert("আগে একটি শ্রেণি নির্বাচন করুন।");
+    return;
+  }
+  const poems = selectedClasses.flatMap(c => classData[String(c)] || []);
+  const title = selectedClasses.length === 2 && selectedClasses[0] === 9
+    ? "নবম–দশম শ্রেণির কবিতা"
+    : selectedClasses.length === 2 && selectedClasses[0] === 11
+      ? "একাদশ–দ্বাদশ শ্রেণির কবিতা"
+      : (classNames[selectedClasses[0]] || selectedClasses[0]) + " শ্রেণির কবিতা";
+  bpPrintPoems(poems, title);
+});
+
+document.getElementById("printPoemBtn")?.addEventListener("click", function() {
+  if (currentPoem) {
+    bpPrintPoems([currentPoem], currentPoem.title || "কবিতা");
+  }
+});

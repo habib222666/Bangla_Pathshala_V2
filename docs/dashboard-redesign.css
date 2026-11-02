@@ -2158,3 +2158,16 @@ body.dark #addPoemBtn:hover,
 body.dark #oldBookPoemBtn:hover {
   background: #1d4ed8 !important;
 }
+
+
+/* ===== PDF / PRINT ACTION BUTTONS ===== */
+#printAllBtn,
+#printClassBtn,
+#printPoemBtn {
+  white-space: normal;
+}
+
+/* Keep the print document out of the normal screen view. */
+#bpPrintRoot {
+  display: none;
+}
