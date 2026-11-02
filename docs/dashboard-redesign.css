@@ -2171,3 +2171,9 @@ body.dark #oldBookPoemBtn:hover {
 #bpPrintRoot {
   display: none;
 }
+
+/* Reader navigation and edit buttons */
+#back.soft-btn,
+#editBtn.soft-btn {
+  font-size: 14px !important;
+}
