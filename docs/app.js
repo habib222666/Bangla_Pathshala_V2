@@ -1918,7 +1918,7 @@ function bpPrintPoems(poems, documentTitle) {
       #bpPrintRoot .bp-print-poet {
         text-align: center;
         font-size: 15px;
-        margin: 5px 0 12px;
+        margin: 5px 0 40px;
       }
       #bpPrintRoot .bp-print-text {
         font-size: 19px;
