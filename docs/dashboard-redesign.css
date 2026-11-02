@@ -1599,3 +1599,182 @@ body.dark .top-search-row .poet-filter {
     padding: 8px 16px !important;
   }
 }
+
+/* ===== MOBILE CLASS BUTTONS - SHORTER HEIGHT ===== */
+@media (max-width: 520px) {
+  #navClasses .nav-class {
+    height: 86px !important;
+    min-height: 86px !important;
+    max-height: 86px !important;
+    padding: 5px 5px !important;
+    gap: 4px !important;
+    box-sizing: border-box !important;
+  }
+
+  #navClasses .nav-class .nav-icon {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    flex: 0 0 30px !important;
+    font-size: 17px !important;
+  }
+
+  #navClasses .nav-class .nav-label {
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+  }
+
+  #navClasses .nav-class .class-count {
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+/* ===== MOBILE HOME BANNER CENTER ALIGNMENT ===== */
+@media (max-width: 520px) {
+  #home .class-banner {
+    text-align: center !important;
+  }
+
+  #home .class-banner-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  #home .class-banner-content h1,
+  #home .class-banner-content h2,
+  #home .class-banner-content p {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  /* Center all class card contents */
+  #navClasses .nav-class {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  #navClasses .nav-class .nav-icon,
+  #navClasses .nav-class .nav-label,
+  #navClasses .nav-class .class-count {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+  }
+}
+
+/* ===== MOBILE BANNER TRUE CENTER - ALL THREE TEXTS ===== */
+@media (max-width: 520px) {
+  #home .class-banner {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    height: 120px !important;
+    min-height: 120px !important;
+    max-height: 120px !important;
+    padding: 6px 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  #home .class-banner-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    gap: 2px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  #home .class-banner-content h2,
+  #home .class-banner-content h1,
+  #home .class-banner-content p {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  #home .class-banner-content h2 {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+  }
+
+  #home .class-banner-content h1 {
+    font-size: 17px !important;
+    line-height: 1.35 !important;
+  }
+
+  #home .class-banner-content p {
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* ===== FINAL MOBILE BANNER CENTER FIX ===== */
+@media (max-width: 720px) {
+  #home .class-banner {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 120px !important;
+    min-height: 120px !important;
+    max-height: 120px !important;
+    padding: 6px 12px !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+
+  #home .class-banner-content {
+    display: flex !important;
+    flex: 1 1 100% !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 2px !important;
+    text-align: center !important;
+  }
+
+  #home .class-banner-content h2,
+  #home .class-banner-content h1,
+  #home .class-banner-content p {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  #home .class-banner-content h2 {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+  }
+
+  #home .class-banner-content h1 {
+    font-size: 18px !important;
+    line-height: 1.3 !important;
+  }
+
+  #home .class-banner-content p {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+}
