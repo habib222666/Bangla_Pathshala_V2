@@ -24,6 +24,7 @@
       <div class="top-action-row">
         <button id="topFavorites" class="top-action" type="button"><span>♡</span><small>প্রিয় কবিতা</small></button>
         <button id="topSettings" class="top-action" type="button"><span>🌙</span><small>ডার্ক মোড</small></button>
+        <button id="adminLoginBtn" class="top-action" type="button"><span>🔐</span><small>Admin Login</small></button>
       </div>
       <div class="top-search-row">
         <input id="topSearchTitle" class="search-box top-search" placeholder="⌕ কবিতার নাম লিখে খুঁজুন" autocomplete="off">
@@ -108,6 +109,16 @@
           <div id="meta" class="muted"></div>
           <h1 id="title"></h1>
           <div id="poet" class="muted"></div>
+          <button id="poetBioButton" class="hidden" type="button">📖 কবি পরিচিতি পড়ুন</button>
+          <section id="poetBioPanel" class="hidden" aria-live="polite">
+            <button id="poetBioClose" type="button">বন্ধ করুন ✕</button>
+            <img id="poetBioPhoto" class="hidden" alt="কবির ছবি">
+            <h2 id="poetBioName"></h2>
+            <p id="poetBioYears"></p>
+            <p id="poetBioShort"></p>
+            <div id="poetBioText"></div>
+            <p id="poetBioSources"></p>
+          </section>
           <pre id="text"></pre>
           <div id="editArea" class="hidden">
             <div class="richToolbar" id="richToolbar">
@@ -221,6 +232,48 @@
         </article>
       </section>
     </main>
+  </div>
+
+  <div id="adminLoginModal" class="hidden" role="dialog" aria-modal="true" aria-labelledby="adminLoginTitle">
+    <div class="admin-login-panel">
+      <button id="adminLoginClose" type="button" aria-label="বন্ধ করুন">✕</button>
+      <h2 id="adminLoginTitle">Admin Login</h2>
+      <p id="adminLoginStatus">কবি পরিচিতি পরিচালনার জন্য লগইন করুন।</p>
+      <form id="adminLoginForm">
+        <label for="adminLoginEmail">ইমেইল</label>
+        <input id="adminLoginEmail" type="email" autocomplete="username" required>
+        <label for="adminLoginPassword">পাসওয়ার্ড</label>
+        <input id="adminLoginPassword" type="password" autocomplete="current-password" required>
+        <button id="adminLoginSubmit" type="submit">লগইন করুন</button>
+      </form>
+      <button id="adminLogoutBtn" class="hidden" type="button">লগআউট</button>
+
+      <section id="poetAdminPanel" class="hidden">
+        <hr>
+        <h3>কবি পরিচিতি পরিচালনা</h3>
+        <form id="poetProfileForm">
+          <input id="poetProfileId" type="hidden">
+          <label for="poetProfileName">কবির নাম *</label>
+          <input id="poetProfileName" type="text" required>
+          <label for="poetProfileBirth">জন্মসাল</label>
+          <input id="poetProfileBirth" type="text" placeholder="যেমন: ১৮৯৯">
+          <label for="poetProfileDeath">মৃত্যুসাল</label>
+          <input id="poetProfileDeath" type="text" placeholder="যেমন: ১৯৭৬">
+          <label for="poetProfilePhoto">ছবির URL</label>
+          <input id="poetProfilePhoto" type="url">
+          <label for="poetProfileShort">সংক্ষিপ্ত পরিচিতি</label>
+          <textarea id="poetProfileShort" rows="3"></textarea>
+          <label for="poetProfileBiography">বিস্তারিত জীবনী</label>
+          <textarea id="poetProfileBiography" rows="7"></textarea>
+          <label for="poetProfileSources">তথ্যসূত্র</label>
+          <textarea id="poetProfileSources" rows="3"></textarea>
+          <button id="poetProfileSave" type="submit">💾 সংরক্ষণ করুন</button>
+          <button id="poetProfileCancel" type="button">বাতিল</button>
+        </form>
+        <h3>সংরক্ষিত কবিদের তালিকা</h3>
+        <div id="poetProfileList">তথ্য লোড হচ্ছে...</div>
+      </section>
+    </div>
   </div>
 
   <script src="app.js"></script>

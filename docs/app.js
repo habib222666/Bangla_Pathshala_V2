@@ -6,22 +6,86 @@ let speaking=false;
 let globalSearchMode=false;
 let globalSearchResults=[];
 let selectedClasses=[1];
+let poetBioRequestId = 0;
 
 const VIEWER_MODE =
   typeof Android !== "undefined" &&
   typeof Android.isViewer === "function" &&
   Android.isViewer();
-const SUPABASE_URL = "https://gycyxkieruvqvlucxzkl.supabase.co";
+const SUPABASE_URL = "https" + String.fromCharCode(58,47,47) + "gycyxkieruvqvlucxzkl" + ".supabase.co";
 const SUPABASE_KEY = "sb_publishable_xDwG72KglVj5qT6fF9Utig_zepfttD2";
 
 
 
+const ADMIN_UID = "be427014-37d6-41a1-8474-a7b166e18c49";
+const ADMIN_SESSION_KEY = "bp_poet_admin_session";
+let adminSession = null;
+
+function saveAdminSession(session) {
+  adminSession = session;
+  if (session) {
+    localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(session));
+  } else {
+    localStorage.removeItem(ADMIN_SESSION_KEY);
+  }
+  updateAdminLoginUI();
+}
+
+async function refreshAdminSession() {
+  if (!adminSession || !adminSession.refresh_token) return null;
+
+  try {
+    const response = await fetch(
+      SUPABASE_URL + "/auth/v1/token?grant_type=refresh_token",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          refresh_token: adminSession.refresh_token
+        })
+      }
+    );
+
+    if (!response.ok) throw new Error("Session refresh failed");
+
+    const data = await response.json();
+    if (!data.user || data.user.id !== ADMIN_UID) {
+      throw new Error("Unauthorized admin account");
+    }
+
+    data.expires_at = Math.floor(Date.now() / 1000) + Number(data.expires_in || 3600);
+    saveAdminSession(data);
+    return data;
+  } catch (error) {
+    saveAdminSession(null);
+    return null;
+  }
+}
+
+async function getValidAdminSession() {
+  if (!adminSession) return null;
+
+  if (Number(adminSession.expires_at || 0) <= Math.floor(Date.now() / 1000) + 60) {
+    return await refreshAdminSession();
+  }
+
+  return adminSession;
+}
+
 async function supabaseRequest(path="", options={}) {
+  const session = await getValidAdminSession();
+  const token = session && session.access_token
+    ? session.access_token
+    : SUPABASE_KEY;
+
   const response = await fetch(SUPABASE_URL + "/rest/v1/" + path, {
     ...options,
     headers: {
       "apikey": SUPABASE_KEY,
-      "Authorization": "Bearer " + SUPABASE_KEY,
+      "Authorization": "Bearer " + token,
       "Content-Type": "application/json",
       ...(options.headers || {})
     }
@@ -37,6 +101,439 @@ async function supabaseRequest(path="", options={}) {
   return text ? JSON.parse(text) : null;
 }
 
+function updateAdminLoginUI() {
+  const button = document.getElementById("adminLoginBtn");
+  const form = document.getElementById("adminLoginForm");
+  const logout = document.getElementById("adminLogoutBtn");
+  const status = document.getElementById("adminLoginStatus");
+  const modal = document.getElementById("adminLoginModal");
+
+  if (VIEWER_MODE) {
+    if (button) button.classList.add("hidden");
+    if (modal) modal.classList.add("hidden");
+    return;
+  }
+
+  const loggedIn = !!(adminSession && adminSession.user &&
+    adminSession.user.id === ADMIN_UID);
+
+  if (button) {
+    button.classList.remove("hidden");
+    button.innerHTML = loggedIn
+      ? "<span>✓</span><small>Admin Logged In</small>"
+      : "<span>🔐</span><small>Admin Login</small>";
+  }
+
+  if (form) form.classList.toggle("hidden", loggedIn);
+  if (logout) logout.classList.toggle("hidden", !loggedIn);
+  const poetPanel = document.getElementById("poetAdminPanel");
+  if (poetPanel) poetPanel.classList.toggle("hidden", !loggedIn);
+
+  if (status) {
+    status.textContent = loggedIn
+      ? "Admin হিসেবে লগইন করা হয়েছে।"
+      : "কবি পরিচিতি পরিচালনার জন্য লগইন করুন।";
+  }
+}
+
+async function restoreAdminSession() {
+  if (VIEWER_MODE) return;
+
+  try {
+    const saved = localStorage.getItem(ADMIN_SESSION_KEY);
+    if (saved) {
+      adminSession = JSON.parse(saved);
+      if (!adminSession.user || adminSession.user.id !== ADMIN_UID) {
+        saveAdminSession(null);
+      } else {
+        await getValidAdminSession();
+      }
+    }
+  } catch (error) {
+    saveAdminSession(null);
+  }
+
+  updateAdminLoginUI();
+  if (adminSession && adminSession.user && adminSession.user.id === ADMIN_UID) {
+    await loadPoetProfilesAdmin();
+  }
+}
+
+function initializeAdminLogin() {
+  const modal = document.getElementById("adminLoginModal");
+  const button = document.getElementById("adminLoginBtn");
+  const close = document.getElementById("adminLoginClose");
+  const form = document.getElementById("adminLoginForm");
+  const logout = document.getElementById("adminLogoutBtn");
+  const status = document.getElementById("adminLoginStatus");
+  const password = document.getElementById("adminLoginPassword");
+
+  if (VIEWER_MODE) {
+    updateAdminLoginUI();
+    return;
+  }
+
+  button?.addEventListener("click", function() {
+    modal?.classList.remove("hidden");
+    updateAdminLoginUI();
+  });
+
+  close?.addEventListener("click", function() {
+    modal?.classList.add("hidden");
+  });
+
+  modal?.addEventListener("click", function(event) {
+    if (event.target === modal) modal.classList.add("hidden");
+  });
+
+  form?.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("adminLoginEmail").value.trim();
+    const enteredPassword = password.value;
+    const submit = document.getElementById("adminLoginSubmit");
+
+    submit.disabled = true;
+    submit.textContent = "যাচাই হচ্ছে...";
+    status.textContent = "Supabase-এর সঙ্গে সংযোগ করা হচ্ছে...";
+
+    try {
+      const response = await fetch(
+        SUPABASE_URL + "/auth/v1/token?grant_type=password",
+        {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: email,
+            password: enteredPassword
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.msg || data.message || data.error_description || "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।");
+      }
+
+      if (!data.user || data.user.id !== ADMIN_UID) {
+        throw new Error("এই অ্যাকাউন্টটি অনুমোদিত Admin নয়।");
+      }
+
+      data.expires_at = Math.floor(Date.now() / 1000) + Number(data.expires_in || 3600);
+      saveAdminSession(data);
+      await loadPoetProfilesAdmin();
+      password.value = "";
+      status.textContent = "Admin Login সফল হয়েছে।";
+    } catch (error) {
+      status.textContent = error.message || "Login করা যায়নি। আবার চেষ্টা করুন।";
+      console.error("Admin login error:", error);
+    } finally {
+      submit.disabled = false;
+      submit.textContent = "লগইন করুন";
+    }
+  });
+
+  logout?.addEventListener("click", async function() {
+    const session = adminSession;
+    saveAdminSession(null);
+    modal?.classList.add("hidden");
+
+    if (session && session.access_token) {
+      try {
+        await fetch(SUPABASE_URL + "/auth/v1/logout", {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + session.access_token
+          }
+        });
+      } catch (error) {
+        console.warn("Supabase logout request failed:", error);
+      }
+    }
+  });
+
+  restoreAdminSession();
+}
+
+initializeAdminLogin();
+
+
+// ===== POET PROFILE: READER + ADMIN =====
+
+async function loadPoetProfileForReader(poetName) {
+  const requestId = ++poetBioRequestId;
+  const button = document.getElementById("poetBioButton");
+  const panel = document.getElementById("poetBioPanel");
+  const photo = document.getElementById("poetBioPhoto");
+
+  if (button) button.classList.add("hidden");
+  if (panel) panel.classList.add("hidden");
+  if (photo) {
+    photo.classList.add("hidden");
+    photo.removeAttribute("src");
+  }
+
+  if (!poetName.trim()) return;
+
+  try {
+    const rows = await supabaseRequest(
+      "poet_profiles?select=id,poet_name,birth_year,death_year,photo_url,short_bio,biography,sources&poet_name=eq." +
+      encodeURIComponent(poetName.trim()) +
+      "&limit=1"
+    );
+
+    if (requestId !== poetBioRequestId) return;
+
+    if (!Array.isArray(rows) || !rows.length) return;
+
+    const profile = rows[0];
+    document.getElementById("poetBioName").textContent = profile.poet_name || "";
+    document.getElementById("poetBioYears").textContent =
+      [profile.birth_year, profile.death_year].filter(Boolean).join(" – ");
+    document.getElementById("poetBioShort").textContent = profile.short_bio || "";
+    document.getElementById("poetBioText").textContent = profile.biography || "";
+    document.getElementById("poetBioText").style.whiteSpace = "pre-wrap";
+    document.getElementById("poetBioSources").textContent =
+      profile.sources ? "তথ্যসূত্র: " + profile.sources : "";
+
+    if (profile.photo_url) {
+      try {
+        const url = new URL(profile.photo_url);
+        if (url.protocol === "https:" || url.protocol === "http:") {
+          photo.src = url.href;
+          photo.classList.remove("hidden");
+          photo.onerror = () => photo.classList.add("hidden");
+        }
+      } catch (_) {
+        photo.classList.add("hidden");
+      }
+    }
+
+    if (button) button.classList.remove("hidden");
+  } catch (error) {
+    console.error("Poet profile load error:", error);
+  }
+}
+
+function initializePoetProfileReader() {
+  const button = document.getElementById("poetBioButton");
+  const panel = document.getElementById("poetBioPanel");
+  const close = document.getElementById("poetBioClose");
+
+  button?.addEventListener("click", () => {
+    panel?.classList.remove("hidden");
+  });
+
+  close?.addEventListener("click", () => {
+    panel?.classList.add("hidden");
+  });
+}
+
+function resetPoetProfileForm() {
+  const form = document.getElementById("poetProfileForm");
+  if (form) form.reset();
+  const id = document.getElementById("poetProfileId");
+  if (id) id.value = "";
+  const save = document.getElementById("poetProfileSave");
+  if (save) save.textContent = "💾 সংরক্ষণ করুন";
+}
+
+function isPoetAdmin() {
+  return !VIEWER_MODE &&
+    !!(adminSession && adminSession.user && adminSession.user.id === ADMIN_UID);
+}
+
+async function loadPoetProfilesAdmin() {
+  const list = document.getElementById("poetProfileList");
+  if (!list || !isPoetAdmin()) return;
+
+  list.textContent = "কবিদের তালিকা লোড হচ্ছে...";
+
+  try {
+    const rows = await supabaseRequest(
+      "poet_profiles?select=id,poet_name,birth_year,death_year&order=poet_name.asc"
+    );
+
+    list.replaceChildren();
+
+    if (!Array.isArray(rows) || !rows.length) {
+      list.textContent = "এখনো কোনো কবির পরিচিতি যোগ করা হয়নি।";
+      return;
+    }
+
+    rows.forEach(profile => {
+      const item = document.createElement("div");
+      item.className = "poet-admin-item";
+
+      const name = document.createElement("strong");
+      name.textContent = profile.poet_name || "";
+      item.appendChild(name);
+
+      const years = document.createElement("span");
+      years.textContent =
+        [profile.birth_year, profile.death_year].filter(Boolean).join(" – ");
+      item.appendChild(years);
+
+      const edit = document.createElement("button");
+      edit.type = "button";
+      edit.textContent = "✏️ Edit";
+      edit.addEventListener("click", () => editPoetProfile(profile.id));
+      item.appendChild(edit);
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.textContent = "🗑 Delete";
+      remove.addEventListener("click", () => deletePoetProfile(profile.id, profile.poet_name));
+      item.appendChild(remove);
+
+      list.appendChild(item);
+    });
+  } catch (error) {
+    list.textContent = "তালিকা লোড করা যায়নি: " + error.message;
+    console.error("Poet profile list error:", error);
+  }
+}
+
+async function editPoetProfile(id) {
+  if (!isPoetAdmin()) return;
+
+  try {
+    const rows = await supabaseRequest(
+      "poet_profiles?select=*&id=eq." + encodeURIComponent(id) + "&limit=1"
+    );
+
+    if (!rows || !rows.length) {
+      alert("কবির তথ্য পাওয়া যায়নি।");
+      return;
+    }
+
+    const p = rows[0];
+    document.getElementById("poetProfileId").value = p.id;
+    document.getElementById("poetProfileName").value = p.poet_name || "";
+    document.getElementById("poetProfileBirth").value = p.birth_year || "";
+    document.getElementById("poetProfileDeath").value = p.death_year || "";
+    document.getElementById("poetProfilePhoto").value = p.photo_url || "";
+    document.getElementById("poetProfileShort").value = p.short_bio || "";
+    document.getElementById("poetProfileBiography").value = p.biography || "";
+    document.getElementById("poetProfileSources").value = p.sources || "";
+    document.getElementById("poetProfileSave").textContent = "💾 পরিবর্তন সংরক্ষণ করুন";
+
+    document.getElementById("poetProfileName").focus();
+  } catch (error) {
+    alert("তথ্য খোলা যায়নি: " + error.message);
+  }
+}
+
+async function deletePoetProfile(id, poetName) {
+  if (!isPoetAdmin()) return;
+  if (!confirm('"' + poetName + '"-এর পরিচিতি মুছে ফেলতে চান?')) return;
+
+  try {
+    await supabaseRequest(
+      "poet_profiles?id=eq." + encodeURIComponent(id),
+      { method: "DELETE" }
+    );
+    resetPoetProfileForm();
+    await loadPoetProfilesAdmin();
+    alert("কবির পরিচিতি মুছে ফেলা হয়েছে।");
+  } catch (error) {
+    alert("মুছে ফেলা যায়নি: " + error.message);
+  }
+}
+
+function initializePoetProfileAdmin() {
+  if (VIEWER_MODE) return;
+
+  const form = document.getElementById("poetProfileForm");
+  const cancel = document.getElementById("poetProfileCancel");
+
+  form?.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (!isPoetAdmin()) {
+      alert("কবি পরিচিতি পরিবর্তনের জন্য Admin Login প্রয়োজন।");
+      return;
+    }
+
+    const id = document.getElementById("poetProfileId").value.trim();
+    const poetName = document.getElementById("poetProfileName").value.trim();
+    if (!poetName) {
+      alert("কবির নাম লিখুন।");
+      return;
+    }
+
+    const photoUrl = document.getElementById("poetProfilePhoto").value.trim();
+    if (photoUrl) {
+      try {
+        const url = new URL(photoUrl);
+        if (url.protocol !== "https:" && url.protocol !== "http:") {
+          throw new Error("Invalid protocol");
+        }
+      } catch (_) {
+        alert("ছবির সঠিক URL দিন।");
+        return;
+      }
+    }
+
+    const payload = {
+      poet_name: poetName,
+      birth_year: document.getElementById("poetProfileBirth").value.trim() || null,
+      death_year: document.getElementById("poetProfileDeath").value.trim() || null,
+      photo_url: photoUrl || null,
+      short_bio: document.getElementById("poetProfileShort").value.trim() || null,
+      biography: document.getElementById("poetProfileBiography").value.trim() || null,
+      sources: document.getElementById("poetProfileSources").value.trim() || null,
+      updated_at: new Date().toISOString()
+    };
+
+    const save = document.getElementById("poetProfileSave");
+    save.disabled = true;
+    save.textContent = "সংরক্ষণ হচ্ছে...";
+
+    try {
+      if (id) {
+        await supabaseRequest(
+          "poet_profiles?id=eq." + encodeURIComponent(id),
+          {
+            method: "PATCH",
+            headers: { "Prefer": "return=minimal" },
+            body: JSON.stringify(payload)
+          }
+        );
+      } else {
+        await supabaseRequest("poet_profiles", {
+          method: "POST",
+          headers: { "Prefer": "return=minimal" },
+          body: JSON.stringify(payload)
+        });
+      }
+
+      resetPoetProfileForm();
+      await loadPoetProfilesAdmin();
+      alert("কবির পরিচিতি সফলভাবে সংরক্ষণ হয়েছে।");
+    } catch (error) {
+      alert("সংরক্ষণ করা যায়নি: " + error.message);
+      console.error("Poet profile save error:", error);
+    } finally {
+      save.disabled = false;
+      if (document.getElementById("poetProfileId").value) {
+        save.textContent = "💾 পরিবর্তন সংরক্ষণ করুন";
+      } else {
+        save.textContent = "💾 সংরক্ষণ করুন";
+      }
+    }
+  });
+
+  cancel?.addEventListener("click", resetPoetProfileForm);
+}
+
+initializePoetProfileReader();
+initializePoetProfileAdmin();
 
 async function loadPoemsFromSupabase() {
   try {
@@ -1102,6 +1599,7 @@ function show(x){
 
   document.querySelector("#poet").textContent=
     x.poet ? x.poet : "";
+  loadPoetProfileForReader(x.poet || "");
 
   const poemTextEl = document.querySelector("#text");
   const displayText = savedText(x);

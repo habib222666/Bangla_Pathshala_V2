@@ -2177,3 +2177,327 @@ body.dark #oldBookPoemBtn:hover {
 #editBtn.soft-btn {
   font-size: 14px !important;
 }
+
+/* ===== ADMIN LOGIN MODAL ===== */
+#adminLoginModal:not(.hidden) {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(15, 23, 42, .62);
+  backdrop-filter: blur(5px);
+}
+
+#adminLoginModal .admin-login-panel {
+  position: relative;
+  width: min(100%, 390px);
+  padding: 28px;
+  border-radius: 18px;
+  background: #fff;
+  color: #1e293b;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+#adminLoginModal #adminLoginClose {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 21px;
+  cursor: pointer;
+}
+
+#adminLoginModal h2 {
+  margin: 0 0 8px;
+  color: #be123c;
+}
+
+#adminLoginStatus {
+  margin: 0 0 18px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+#adminLoginForm label {
+  display: block;
+  margin: 12px 0 5px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+#adminLoginForm input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 43px;
+  padding: 9px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: #fff;
+  color: #1e293b;
+  font: inherit;
+}
+
+#adminLoginSubmit,
+#adminLogoutBtn {
+  width: 100%;
+  min-height: 43px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: 9px;
+  background: #be123c;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+body.dark #adminLoginModal .admin-login-panel {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+body.dark #adminLoginStatus {
+  color: #cbd5e1;
+}
+
+body.dark #adminLoginForm input {
+  background: #0f172a;
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+@media (max-width: 520px) {
+  #adminLoginModal .admin-login-panel {
+    padding: 24px 19px;
+  }
+
+  #adminLoginBtn {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+  }
+}
+
+/* ===== POET BIOGRAPHY READER ===== */
+#poetBioButton {
+  display: inline-block;
+  margin: 12px 0 16px;
+  padding: 9px 15px;
+  border: 0;
+  border-radius: 9px;
+  background: #be123c;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#poetBioPanel {
+  margin: 12px 0 22px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+  color: #1e293b;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+
+#poetBioClose {
+  display: block;
+  margin-left: auto;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: #e2e8f0;
+  color: #334155;
+  cursor: pointer;
+}
+
+#poetBioPhoto {
+  display: block;
+  width: min(100%, 190px);
+  max-height: 230px;
+  margin: 16px auto;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+#poetBioName {
+  margin: 12px 0 5px;
+  color: #be123c;
+}
+
+#poetBioYears {
+  color: #64748b;
+  font-weight: 700;
+}
+
+#poetBioShort {
+  font-weight: 600;
+}
+
+#poetBioText {
+  line-height: 1.95;
+}
+
+#poetBioSources {
+  margin-top: 16px;
+  padding-top: 10px;
+  border-top: 1px solid #cbd5e1;
+  color: #64748b;
+  font-size: 13px;
+}
+
+/* ===== POET ADMIN PANEL ===== */
+#adminLoginModal .admin-login-panel {
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
+}
+
+#poetAdminPanel {
+  margin-top: 20px;
+  padding-top: 8px;
+}
+
+#poetAdminPanel h3 {
+  margin: 18px 0 12px;
+  color: #be123c;
+}
+
+#poetProfileForm label {
+  display: block;
+  margin: 12px 0 5px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#poetProfileForm input:not([type="hidden"]),
+#poetProfileForm textarea {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #1e293b;
+  font: inherit;
+}
+
+#poetProfileForm textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+#poetProfileForm button,
+#poetProfileList button {
+  margin: 12px 6px 4px 0;
+  padding: 9px 13px;
+  border: 0;
+  border-radius: 8px;
+  background: #be123c;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#poetProfileForm button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+#poetProfileList {
+  display: grid;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+#poetProfileList .poet-admin-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 11px;
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+#poetProfileList .poet-admin-item strong {
+  flex: 1 1 100%;
+}
+
+#poetProfileList .poet-admin-item span {
+  flex: 1;
+  color: #64748b;
+  font-size: 13px;
+}
+
+#poetProfileList button {
+  margin: 0;
+  padding: 7px 10px;
+  font-size: 12px;
+}
+
+#poetProfileList button:last-child {
+  background: #b91c1c;
+}
+
+/* ===== DARK MODE ===== */
+body.dark #poetBioPanel {
+  border-color: #475569;
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+body.dark #poetBioName,
+body.dark #poetAdminPanel h3 {
+  color: #fda4af;
+}
+
+body.dark #poetBioYears,
+body.dark #poetBioSources {
+  color: #cbd5e1;
+}
+
+body.dark #poetBioSources {
+  border-color: #475569;
+}
+
+body.dark #poetBioClose {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+body.dark #poetProfileForm input:not([type="hidden"]),
+body.dark #poetProfileForm textarea {
+  border-color: #475569;
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+body.dark #poetProfileList .poet-admin-item {
+  border-color: #475569;
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+body.dark #poetProfileList .poet-admin-item span {
+  color: #cbd5e1;
+}
+
+@media (max-width: 520px) {
+  #poetBioPanel {
+    padding: 14px;
+  }
+
+  #adminLoginModal .admin-login-panel {
+    padding: 22px 16px;
+  }
+}
