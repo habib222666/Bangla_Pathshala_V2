@@ -1961,7 +1961,7 @@ function bpPrintPoems(poems, documentTitle) {
         }
       }
     </style>
-    <h1 class="bp-print-heading">${esc(documentTitle)}</h1>
+    ${documentTitle ? `<h1 class="bp-print-heading">${esc(documentTitle)}</h1>` : ""}
     ${poemHtml}
   `;
 
@@ -2004,6 +2004,6 @@ document.getElementById("printClassBtn")?.addEventListener("click", function() {
 
 document.getElementById("printPoemBtn")?.addEventListener("click", function() {
   if (currentPoem) {
-    bpPrintPoems([currentPoem], currentPoem.title || "কবিতা");
+    bpPrintPoems([currentPoem], "");
   }
 });
