@@ -851,7 +851,7 @@ function updateClassNavCounts(){
   if(summary) {
     summary.setAttribute(
       "data-summary",
-      `১০টি শ্রেণি উপলব্ধ\n(${toBanglaNumber(totalPoems)}) টি কবিতা উপলব্ধ`
+      `১০টি শ্রেণি উপলব্ধ\n${toBanglaNumber(totalPoems)} টি কবিতা উপলব্ধ`
     );
   }
 }
