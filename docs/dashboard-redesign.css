@@ -1536,3 +1536,42 @@ body.dark .top-search-row .poet-filter {
     padding: 8px 6px !important;
   }
 }
+
+/* ===== HOME BANNER COMPACT HEIGHT ===== */
+#home .class-banner {
+  min-height: 145px !important;
+  padding: 18px 26px !important;
+}
+
+#home .class-banner-content {
+  min-height: 0 !important;
+  gap: 3px !important;
+}
+
+#home .class-banner .class-banner-description {
+  margin-top: 3px !important;
+  line-height: 1.6 !important;
+}
+
+/* ===== PERFECT ROUND BOOK ICON CIRCLES ===== */
+#navClasses .nav-class .nav-icon {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  aspect-ratio: 1 / 1 !important;
+  flex: 0 0 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+@media (max-width: 520px) {
+  #home .class-banner {
+    min-height: 135px !important;
+    padding: 15px 16px !important;
+  }
+}
