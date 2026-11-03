@@ -1493,20 +1493,17 @@ function renderContents(classes){
   if(!contents || !className || !wrap) return;
 
   const classList = Array.isArray(classes) ? classes.map(Number) : [];
-
   const allClasses = classList.length === 12 &&
     classList.every((c,i) => c === i + 1);
 
   if(allClasses){
     className.textContent="সকল শ্রেণির কবিতার তালিকা";
-  } else if(classList.length === 2 && classList[0] === 9 && classList[1] === 10){
-    className.textContent="নবম–দশম শ্রেণির কবিতার তালিকা";
-  } else if(classList.length === 2 && classList[0] === 11 && classList[1] === 12){
-    className.textContent="একাদশ–দ্বাদশ শ্রেণির কবিতার তালিকা";
-  } else if(classList.length === 1){
-    className.textContent=(classNames[classList[0]] || classList[0])+" শ্রেণির কবিতার তালিকা";
+  } else if(classList.length===2 && classList[0]===9 && classList[1]===10){
+    className.textContent="নবম–দশম শ্রেণি";
+  } else if(classList.length===2 && classList[0]===11 && classList[1]===12){
+    className.textContent="একাদশ–দ্বাদশ শ্রেণি";
   } else {
-    className.textContent="নির্বাচিত শ্রেণির কবিতার তালিকা";
+    className.textContent=(classNames[classList[0]] || classList[0])+" শ্রেণি";
   }
 
   const poems=[];
@@ -1518,19 +1515,27 @@ function renderContents(classes){
   });
 
   if(poems.length===0){
-    wrap.innerHTML="<div class=\"contents-empty\">কোনো কবিতা পাওয়া যায়নি।</div>";
+    wrap.innerHTML=allClasses
+      ? "<div class=\"contents-empty\">কোনো কবিতা পাওয়া যায়নি।</div>"
+      : "<div class=\"contents-empty\">এই শ্রেণিতে কোনো কবিতা পাওয়া যায়নি।</div>";
     return;
   }
 
+  const lastColumn = allClasses ? "শ্রেণি" : "কবিতার ধরন";
+
   wrap.innerHTML=`<table class="contents-table">
-    <thead><tr><th>নং</th><th>কবিতার নাম</th><th>কবি</th><th>শ্রেণি</th></tr></thead>
+    <thead><tr><th>নং</th><th>কবিতার নাম</th><th>কবি</th><th>${lastColumn}</th></tr></thead>
     <tbody>${poems.map(function(entry,i){
       const poem=entry.poem;
+      const typeText = allClasses
+        ? displayClassName(entry.classNo)
+        : (poem.oldBook ? "পুরোনো কবিতা" : "");
+
       return `<tr data-class="${entry.classNo}" data-index="${entry.index}">
         <td>${toBanglaNumber(i+1)}</td>
         <td>${poem.title || "নাম নেই"}</td>
         <td>${poem.poet || "—"}</td>
-        <td>${displayClassName(entry.classNo)}</td>
+        <td>${typeText}</td>
       </tr>`;
     }).join("")}</tbody>
   </table>`;
