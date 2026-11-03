@@ -120,8 +120,8 @@ function updateAdminLoginUI() {
   if (button) {
     button.classList.remove("hidden");
     button.innerHTML = loggedIn
-      ? "<span>✓</span><small>Admin Logged In</small>"
-      : "<span>🔐</span><small>Admin Login</small>";
+      ? "<span>✓</span><small>এডমিন প্রবেশ করেছেন</small>"
+      : "<span>🔐</span><small>এডমিন</small>";
   }
 
   if (form) form.classList.toggle("hidden", loggedIn);
@@ -131,7 +131,7 @@ function updateAdminLoginUI() {
 
   if (status) {
     status.textContent = loggedIn
-      ? "Admin হিসেবে লগইন করা হয়েছে।"
+      ? "এডমিন হিসেবে প্রবেশ করা হয়েছে।"
       : "কবি পরিচিতি পরিচালনার জন্য লগইন করুন।";
   }
 }
@@ -195,7 +195,7 @@ function initializeAdminLogin() {
 
     submit.disabled = true;
     submit.textContent = "যাচাই হচ্ছে...";
-    status.textContent = "Supabase-এর সঙ্গে সংযোগ করা হচ্ছে...";
+    status.textContent = "সার্ভারের সঙ্গে সংযোগ করা হচ্ছে...";
 
     try {
       const response = await fetch(
@@ -220,16 +220,16 @@ function initializeAdminLogin() {
       }
 
       if (!data.user || data.user.id !== ADMIN_UID) {
-        throw new Error("এই অ্যাকাউন্টটি অনুমোদিত Admin নয়।");
+        throw new Error("এই অ্যাকাউন্টটি অনুমোদিত এডমিন নয়।");
       }
 
       data.expires_at = Math.floor(Date.now() / 1000) + Number(data.expires_in || 3600);
       saveAdminSession(data);
       await loadPoetProfilesAdmin();
       password.value = "";
-      status.textContent = "Admin Login সফল হয়েছে।";
+      status.textContent = "এডমিন হিসেবে সফলভাবে প্রবেশ করেছেন।";
     } catch (error) {
-      status.textContent = error.message || "Login করা যায়নি। আবার চেষ্টা করুন।";
+      status.textContent = error.message || "প্রবেশ করা যায়নি। আবার চেষ্টা করুন।";
       console.error("Admin login error:", error);
     } finally {
       submit.disabled = false;
@@ -381,13 +381,13 @@ async function loadPoetProfilesAdmin() {
 
       const edit = document.createElement("button");
       edit.type = "button";
-      edit.textContent = "✏️ Edit";
+      edit.textContent = "✏️ সম্পাদনা";
       edit.addEventListener("click", () => editPoetProfile(profile.id));
       item.appendChild(edit);
 
       const remove = document.createElement("button");
       remove.type = "button";
-      remove.textContent = "🗑 Delete";
+      remove.textContent = "🗑 মুছুন";
       remove.addEventListener("click", () => deletePoetProfile(profile.id, profile.poet_name));
       item.appendChild(remove);
 
@@ -456,7 +456,7 @@ function initializePoetProfileAdmin() {
     event.preventDefault();
 
     if (!isPoetAdmin()) {
-      alert("কবি পরিচিতি পরিবর্তনের জন্য Admin Login প্রয়োজন।");
+      alert("কবি পরিচিতি পরিবর্তনের জন্য এডমিন হিসেবে প্রবেশ করতে হবে।");
       return;
     }
 
