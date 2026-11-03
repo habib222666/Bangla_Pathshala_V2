@@ -2603,3 +2603,31 @@ body.dark #poetProfileList .poet-admin-item span {
     font-size: 10px;
   }
 }
+
+
+/* ===== HOME BANNER TEXT SIZE UPDATE ===== */
+#home .class-banner h2#homeClassTitle {
+  font-size: 18px !important;
+}
+
+#home .class-banner h1#homeClassCount {
+  font-size: clamp(25px, 3.2vw, 31px) !important;
+}
+
+#home .class-banner .class-banner-description {
+  font-size: 14px !important;
+}
+
+@media (max-width: 520px) {
+  #home .class-banner h2#homeClassTitle {
+    font-size: 16px !important;
+  }
+
+  #home .class-banner h1#homeClassCount {
+    font-size: 24px !important;
+  }
+
+  #home .class-banner .class-banner-description {
+    font-size: 12px !important;
+  }
+}

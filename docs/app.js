@@ -1484,20 +1484,38 @@ function toBanglaNumber(n){
   return String(n).replace(/[0-9]/g, function(d){ return "০১২৩৪৫৬৭৮৯"[Number(d)]; });
 }
 
-function renderContents(){
+function renderContents(classes){
+
   const contents=document.querySelector("#contents");
   const className=document.querySelector("#contentsClassName");
   const wrap=document.querySelector("#contentsTableWrap");
+
   if(!contents || !className || !wrap) return;
 
-  className.textContent="সকল শ্রেণির কবিতার তালিকা";
+  const classList = Array.isArray(classes) ? classes.map(Number) : [];
+
+  const allClasses = classList.length === 12 &&
+    classList.every((c,i) => c === i + 1);
+
+  if(allClasses){
+    className.textContent="সকল শ্রেণির কবিতার তালিকা";
+  } else if(classList.length === 2 && classList[0] === 9 && classList[1] === 10){
+    className.textContent="নবম–দশম শ্রেণির কবিতার তালিকা";
+  } else if(classList.length === 2 && classList[0] === 11 && classList[1] === 12){
+    className.textContent="একাদশ–দ্বাদশ শ্রেণির কবিতার তালিকা";
+  } else if(classList.length === 1){
+    className.textContent=(classNames[classList[0]] || classList[0])+" শ্রেণির কবিতার তালিকা";
+  } else {
+    className.textContent="নির্বাচিত শ্রেণির কবিতার তালিকা";
+  }
 
   const poems=[];
-  for(let c=1;c<=12;c++){
+
+  classList.forEach(function(c){
     (classData[String(c)] || []).forEach(function(poem,index){
       poems.push({poem:poem,classNo:c,index:index});
     });
-  }
+  });
 
   if(poems.length===0){
     wrap.innerHTML="<div class=\"contents-empty\">কোনো কবিতা পাওয়া যায়নি।</div>";
@@ -1534,7 +1552,7 @@ if(homeContentsBtn){
     library.classList.add("hidden");
     reader.classList.add("hidden");
     document.querySelector("#contents").classList.remove("hidden");
-    renderContents();
+    renderContents(Array.from({length:12}, (_,i) => i+1));
   });
 }
 
@@ -2315,7 +2333,7 @@ if(classContentsBtn){
     library.classList.add("hidden");
     reader.classList.add("hidden");
     document.querySelector("#contents").classList.remove("hidden");
-    renderContents();
+    renderContents(selectedClasses);
   });
 }
 
