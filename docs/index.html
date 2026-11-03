@@ -59,7 +59,13 @@
         <div class="nav-classes" id="navClasses"></div>
 
         <div class="section-tools">
-          <div class="welcome">আজ কী পড়বে?</div>
+          <button id="homePoetProfilesBtn" class="poet-home-card" type="button">
+  <span class="poet-home-icon">📚</span>
+  <span class="poet-home-title">কবিদের পরিচিতি</span>
+  <span class="poet-home-subtitle">বাংলা সাহিত্যের কবিদের জীবন ও সাহিত্যকর্ম সম্পর্কে জানুন</span>
+  <span id="homePoetCount" class="poet-home-count">কবি লোড হচ্ছে...</span>
+  <span class="poet-home-arrow">›</span>
+</button>
           <input id="homeSearch" class="search-box" placeholder="⌕ সব শ্রেণির কবিতা খুঁজুন" autocomplete="off">
 <button id="homeFavoriteBtn" class="soft-btn" type="button">♡ প্রিয় কবিতা</button>
           <button id="homeDarkModeBtn" class="soft-btn" type="button">🌙 ডার্ক মোড</button>
@@ -69,7 +75,39 @@
         <div id="homeList" class="poem-grid"></div>
       </section>
 
-      <section id="contents" class="hidden dashboard">
+
+
+
+<section id="poetProfilesPage" class="hidden dashboard">
+  <div class="poet-page-header">
+    <button id="poetProfilesHomeBtn" type="button" class="poet-back-btn">← প্রচ্ছদে ফিরুন</button>
+    <h2>কবিদের পরিচিতি</h2>
+    <p>বাংলা সাহিত্যের কবিদের জীবন ও সাহিত্যকর্ম সম্পর্কে জানুন</p>
+  </div>
+
+  <div id="poetProfilesList" class="poet-public-grid">
+    <div class="empty">কবিদের তালিকা লোড হচ্ছে...</div>
+  </div>
+
+  <article id="poetProfileDetail" class="poet-public-detail hidden">
+    <button id="poetProfileBackToList" type="button" class="poet-back-btn">← সকল কবি</button>
+    <div class="poet-detail-heading">
+      <img id="publicPoetPhoto" class="poet-public-photo hidden" alt="কবির ছবি">
+      <div>
+        <h2 id="publicPoetName"></h2>
+        <p id="publicPoetYears"></p>
+        <p id="publicPoetShort"></p>
+      </div>
+    </div>
+    <h3>জীবনী</h3>
+    <div id="publicPoetBiography" class="poet-public-biography"></div>
+    <div id="publicPoetSourcesWrap" class="poet-public-sources-wrap">
+      <h3>তথ্যসূত্র</h3>
+      <div id="publicPoetSources"></div>
+    </div>
+  </article>
+</section>
+<section id="contents" class="hidden dashboard">
         <div class="section-tools">
           <h2 id="contentsHeading">📖 সূচিপত্র</h2>
           <div id="contentsClassName"></div>

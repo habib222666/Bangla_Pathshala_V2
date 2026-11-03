@@ -1456,29 +1456,182 @@ function openClass(c){
 
 }
 function showHome(){
-
   document.querySelector("#contents")?.classList.add("hidden");
-
-  home.classList.remove('hidden');
-
-  library.classList.add('hidden');
-
-  reader.classList.add('hidden');
-
+  document.querySelector("#poetProfilesPage")?.classList.add("hidden");
+  home.classList.remove("hidden");
+  library.classList.add("hidden");
+  reader.classList.add("hidden");
   document.querySelector('#homeClassTitle').textContent="শ্রেণি ভিত্তিক কবিতা সমূহ";
-
   document.querySelector('#homeClassCount').textContent="পছন্দের শ্রেণি নির্বাচন করুন";
-
   const homeList = document.querySelector('#homeList');
-
   if(homeList){
     homeList.innerHTML='<div class="empty">উপরের সকল শ্রেণি থেকে যেকোনো একটি শ্রেণি নির্বাচন করুন।</div>';
   }
-
   updateNav(null);
-
 }
 
+
+let publicPoetProfiles = [];
+
+async function loadPublicPoetProfiles(){
+  const list = document.querySelector("#poetProfilesList");
+  if(!list) return;
+
+  list.innerHTML = '<div class="empty">কবিদের তালিকা লোড হচ্ছে...</div>';
+
+  try {
+    const url = SUPABASE_URL +
+      "/rest/v1/poet_profiles?select=id,poet_name,birth_year,death_year,photo_url,short_bio,biography,sources&order=poet_name.asc";
+
+    const response = await fetch(url, {
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY
+      }
+    });
+
+    if(!response.ok) throw new Error("কবিদের তথ্য লোড করা যায়নি (" + response.status + ")");
+
+    const rows = await response.json();
+    publicPoetProfiles = Array.isArray(rows) ? rows : [];
+    const homePoetCount = document.querySelector("#homePoetCount");
+    if(homePoetCount){
+      homePoetCount.textContent =
+        toBanglaNumber(publicPoetProfiles.length) + " জন কবি উপলব্ধ";
+    }
+
+    list.replaceChildren();
+
+    if(!publicPoetProfiles.length){
+      list.innerHTML = '<div class="empty">এখনো কোনো কবির পরিচিতি সংরক্ষিত নেই।</div>';
+      return;
+    }
+
+    publicPoetProfiles.forEach(function(poet, index){
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "poet-public-card";
+
+      const name = document.createElement("span");
+      name.className = "poet-public-card-name";
+      name.textContent = poet.poet_name || "নাম উল্লেখ নেই";
+
+      const years = document.createElement("span");
+      years.className = "poet-public-card-years";
+      years.textContent = [poet.birth_year, poet.death_year].filter(Boolean).join(" — ") || "জীবনকাল উল্লেখ নেই";
+
+      const arrow = document.createElement("span");
+      arrow.className = "poet-public-card-arrow";
+      arrow.textContent = "›";
+
+      const photo = document.createElement("img");
+      photo.className = "poet-public-card-photo";
+      photo.alt = poet.poet_name || "কবির ছবি";
+      photo.loading = "lazy";
+
+      if(poet.photo_url){
+        try {
+          const photoUrl = new URL(poet.photo_url, location.href);
+          if(photoUrl.protocol === "https:" || photoUrl.protocol === "http:"){
+            photo.src = photoUrl.href;
+          }
+        } catch(error) {
+          console.warn("Invalid poet photo URL:", poet.poet_name);
+        }
+      }
+
+      photo.addEventListener("error", function(){
+        photo.classList.add("hidden");
+      });
+
+      const info = document.createElement("span");
+      info.className = "poet-public-card-info";
+      info.append(name, years);
+
+      button.append(photo, info, arrow);
+      button.addEventListener("click", function(){
+        openPublicPoetProfile(index);
+      });
+      list.appendChild(button);
+    });
+
+  } catch(error) {
+    console.error("Public poet profiles:", error);
+    list.innerHTML = '<div class="empty">কবিদের তথ্য লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</div>';
+  }
+}
+
+function openPublicPoetProfile(index){
+  const poet = publicPoetProfiles[index];
+  if(!poet) return;
+
+  const list = document.querySelector("#poetProfilesList");
+  const detail = document.querySelector("#poetProfileDetail");
+  if(!list || !detail) return;
+
+  document.querySelector("#publicPoetName").textContent = poet.poet_name || "নাম উল্লেখ নেই";
+  document.querySelector("#publicPoetYears").textContent =
+    [poet.birth_year, poet.death_year].filter(Boolean).join(" — ");
+
+  document.querySelector("#publicPoetShort").textContent = poet.short_bio || "";
+
+  const biography = document.querySelector("#publicPoetBiography");
+  biography.textContent = poet.biography || poet.short_bio || "বিস্তারিত জীবনী এখনো যোগ করা হয়নি।";
+
+  const sourcesWrap = document.querySelector("#publicPoetSourcesWrap");
+  const sources = document.querySelector("#publicPoetSources");
+  sources.textContent = poet.sources || "";
+  sourcesWrap.classList.toggle("hidden", !poet.sources);
+
+  const photo = document.querySelector("#publicPoetPhoto");
+  photo.removeAttribute("src");
+  photo.classList.add("hidden");
+
+  if(poet.photo_url){
+    try {
+      const photoUrl = new URL(poet.photo_url, location.href);
+      if(photoUrl.protocol === "https:" || photoUrl.protocol === "http:"){
+        photo.src = photoUrl.href;
+        photo.classList.remove("hidden");
+      }
+    } catch(error) {
+      console.warn("Invalid poet photo URL:", error);
+    }
+  }
+
+  list.classList.add("hidden");
+  detail.classList.remove("hidden");
+  detail.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function showPoetProfilesPage(){
+  home.classList.add("hidden");
+  document.querySelector("#contents")?.classList.add("hidden");
+  library.classList.add("hidden");
+  reader.classList.add("hidden");
+
+  const page = document.querySelector("#poetProfilesPage");
+  const detail = document.querySelector("#poetProfileDetail");
+  const list = document.querySelector("#poetProfilesList");
+
+  if(!page || !detail || !list) return;
+
+  detail.classList.add("hidden");
+  list.classList.remove("hidden");
+  page.classList.remove("hidden");
+  updateNav(null);
+  loadPublicPoetProfiles();
+}
+
+document.querySelector("#homePoetProfilesBtn")?.addEventListener("click", showPoetProfilesPage);
+loadPublicPoetProfiles();
+
+document.querySelector("#poetProfilesHomeBtn")?.addEventListener("click", showHome);
+
+document.querySelector("#poetProfileBackToList")?.addEventListener("click", function(){
+  document.querySelector("#poetProfileDetail")?.classList.add("hidden");
+  document.querySelector("#poetProfilesList")?.classList.remove("hidden");
+});
 
 function toBanglaNumber(n){
   return String(n).replace(/[0-9]/g, function(d){ return "০১২৩৪৫৬৭৮৯"[Number(d)]; });
