@@ -2423,6 +2423,8 @@ function bpPrintPoems(poems, documentTitle) {
         line-height: 1.9;
         white-space: normal;
         overflow-wrap: anywhere;
+        margin-left: 150px;
+        margin-right: 150px;
       }
       #bpPrintRoot .bp-print-text p {
         margin: 0 0 8px;

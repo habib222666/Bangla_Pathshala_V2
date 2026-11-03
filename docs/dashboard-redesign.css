@@ -2570,3 +2570,36 @@ body.dark #poetProfileList .poet-admin-item span {
     margin-right: 10px !important;
   }
 }
+
+
+/* ===== FINAL POEM SCREEN MARGINS ===== */
+#text {
+  margin-left: 50px !important;
+  margin-right: 50px !important;
+}
+
+/* ===== MOBILE HEADER BUTTONS ===== */
+@media (max-width: 520px) {
+  #text {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+
+  .top-action-row {
+    gap: 6px !important;
+  }
+
+  .top-action {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  #adminLoginBtn small {
+    font-size: 0 !important;
+  }
+
+  #adminLoginBtn small::after {
+    content: "এডমিন";
+    font-size: 10px;
+  }
+}
