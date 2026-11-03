@@ -2501,3 +2501,64 @@ body.dark #poetProfileList .poet-admin-item span {
     padding: 22px 16px;
   }
 }
+
+/* ===== POET BIO PHOTO RIGHT-FLOAT LAYOUT ===== */
+#poetBioPhoto {
+  float: right;
+  display: block;
+  width: 190px;
+  height: 230px;
+  max-height: none;
+  margin: 0 0 14px 20px;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 12px;
+}
+
+#poetBioName {
+  margin-top: 0;
+}
+
+#poetBioSources {
+  clear: both;
+}
+
+#poetBioPanel::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+@media (max-width: 520px) {
+  #poetBioPhoto {
+    width: 120px;
+    height: 150px;
+    margin: 0 0 10px 12px;
+  }
+}
+
+/* Poem text: 50px left and right margin */
+#text {
+  margin-left: 50px !important;
+  margin-right: 50px !important;
+}
+
+@media (max-width: 520px) {
+  #text {
+    margin-left: 50px !important;
+    margin-right: 50px !important;
+  }
+}
+
+/* Poem text: 150px left and right margin */
+#text {
+  margin-left: 150px !important;
+  margin-right: 150px !important;
+}
+
+@media (max-width: 520px) {
+  #text {
+    margin-left: 150px !important;
+    margin-right: 150px !important;
+  }
+}
