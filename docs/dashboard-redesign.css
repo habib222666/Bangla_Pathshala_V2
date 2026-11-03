@@ -2562,3 +2562,11 @@ body.dark #poetProfileList .poet-admin-item span {
     margin-right: 150px !important;
   }
 }
+
+/* Mobile poem text margins */
+@media (max-width: 520px) {
+  #text {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+}
