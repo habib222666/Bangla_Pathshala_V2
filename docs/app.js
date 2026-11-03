@@ -1159,6 +1159,13 @@ if(homeDarkModeBtn){
 updateHomeDarkModeButton();
 
 const classNames=["","প্রথম","দ্বিতীয়","তৃতীয়","চতুর্থ","পঞ্চম","ষষ্ঠ","সপ্তম","অষ্টম","নবম","দশম","একাদশ","দ্বাদশ"];
+
+function displayClassName(classNo) {
+  if (classNo === 9 || classNo === 10) return "নবম-দশম";
+  if (classNo === 11 || classNo === 12) return "একাদশ-দ্বাদশ";
+  return classNames[classNo] || classNo;
+}
+
 buildClassNav();
 
 function favoriteKey(x){
@@ -1483,34 +1490,29 @@ function renderContents(){
   const wrap=document.querySelector("#contentsTableWrap");
   if(!contents || !className || !wrap) return;
 
-  let title="";
-  if(selectedClasses.length===2 && selectedClasses[0]===9 && selectedClasses[1]===10){
-    title="নবম–দশম শ্রেণি";
-  }else if(selectedClasses.length===2 && selectedClasses[0]===11 && selectedClasses[1]===12){
-    title="একাদশ–দ্বাদশ শ্রেণি";
-  }else{
-    title=(classNames[selectedClasses[0]] || selectedClasses[0])+" শ্রেণি";
+  className.textContent="সকল শ্রেণির কবিতার তালিকা";
+
+  const poems=[];
+  for(let c=1;c<=12;c++){
+    (classData[String(c)] || []).forEach(function(poem,index){
+      poems.push({poem:poem,classNo:c,index:index});
+    });
   }
 
-  className.textContent=title;
-
-  const poems=selectedClasses.flatMap(function(c){
-    return classData[String(c)] || [];
-  });
-
   if(poems.length===0){
-    wrap.innerHTML="<div class=\"contents-empty\">এই শ্রেণিতে কোনো কবিতা পাওয়া যায়নি।</div>";
+    wrap.innerHTML="<div class=\"contents-empty\">কোনো কবিতা পাওয়া যায়নি।</div>";
     return;
   }
 
   wrap.innerHTML=`<table class="contents-table">
-    <thead><tr><th>নং</th><th>কবিতার নাম</th><th>কবি</th><th>কবিতার ধরন</th></tr></thead>
-    <tbody>${poems.map(function(poem,i){
-      return `<tr data-class="${poem.class}" data-index="${(classData[String(poem.class)]||[]).indexOf(poem)}">
+    <thead><tr><th>নং</th><th>কবিতার নাম</th><th>কবি</th><th>শ্রেণি</th></tr></thead>
+    <tbody>${poems.map(function(entry,i){
+      const poem=entry.poem;
+      return `<tr data-class="${entry.classNo}" data-index="${entry.index}">
         <td>${toBanglaNumber(i+1)}</td>
         <td>${poem.title || "নাম নেই"}</td>
         <td>${poem.poet || "—"}</td>
-        <td>${poem.oldBook ? "পুরোনো কবিতা" : ""}</td>
+        <td>${displayClassName(entry.classNo)}</td>
       </tr>`;
     }).join("")}</tbody>
   </table>`;
@@ -2362,7 +2364,7 @@ function bpPrintPoems(poems, documentTitle) {
 
   const poemHtml = poems.map(function(poem, index) {
     const classNo = Number(poem.class);
-    const classLabel = (classNames[classNo] || classNo) + " শ্রেণি";
+    const classLabel = displayClassName(classNo) + " শ্রেণি";
     return `
       <section class="bp-print-poem">
         <div class="bp-print-meta">${esc(classLabel)}</div>
@@ -2419,7 +2421,7 @@ function bpPrintPoems(poems, documentTitle) {
         margin: 5px 0 40px;
       }
       #bpPrintRoot .bp-print-text {
-        font-size: 19px;
+        font-size: 21px;
         line-height: 1.9;
         white-space: normal;
         overflow-wrap: anywhere;
