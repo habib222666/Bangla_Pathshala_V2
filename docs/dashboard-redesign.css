@@ -2922,3 +2922,27 @@ body.dark .poet-admin-list-heading {
   #poetPageAdminControls { padding: 11px; }
   #poetProfileForm { padding: 11px; }
 }
+
+/* ===== AUTO SPACING: CLASS BUTTONS 1-5 / FULL ROW WIDTH ===== */
+@media (min-width: 901px) {
+  #navClasses {
+    display: grid !important;
+    width: 100% !important;
+    max-width: 1650px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    column-gap: clamp(8px, 1.5vw, 20px) !important;
+    row-gap: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  #navClasses .nav-class {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
