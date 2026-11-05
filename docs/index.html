@@ -85,7 +85,35 @@
     <p>বাংলা সাহিত্যের কবিদের জীবন ও সাহিত্যকর্ম সম্পর্কে জানুন</p>
   </div>
 
-  <div id="poetProfilesList" class="poet-public-grid">
+  <section id="poetPageAdminControls" class="hidden">
+  <div class="poet-admin-toolbar">
+    <button id="poetProfileAddBtn" type="button">＋ নতুন কবি যোগ করুন</button>
+  </div>
+  <form id="poetProfileForm" class="hidden">
+          <input id="poetProfileId" type="hidden">
+          <label for="poetProfileSerial">ক্রমিক নম্বর *</label>
+          <input id="poetProfileSerial" type="number" min="1" step="1" required>
+          <label for="poetProfileName">কবির নাম *</label>
+          <input id="poetProfileName" type="text" required>
+          <label for="poetProfileBirth">জন্মসাল</label>
+          <input id="poetProfileBirth" type="text" placeholder="যেমন: ১৮৯৯">
+          <label for="poetProfileDeath">মৃত্যুসাল</label>
+          <input id="poetProfileDeath" type="text" placeholder="যেমন: ১৯৭৬">
+          <label for="poetProfilePhoto">ছবির ওয়েব ঠিকানা</label>
+          <input id="poetProfilePhoto" type="url">
+          <label for="poetProfileShort">সংক্ষিপ্ত পরিচিতি</label>
+          <textarea id="poetProfileShort" rows="3"></textarea>
+          <label for="poetProfileBiography">বিস্তারিত জীবনী</label>
+          <textarea id="poetProfileBiography" rows="7"></textarea>
+          <label for="poetProfileSources">তথ্যসূত্র</label>
+          <textarea id="poetProfileSources" rows="3"></textarea>
+          <button id="poetProfileSave" type="submit">💾 সংরক্ষণ করুন</button>
+          <button id="poetProfileCancel" type="button">বাতিল</button>
+        </form>
+  <h3 class="poet-admin-list-heading">সংরক্ষিত কবিদের তালিকা</h3>
+  <div id="poetProfileList">তথ্য লোড হচ্ছে...</div>
+</section>
+<div id="poetProfilesList" class="poet-public-grid">
     <div class="empty">কবিদের তালিকা লোড হচ্ছে...</div>
   </div>
 
@@ -278,33 +306,7 @@
       </form>
       <button id="adminLogoutBtn" class="hidden" type="button">লগআউট</button>
 
-      <section id="poetAdminPanel" class="hidden">
-        <hr>
-        <h3>কবি পরিচিতি পরিচালনা</h3>
-        <form id="poetProfileForm">
-          <input id="poetProfileId" type="hidden">
-          <label for="poetProfileSerial">ক্রমিক নম্বর *</label>
-          <input id="poetProfileSerial" type="number" min="1" step="1" required>
-          <label for="poetProfileName">কবির নাম *</label>
-          <input id="poetProfileName" type="text" required>
-          <label for="poetProfileBirth">জন্মসাল</label>
-          <input id="poetProfileBirth" type="text" placeholder="যেমন: ১৮৯৯">
-          <label for="poetProfileDeath">মৃত্যুসাল</label>
-          <input id="poetProfileDeath" type="text" placeholder="যেমন: ১৯৭৬">
-          <label for="poetProfilePhoto">ছবির ওয়েব ঠিকানা</label>
-          <input id="poetProfilePhoto" type="url">
-          <label for="poetProfileShort">সংক্ষিপ্ত পরিচিতি</label>
-          <textarea id="poetProfileShort" rows="3"></textarea>
-          <label for="poetProfileBiography">বিস্তারিত জীবনী</label>
-          <textarea id="poetProfileBiography" rows="7"></textarea>
-          <label for="poetProfileSources">তথ্যসূত্র</label>
-          <textarea id="poetProfileSources" rows="3"></textarea>
-          <button id="poetProfileSave" type="submit">💾 সংরক্ষণ করুন</button>
-          <button id="poetProfileCancel" type="button">বাতিল</button>
-        </form>
-        <h3>সংরক্ষিত কবিদের তালিকা</h3>
-        <div id="poetProfileList">তথ্য লোড হচ্ছে...</div>
-      </section>
+
     </div>
   </div>
 

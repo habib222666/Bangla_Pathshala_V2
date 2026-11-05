@@ -126,8 +126,9 @@ function updateAdminLoginUI() {
 
   if (form) form.classList.toggle("hidden", loggedIn);
   if (logout) logout.classList.toggle("hidden", !loggedIn);
-  const poetPanel = document.getElementById("poetAdminPanel");
-  if (poetPanel) poetPanel.classList.toggle("hidden", !loggedIn);
+  const poetControls = document.getElementById("poetPageAdminControls");
+  if (poetControls) poetControls.classList.toggle("hidden", !loggedIn);
+  if (!loggedIn) document.getElementById("poetProfileForm")?.classList.add("hidden");
 
   if (status) {
     status.textContent = loggedIn
@@ -343,6 +344,7 @@ function resetPoetProfileForm() {
   if (serial) serial.value = "";
   const save = document.getElementById("poetProfileSave");
   if (save) save.textContent = "💾 সংরক্ষণ করুন";
+  form?.classList.add("hidden");
 }
 
 function isPoetAdmin() {
@@ -433,6 +435,8 @@ async function editPoetProfile(id) {
     document.getElementById("poetProfileBiography").value = p.biography || "";
     document.getElementById("poetProfileSources").value = p.sources || "";
     document.getElementById("poetProfileSave").textContent = "💾 পরিবর্তন সংরক্ষণ করুন";
+    document.getElementById("poetProfileForm").classList.remove("hidden");
+    document.getElementById("poetProfileForm").scrollIntoView({behavior:"smooth", block:"start"});
 
     document.getElementById("poetProfileName").focus();
   } catch (error) {
@@ -451,6 +455,7 @@ async function deletePoetProfile(id, poetName) {
     );
     resetPoetProfileForm();
     await loadPoetProfilesAdmin();
+    await loadPublicPoetProfiles();
     alert("কবির পরিচিতি মুছে ফেলা হয়েছে।");
   } catch (error) {
     alert("কবির তথ্য মুছে ফেলা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।");
@@ -462,6 +467,14 @@ function initializePoetProfileAdmin() {
 
   const form = document.getElementById("poetProfileForm");
   const cancel = document.getElementById("poetProfileCancel");
+  const addButton = document.getElementById("poetProfileAddBtn");
+  addButton?.addEventListener("click", () => {
+    if (!isPoetAdmin()) return;
+    resetPoetProfileForm();
+    form?.classList.remove("hidden");
+    form?.scrollIntoView({behavior:"smooth", block:"start"});
+    document.getElementById("poetProfileName")?.focus();
+  });
 
   form?.addEventListener("submit", async event => {
     event.preventDefault();
@@ -533,6 +546,7 @@ function initializePoetProfileAdmin() {
 
       resetPoetProfileForm();
       await loadPoetProfilesAdmin();
+      await loadPublicPoetProfiles();
       alert("কবির পরিচিতি সফলভাবে সংরক্ষণ হয়েছে।");
     } catch (error) {
       alert("কবির তথ্য সংরক্ষণ করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।");

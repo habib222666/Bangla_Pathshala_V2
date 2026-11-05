@@ -2413,7 +2413,8 @@ body.dark #adminLoginForm input {
 
 #poetProfileList {
   display: grid;
-  gap: 9px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
   margin-top: 12px;
 }
 
@@ -2720,6 +2721,7 @@ body.dark #poetProfileList .poet-admin-item span {
 .poet-public-detail h3 { margin: 20px 0 9px; }
 .poet-public-biography,
 #publicPoetSources {
+  text-align: justify;
   line-height: 1.95;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -2853,4 +2855,55 @@ body.dark .poet-public-card-photo {
     width: 52px;
     height: 52px;
   }
+}
+
+
+/* ===== ADMIN CONTROLS INSIDE POET PROFILES PAGE ===== */
+#poetPageAdminControls {
+  margin: 18px 0 22px;
+  padding: 16px;
+  border: 1px solid #cbd9e8;
+  border-radius: 14px;
+  background: #f4f8fc;
+}
+.poet-admin-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 12px;
+}
+#poetProfileAddBtn {
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 16px;
+  background: #176b45;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+#poetProfileForm {
+  margin: 12px 0 20px;
+  padding: 15px;
+  border: 1px solid #d5e0eb;
+  border-radius: 11px;
+  background: #fff;
+}
+.poet-admin-list-heading {
+  margin: 12px 0 8px;
+  color: var(--text, #23466d);
+}
+body.dark #poetPageAdminControls {
+  border-color: #475569;
+  background: #172435;
+}
+body.dark #poetProfileForm {
+  border-color: #475569;
+  background: #202d3e;
+  color: #f1f5f9;
+}
+body.dark .poet-admin-list-heading {
+  color: #e5efff;
+}
+@media (max-width: 600px) {
+  #poetPageAdminControls { padding: 11px; }
+  #poetProfileForm { padding: 11px; }
 }
