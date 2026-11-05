@@ -2419,10 +2419,11 @@ body.dark #adminLoginForm input {
 }
 
 #poetProfileList .poet-admin-item {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 10px;
+  row-gap: 5px;
   padding: 11px;
   border: 1px solid #e2e8f0;
   border-radius: 9px;
@@ -2431,16 +2432,30 @@ body.dark #adminLoginForm input {
 }
 
 #poetProfileList .poet-admin-item strong {
-  flex: 1 1 100%;
+  grid-column: 1;
+  grid-row: 1;
 }
 
 #poetProfileList .poet-admin-item span {
-  flex: 1;
+  grid-column: 1;
+  grid-row: 2;
   color: #64748b;
   font-size: 13px;
 }
 
+#poetProfileList .poet-admin-actions {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
 #poetProfileList button {
+  display: block;
+  width: fit-content;
   margin: 0;
   padding: 7px 10px;
   font-size: 12px;

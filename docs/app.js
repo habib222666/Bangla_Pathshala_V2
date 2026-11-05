@@ -391,17 +391,22 @@ async function loadPoetProfilesAdmin() {
         [profile.birth_year, profile.death_year].filter(Boolean).join(" – ");
       item.appendChild(years);
 
+      const actions = document.createElement("div");
+      actions.className = "poet-admin-actions";
+
       const edit = document.createElement("button");
       edit.type = "button";
       edit.textContent = "✏️ সম্পাদনা";
       edit.addEventListener("click", () => editPoetProfile(profile.id));
-      item.appendChild(edit);
+      actions.appendChild(edit);
 
       const remove = document.createElement("button");
       remove.type = "button";
       remove.textContent = "🗑 মুছুন";
       remove.addEventListener("click", () => deletePoetProfile(profile.id, profile.poet_name));
-      item.appendChild(remove);
+      actions.appendChild(remove);
+
+      item.appendChild(actions);
 
       list.appendChild(item);
     });
