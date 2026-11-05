@@ -229,7 +229,7 @@ function initializeAdminLogin() {
       password.value = "";
       status.textContent = "এডমিন হিসেবে সফলভাবে প্রবেশ করেছেন।";
     } catch (error) {
-      status.textContent = error.message || "প্রবেশ করা যায়নি। আবার চেষ্টা করুন।";
+      status.textContent = "প্রবেশ করা যায়নি। ইমেইল ও পাসওয়ার্ড যাচাই করে আবার চেষ্টা করুন।";
       console.error("Admin login error:", error);
     } finally {
       submit.disabled = false;
@@ -339,6 +339,8 @@ function resetPoetProfileForm() {
   if (form) form.reset();
   const id = document.getElementById("poetProfileId");
   if (id) id.value = "";
+  const serial = document.getElementById("poetProfileSerial");
+  if (serial) serial.value = "";
   const save = document.getElementById("poetProfileSave");
   if (save) save.textContent = "💾 সংরক্ষণ করুন";
 }
@@ -356,10 +358,18 @@ async function loadPoetProfilesAdmin() {
 
   try {
     const rows = await supabaseRequest(
-      "poet_profiles?select=id,poet_name,birth_year,death_year&order=poet_name.asc"
+      "poet_profiles?select=id,poet_name,birth_year,death_year,serial_no&order=serial_no.asc,id.asc"
     );
 
     list.replaceChildren();
+
+    const serialInput = document.getElementById("poetProfileSerial");
+    if (serialInput && !document.getElementById("poetProfileId").value) {
+      const maxSerial = Array.isArray(rows)
+        ? rows.reduce((max, p) => Math.max(max, Number(p.serial_no) || 0), 0)
+        : 0;
+      serialInput.value = String(maxSerial + 1);
+    }
 
     if (!Array.isArray(rows) || !rows.length) {
       list.textContent = "এখনো কোনো কবির পরিচিতি যোগ করা হয়নি।";
@@ -371,7 +381,7 @@ async function loadPoetProfilesAdmin() {
       item.className = "poet-admin-item";
 
       const name = document.createElement("strong");
-      name.textContent = profile.poet_name || "";
+      name.textContent = (profile.serial_no || "") + ". " + (profile.poet_name || "");
       item.appendChild(name);
 
       const years = document.createElement("span");
@@ -394,7 +404,7 @@ async function loadPoetProfilesAdmin() {
       list.appendChild(item);
     });
   } catch (error) {
-    list.textContent = "তালিকা লোড করা যায়নি: " + error.message;
+    list.textContent = "কবিদের তালিকা লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।";
     console.error("Poet profile list error:", error);
   }
 }
@@ -414,6 +424,7 @@ async function editPoetProfile(id) {
 
     const p = rows[0];
     document.getElementById("poetProfileId").value = p.id;
+    document.getElementById("poetProfileSerial").value = p.serial_no || 1;
     document.getElementById("poetProfileName").value = p.poet_name || "";
     document.getElementById("poetProfileBirth").value = p.birth_year || "";
     document.getElementById("poetProfileDeath").value = p.death_year || "";
@@ -425,7 +436,7 @@ async function editPoetProfile(id) {
 
     document.getElementById("poetProfileName").focus();
   } catch (error) {
-    alert("তথ্য খোলা যায়নি: " + error.message);
+    alert("কবির তথ্য খোলা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।");
   }
 }
 
@@ -442,7 +453,7 @@ async function deletePoetProfile(id, poetName) {
     await loadPoetProfilesAdmin();
     alert("কবির পরিচিতি মুছে ফেলা হয়েছে।");
   } catch (error) {
-    alert("মুছে ফেলা যায়নি: " + error.message);
+    alert("কবির তথ্য মুছে ফেলা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।");
   }
 }
 
@@ -467,6 +478,12 @@ function initializePoetProfileAdmin() {
       return;
     }
 
+    const serialNo = Number(document.getElementById("poetProfileSerial").value);
+    if (!Number.isInteger(serialNo) || serialNo < 1) {
+      alert("সঠিক ধনাত্মক ক্রমিক নম্বর দিন।");
+      return;
+    }
+
     const photoUrl = document.getElementById("poetProfilePhoto").value.trim();
     if (photoUrl) {
       try {
@@ -475,12 +492,13 @@ function initializePoetProfileAdmin() {
           throw new Error("Invalid protocol");
         }
       } catch (_) {
-        alert("ছবির সঠিক URL দিন।");
+        alert("ছবির সঠিক ওয়েব ঠিকানা দিন।");
         return;
       }
     }
 
     const payload = {
+      serial_no: serialNo,
       poet_name: poetName,
       birth_year: document.getElementById("poetProfileBirth").value.trim() || null,
       death_year: document.getElementById("poetProfileDeath").value.trim() || null,
@@ -517,7 +535,7 @@ function initializePoetProfileAdmin() {
       await loadPoetProfilesAdmin();
       alert("কবির পরিচিতি সফলভাবে সংরক্ষণ হয়েছে।");
     } catch (error) {
-      alert("সংরক্ষণ করা যায়নি: " + error.message);
+      alert("কবির তথ্য সংরক্ষণ করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।");
       console.error("Poet profile save error:", error);
     } finally {
       save.disabled = false;
@@ -843,7 +861,7 @@ if(saveBtn){
     }
 
     if(!currentPoem.id){
-      alert("এই কবিতার Supabase ID পাওয়া যায়নি।");
+      alert("এই কবিতার অনলাইন তথ্যভান্ডারের পরিচিতি পাওয়া যায়নি।");
       return;
     }
 
@@ -1481,7 +1499,7 @@ async function loadPublicPoetProfiles(){
 
   try {
     const url = SUPABASE_URL +
-      "/rest/v1/poet_profiles?select=id,poet_name,birth_year,death_year,photo_url,short_bio,biography,sources&order=poet_name.asc";
+      "/rest/v1/poet_profiles?select=id,poet_name,birth_year,death_year,photo_url,short_bio,biography,sources,serial_no&order=serial_no.asc,id.asc";
 
     const response = await fetch(url, {
       headers: {
@@ -1514,7 +1532,7 @@ async function loadPublicPoetProfiles(){
 
       const name = document.createElement("span");
       name.className = "poet-public-card-name";
-      name.textContent = poet.poet_name || "নাম উল্লেখ নেই";
+      name.textContent = toBanglaNumber(poet.serial_no) + ". " + (poet.poet_name || "নাম উল্লেখ নেই");
 
       const years = document.createElement("span");
       years.className = "poet-public-card-years";
@@ -1863,7 +1881,7 @@ function show(x){
 
     }
 
-    alert("এই Browser-এ আবৃত্তি সুবিধা পাওয়া যাচ্ছে না।");
+    alert("এই ব্রাউজারে আবৃত্তির সুবিধা পাওয়া যাচ্ছে না।");
 
   };
 
@@ -2077,7 +2095,7 @@ window.addEventListener("beforeunload",()=>{
         );
 
         if (Array.isArray(existingRows) && existingRows.length > 0) {
-          alert("এই পুরোনো বইয়ের কবিতাটি ইতিমধ্যে Supabase-এ আছে।");
+          alert("এই পুরোনো বইয়ের কবিতাটি ইতিমধ্যে অনলাইন তথ্যভান্ডারে আছে।");
           box.remove();
           return;
         }
@@ -2181,7 +2199,7 @@ window.addEventListener("beforeunload",()=>{
         style="width:100%;box-sizing:border-box;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #ccc;">
 
       <textarea id="newPoemText"
-        placeholder="এখানে কবিতাটি লিখুন বা paste করুন"
+        placeholder="এখানে কবিতাটি লিখুন বা পেস্ট করুন"
         rows="10"
         style="width:100%;box-sizing:border-box;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #ccc;"></textarea>
 
@@ -2242,7 +2260,7 @@ window.addEventListener("beforeunload",()=>{
         );
 
         if (Array.isArray(existingRows) && existingRows.length > 0) {
-          alert("এই কবিতাটি ইতিমধ্যে Supabase-এ আছে।");
+          alert("এই কবিতাটি ইতিমধ্যে অনলাইন তথ্যভান্ডারে আছে।");
           box.remove();
           return;
         }
@@ -2324,7 +2342,7 @@ window.addEventListener("beforeunload",()=>{
           saveButton.style.opacity = "1";
         }
 
-        alert("Supabase Add Error: " + error.message);
+        alert("কবিতা অনলাইনে সংরক্ষণ করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।");
       }
     };
 
@@ -2361,7 +2379,7 @@ window.addEventListener("beforeunload",()=>{
 
         // Supabase ID ছাড়া কোনো poem delete করা হবে না
         if (!poemToDelete.id) {
-          alert("এই কবিতার Supabase ID পাওয়া যায়নি।");
+          alert("এই কবিতার অনলাইন তথ্যভান্ডারের পরিচিতি পাওয়া যায়নি।");
           return;
         }
 
@@ -2399,7 +2417,7 @@ window.addEventListener("beforeunload",()=>{
 
           btn.disabled = false;
 
-          alert("Supabase Delete Error: " + error.message);
+          alert("অনলাইন তথ্যভান্ডার থেকে কবিতা মুছতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
         }
       });
     });
