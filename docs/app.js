@@ -370,7 +370,7 @@ async function loadPoetProfilesAdmin() {
       const maxSerial = Array.isArray(rows)
         ? rows.reduce((max, p) => Math.max(max, Number(p.serial_no) || 0), 0)
         : 0;
-      serialInput.value = String(maxSerial + 1);
+      serialInput.value = toBanglaNumber(maxSerial + 1);
     }
 
     if (!Array.isArray(rows) || !rows.length) {
@@ -383,7 +383,7 @@ async function loadPoetProfilesAdmin() {
       item.className = "poet-admin-item";
 
       const name = document.createElement("strong");
-      name.textContent = (profile.serial_no || "") + ". " + (profile.poet_name || "");
+      name.textContent = toBanglaNumber(profile.serial_no || "") + ". " + (profile.poet_name || "");
       item.appendChild(name);
 
       const years = document.createElement("span");
@@ -431,7 +431,7 @@ async function editPoetProfile(id) {
 
     const p = rows[0];
     document.getElementById("poetProfileId").value = p.id;
-    document.getElementById("poetProfileSerial").value = p.serial_no || 1;
+    document.getElementById("poetProfileSerial").value = toBanglaNumber(p.serial_no || 1);
     document.getElementById("poetProfileName").value = p.poet_name || "";
     document.getElementById("poetProfileBirth").value = p.birth_year || "";
     document.getElementById("poetProfileDeath").value = p.death_year || "";
@@ -496,7 +496,10 @@ function initializePoetProfileAdmin() {
       return;
     }
 
-    const serialNo = Number(document.getElementById("poetProfileSerial").value);
+    const serialText = document.getElementById("poetProfileSerial").value;
+    const serialNo = Number(serialText.replace(/[০-৯]/g, d =>
+      String("০১২৩৪৫৬৭৮৯".indexOf(d))
+    ));
     if (!Number.isInteger(serialNo) || serialNo < 1) {
       alert("সঠিক ধনাত্মক ক্রমিক নম্বর দিন।");
       return;

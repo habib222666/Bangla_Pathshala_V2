@@ -2732,7 +2732,7 @@ body.dark #poetProfileList .poet-admin-item span {
 }
 #publicPoetName { margin: 0 0 8px; font-size: 25px; }
 #publicPoetYears { color: #718096; font-weight: 700; }
-#publicPoetShort { line-height: 1.8; }
+#publicPoetShort { text-align: justify; line-height: 1.8; }
 .poet-public-detail h3 { margin: 20px 0 9px; }
 .poet-public-biography,
 #publicPoetSources {
