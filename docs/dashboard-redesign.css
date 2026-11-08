@@ -2982,3 +2982,15 @@ body.dark #favoritePage .poet-page-header h2 { color: #f1f5f9; }
 #printAllBtn {
   order: 11 !important;
 }
+
+
+/* FINAL: Reader poem title green and poet name black */
+.paper h1 {
+  color: #008000 !important;
+  -webkit-text-fill-color: #008000 !important;
+}
+
+.paper #poet {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
