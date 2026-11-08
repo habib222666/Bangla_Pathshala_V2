@@ -1474,12 +1474,12 @@ body.dark .paper h1 {
 /* SOLAIMANLIPI-FORCE */
 .card h3,
 .paper h1{
-  font-family:"TeeshtaMJ-Bold" !important;
+  font-family:"SolaimanLipi",sans-serif !important;
 }
 
 .card .poet,
 .paper #poet{
-  font-family:"TeeshtaMJ-Regular" !important;
+  font-family:"SolaimanLipi",sans-serif !important;
 }
 
 /* Mobile: keep Home and Library on the same row */
