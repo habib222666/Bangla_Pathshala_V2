@@ -2338,6 +2338,11 @@ body.dark #adminLoginForm input {
 
 #poetBioShort {
   font-weight: 600;
+  text-align: justify;
+}
+
+#poetBioText {
+  text-align: justify;
 }
 
 #poetBioText {
@@ -2735,9 +2740,15 @@ body.dark #poetProfileList .poet-admin-item span {
 #publicPoetShort { text-align: justify; line-height: 1.8; }
 .poet-public-detail h3 { margin: 20px 0 9px; }
 .poet-public-biography,
+/* Restore biography font size; keep sources smaller */
+.poet-public-detail .poet-public-biography {
+  font-size: inherit;
+}
+
 #publicPoetSources {
+  font-size: 10px;
   text-align: justify;
-  line-height: 1.95;
+  line-height: 1.75;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
