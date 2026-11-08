@@ -1141,33 +1141,45 @@ if(topSearchPoetSelect){
   });
 }
 
-if(homeFavoriteBtn){
-  homeFavoriteBtn.addEventListener("click", function(){
-    const favoritePoems=[];
-
-    for(let c=1;c<=12;c++){
-      (classData[String(c)]||[]).forEach(function(poem){
-        if(isFavorite(poem)) favoritePoems.push(poem);
-      });
-    }
-
-    if(favoritePoems.length===0){
-      alert("এখনও কোনো প্রিয় কবিতা নির্বাচন করা হয়নি।");
-      return;
-    }
-
-    home.classList.remove("hidden");
-    library.classList.add("hidden");
-    reader.classList.add("hidden");
-
-    document.querySelector("#homeClassTitle").textContent="প্রিয় কবিতা";
-    document.querySelector("#homeClassCount").textContent=`মোট প্রিয় কবিতা: ${favoritePoems.length} টি`;
-
-    renderPoems(document.querySelector("#homeList"), favoritePoems);
-
-    this.textContent="♥ প্রিয় কবিতা";
-  });
+function collectFavoritePoems(){
+  const favoritePoems = [];
+  for(let cls=1; cls<=12; cls++){
+    (classData[String(cls)] || []).forEach(function(poem){
+      if(isFavorite(poem)) favoritePoems.push(poem);
+    });
+  }
+  return favoritePoems;
 }
+
+function openFavoritesPage(){
+  const page = document.querySelector("#favoritePage");
+  const list = document.querySelector("#favoriteList");
+  if(!page || !list) return;
+
+  home.classList.add("hidden");
+  document.querySelector("#contents")?.classList.add("hidden");
+  document.querySelector("#poetProfilesPage")?.classList.add("hidden");
+  library.classList.add("hidden");
+  reader.classList.add("hidden");
+  page.classList.remove("hidden");
+
+  const poems = collectFavoritePoems();
+  document.querySelector("#favoritePageCount").textContent =
+    `মোট প্রিয় কবিতা: ${toBanglaNumber(poems.length)} টি`;
+
+  if(poems.length){
+    renderPoems(list, poems);
+  } else {
+    list.innerHTML = '<div class="empty">এখনো কোনো প্রিয় কবিতা সংরক্ষিত নেই।</div>';
+  }
+  updateNav(null);
+}
+
+if(homeFavoriteBtn){
+  homeFavoriteBtn.addEventListener("click", openFavoritesPage);
+}
+
+document.querySelector("#favoritePageHomeBtn")?.addEventListener("click", showHome);
 
 function updateHomeDarkModeButton(){
   if(!homeDarkModeBtn) return;
@@ -1212,8 +1224,15 @@ function toggleFavorite(x){
   const key=favoriteKey(x);
   if(isFavorite(x)) localStorage.removeItem(key);
   else localStorage.setItem(key,"1");
-  if(!home.classList.contains("hidden")) showHome();
-  else render();
+
+  const favoritePage = document.querySelector("#favoritePage");
+  if(favoritePage && !favoritePage.classList.contains("hidden")){
+    openFavoritesPage();
+  } else if(!home.classList.contains("hidden")) {
+    showHome();
+  } else {
+    render();
+  }
 }
 
 function savedText(x){
@@ -1232,7 +1251,11 @@ if(backBtn){
     if(window.speechSynthesis) window.speechSynthesis.cancel();
     if(window.Android && Android.stop) Android.stop();
     reader.classList.add("hidden");
-    library.classList.remove("hidden");
+    if(readerReturnPage === "favorites"){
+      openFavoritesPage();
+    } else {
+      library.classList.remove("hidden");
+    }
   });
 }
 
@@ -1490,6 +1513,7 @@ function openClass(c){
 function showHome(){
   document.querySelector("#contents")?.classList.add("hidden");
   document.querySelector("#poetProfilesPage")?.classList.add("hidden");
+  document.querySelector("#favoritePage")?.classList.add("hidden");
   home.classList.remove("hidden");
   library.classList.add("hidden");
   reader.classList.add("hidden");
@@ -1638,6 +1662,7 @@ function openPublicPoetProfile(index){
 
 function showPoetProfilesPage(){
   home.classList.add("hidden");
+  document.querySelector("#favoritePage")?.classList.add("hidden");
   document.querySelector("#contents")?.classList.add("hidden");
   library.classList.add("hidden");
   reader.classList.add("hidden");
@@ -1796,7 +1821,11 @@ function render(){
   if(countEl) countEl.textContent=poemCountText(c);
 }
 
+let readerReturnPage = "library";
+
 function show(x){
+  readerReturnPage = document.querySelector("#favoritePage")?.classList.contains("hidden")
+    ? "library" : "favorites";
   currentPoem=x;
 
   library.classList.add("hidden");

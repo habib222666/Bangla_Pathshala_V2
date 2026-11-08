@@ -2957,3 +2957,10 @@ body.dark .poet-admin-list-heading {
     box-sizing: border-box !important;
   }
 }
+
+
+/* ===== Separate Favorites Page ===== */
+#favoritePage { padding-bottom: 30px; }
+#favoritePage .poem-grid { margin-top: 14px; }
+#favoritePage .poet-page-header h2 { margin-top: 16px; }
+body.dark #favoritePage .poet-page-header h2 { color: #f1f5f9; }
