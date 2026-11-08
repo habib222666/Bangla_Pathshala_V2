@@ -2964,3 +2964,21 @@ body.dark .poet-admin-list-heading {
 #favoritePage .poem-grid { margin-top: 14px; }
 #favoritePage .poet-page-header h2 { margin-top: 16px; }
 body.dark #favoritePage .poet-page-header h2 { color: #f1f5f9; }
+
+/* Homepage contents and print buttons: 14px, side by side */
+#homeContentsBtn,
+#printAllBtn {
+  font-size: 14px !important;
+  box-sizing: border-box;
+  flex: 0 0 calc(50% - 5px);
+  min-width: 0;
+  text-align: center;
+}
+
+#homeContentsBtn {
+  order: 10 !important;
+}
+
+#printAllBtn {
+  order: 11 !important;
+}
