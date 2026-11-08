@@ -8,10 +8,6 @@ let globalSearchResults=[];
 let selectedClasses=[1];
 let poetBioRequestId = 0;
 
-const VIEWER_MODE =
-  typeof Android !== "undefined" &&
-  typeof Android.isViewer === "function" &&
-  Android.isViewer();
 const SUPABASE_URL = "https" + String.fromCharCode(58,47,47) + "gycyxkieruvqvlucxzkl" + ".supabase.co";
 const SUPABASE_KEY = "sb_publishable_xDwG72KglVj5qT6fF9Utig_zepfttD2";
 
@@ -108,12 +104,6 @@ function updateAdminLoginUI() {
   const status = document.getElementById("adminLoginStatus");
   const modal = document.getElementById("adminLoginModal");
 
-  if (VIEWER_MODE) {
-    if (button) button.classList.add("hidden");
-    if (modal) modal.classList.add("hidden");
-    return;
-  }
-
   const loggedIn = !!(adminSession && adminSession.user &&
     adminSession.user.id === ADMIN_UID);
 
@@ -128,7 +118,17 @@ function updateAdminLoginUI() {
   if (logout) logout.classList.toggle("hidden", !loggedIn);
   const poetControls = document.getElementById("poetPageAdminControls");
   if (poetControls) poetControls.classList.toggle("hidden", !loggedIn);
-  if (!loggedIn) document.getElementById("poetProfileForm")?.classList.add("hidden");
+  if (!loggedIn) {
+    document.getElementById("poetProfileForm")?.classList.add("hidden");
+    document.getElementById("editBtn")?.classList.add("hidden");
+    document.getElementById("editArea")?.classList.add("hidden");
+    document.getElementById("text")?.classList.remove("hidden");
+    document.getElementById("addPoemBtn")?.parentElement?.remove();
+    document.querySelectorAll(".deleteUserPoem").forEach(button => button.remove());
+  } else if (currentPoem) {
+    document.getElementById("editBtn")?.classList.remove("hidden");
+  }
+  document.dispatchEvent(new Event("admin-session-changed"));
 
   if (status) {
     status.textContent = loggedIn
@@ -138,8 +138,6 @@ function updateAdminLoginUI() {
 }
 
 async function restoreAdminSession() {
-  if (VIEWER_MODE) return;
-
   try {
     const saved = localStorage.getItem(ADMIN_SESSION_KEY);
     if (saved) {
@@ -168,11 +166,6 @@ function initializeAdminLogin() {
   const logout = document.getElementById("adminLogoutBtn");
   const status = document.getElementById("adminLoginStatus");
   const password = document.getElementById("adminLoginPassword");
-
-  if (VIEWER_MODE) {
-    updateAdminLoginUI();
-    return;
-  }
 
   button?.addEventListener("click", function() {
     modal?.classList.remove("hidden");
@@ -227,6 +220,7 @@ function initializeAdminLogin() {
       data.expires_at = Math.floor(Date.now() / 1000) + Number(data.expires_in || 3600);
       saveAdminSession(data);
       await loadPoetProfilesAdmin();
+      render();
       password.value = "";
       status.textContent = "এডমিন হিসেবে সফলভাবে প্রবেশ করেছেন।";
     } catch (error) {
@@ -241,6 +235,7 @@ function initializeAdminLogin() {
   logout?.addEventListener("click", async function() {
     const session = adminSession;
     saveAdminSession(null);
+    render();
     modal?.classList.add("hidden");
 
     if (session && session.access_token) {
@@ -348,8 +343,7 @@ function resetPoetProfileForm() {
 }
 
 function isPoetAdmin() {
-  return !VIEWER_MODE &&
-    !!(adminSession && adminSession.user && adminSession.user.id === ADMIN_UID);
+  return !!(adminSession && adminSession.user && adminSession.user.id === ADMIN_UID);
 }
 
 async function loadPoetProfilesAdmin() {
@@ -468,8 +462,6 @@ async function deletePoetProfile(id, poetName) {
 }
 
 function initializePoetProfileAdmin() {
-  if (VIEWER_MODE) return;
-
   const form = document.getElementById("poetProfileForm");
   const cancel = document.getElementById("poetProfileCancel");
   const addButton = document.getElementById("poetProfileAddBtn");
@@ -863,7 +855,7 @@ if(saveBtn){
 
   saveBtn.addEventListener("click", async function(){
 
-    if(VIEWER_MODE){
+    if(!isPoetAdmin()){
       return;
     }
 
@@ -949,7 +941,7 @@ if(editBtn){
 
   editBtn.addEventListener("click", function(){
 
-    if(VIEWER_MODE){
+    if(!isPoetAdmin()){
       return;
     }
 
@@ -1308,7 +1300,7 @@ function poemCardHTML(x, i){
   const poetColor = isDark ? "#86efac" : ["#00695c","#ad1457","#283593","#ef6c00","#2e7d32","#6d4c41","#00838f","#c62828","#4527a0","#558b2f","#5d4037","#0277bd","#6a1b9a","#9e9d24","#37474f","#d84315","#1b5e20","#1565c0","#880e4f","#4e342e","#00897b","#bf360c","#303f9f","#33691e","#795548","#00796b","#e65100","#512da8","#827717","#263238"][(Number(i)) % 30];
   return `<div class="card" data-i="${i}" data-class="${x.class}" style="background:${cardColor} !important;">
     <button class="favoriteBtn" data-fav="${i}" aria-label="প্রিয় কবিতা">${isFavorite(x) ? "♥" : "♡"}</button>
-    ${VIEWER_MODE ? "" : `<button class="deleteUserPoem" data-index="${realIndex}" data-class="${x.class}" type="button" onclick="event.preventDefault();event.stopPropagation();deleteUserPoem(this.dataset.class,this.dataset.index);return false;">🗑</button>`}
+    ${!isPoetAdmin() ? "" : `<button class="deleteUserPoem" data-index="${realIndex}" data-class="${x.class}" type="button" onclick="event.preventDefault();event.stopPropagation();deleteUserPoem(this.dataset.class,this.dataset.index);return false;">🗑</button>`}
     ${x.oldBook ? `<div class="old-book-label">📚 পুরোনো কবিতা</div>` : ""}
     <div class="card-illustration">${image}</div>
     <h3 style="color:${titleColor} !important;font-family:'SolaimanLipi',sans-serif;">${x.title}</h3>
@@ -1832,7 +1824,7 @@ function show(x){
 
   editArea.classList.add("hidden");
   document.querySelector("#text").classList.remove("hidden");
-  editBtn.classList.remove("hidden");
+  editBtn.classList.toggle("hidden", !isPoetAdmin());
   if(reciteControls){
     reciteControls.classList.remove("hidden");
   }
@@ -1975,8 +1967,17 @@ window.addEventListener("beforeunload",()=>{
   for (let i = 1; i <= 12; i++) {
     if (!classData[i]) classData[i] = [];
   }
+  document.addEventListener("admin-session-changed", function () {
+  if (isPoetAdmin()) {
+  addButton();
+  } else {
+  document.getElementById("addPoemBtn")?.parentElement?.remove();
+  document.querySelectorAll(".deleteUserPoem").forEach(button => button.remove());
+  }
+  });
+
   function addButton() {
-    if(VIEWER_MODE){
+    if(!isPoetAdmin()){
       return;
     }
     const library = document.getElementById("library");
@@ -2003,6 +2004,7 @@ window.addEventListener("beforeunload",()=>{
       "display:inline-block;flex:1;min-width:0;margin:0;padding:12px 10px;border:0;border-radius:12px;font-size:16px;cursor:pointer;background:#e8e0ff;";
 
     const buttonRow = document.createElement("div");
+
     buttonRow.style.cssText = "display:flex;gap:10px;width:100%;margin:12px 0;";
     btn.parentNode.insertBefore(buttonRow, btn);
     buttonRow.append(btn, oldBookBtn);
@@ -2013,7 +2015,7 @@ window.addEventListener("beforeunload",()=>{
   }
 
   function showOldBookPoemForm() {
-    if(VIEWER_MODE){
+    if(!isPoetAdmin()){
       return;
     }
 
@@ -2078,7 +2080,7 @@ window.addEventListener("beforeunload",()=>{
     };
 
     document.getElementById("saveOldPoem").onclick = async function () {
-      if(VIEWER_MODE){
+      if(!isPoetAdmin()){
         return;
       }
 
@@ -2185,7 +2187,7 @@ window.addEventListener("beforeunload",()=>{
   }
 
   function showPoemForm() {
-    if(VIEWER_MODE){
+    if(!isPoetAdmin()){
       return;
     }
 
@@ -2244,7 +2246,7 @@ window.addEventListener("beforeunload",()=>{
     };
 
     document.getElementById("saveNewPoem").onclick = async function () {
-      if(VIEWER_MODE){
+      if(!isPoetAdmin()){
         return;
       }
       const title = document.getElementById("newPoemTitle").value.trim();
@@ -2373,7 +2375,7 @@ window.addEventListener("beforeunload",()=>{
 
   // ===== যোগ করা কবিতা Delete করার ব্যবস্থা =====
   function enablePoemDeleteButtons() {
-    if(VIEWER_MODE){
+    if(!isPoetAdmin()){
       return;
     }
     document.querySelectorAll(".deleteUserPoem").forEach(function (btn) {
