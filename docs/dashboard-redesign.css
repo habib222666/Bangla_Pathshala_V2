@@ -3015,3 +3015,82 @@ body.dark #favoritePage .poet-page-header h2 { color: #f1f5f9; }
   text-align: center;
   overflow-wrap: anywhere;
 }
+
+
+/* ===== FINAL CLASS PAGE GRID AND COMPACT BANNER ===== */
+
+/* Class page only: four columns on desktop */
+#library #list.poem-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 15px !important;
+}
+
+/* Class page only: two columns on phones and tablets */
+@media (max-width: 720px) {
+  #library #list.poem-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+
+/* Class page banner: approximately half the original height */
+#library .class-banner {
+  height: 76px !important;
+  min-height: 76px !important;
+  max-height: 76px !important;
+  padding: 8px 18px !important;
+  margin-bottom: 14px !important;
+  box-sizing: border-box !important;
+}
+
+#library .class-banner .banner-icon {
+  width: 42px !important;
+  min-width: 42px !important;
+  margin-right: 10px !important;
+  font-size: 28px !important;
+}
+
+#library .class-banner h1 {
+  font-size: 21px !important;
+  line-height: 1.25 !important;
+  margin: 0 !important;
+}
+
+#library .class-banner p {
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  margin: 3px 0 0 !important;
+}
+
+#library .class-banner .banner-art {
+  font-size: 16px !important;
+  letter-spacing: 0 !important;
+}
+
+@media (max-width: 520px) {
+  #library .class-banner {
+    height: 64px !important;
+    min-height: 64px !important;
+    max-height: 64px !important;
+    padding: 5px 10px !important;
+  }
+
+  #library .class-banner .banner-icon {
+    width: 28px !important;
+    min-width: 28px !important;
+    margin-right: 6px !important;
+    font-size: 21px !important;
+  }
+
+  #library .class-banner h1 {
+    font-size: 16px !important;
+  }
+
+  #library .class-banner p {
+    font-size: 10px !important;
+  }
+
+  #library .class-banner .banner-art {
+    font-size: 11px !important;
+  }
+}
