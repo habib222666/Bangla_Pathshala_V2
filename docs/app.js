@@ -1369,16 +1369,16 @@ function buildClassNav(){
   nav.innerHTML = "";
 
   const classGroups = [
-    { key: "1", classes: [1], label: "প্রথম" },
-    { key: "2", classes: [2], label: "দ্বিতীয়" },
-    { key: "3", classes: [3], label: "তৃতীয়" },
-    { key: "4", classes: [4], label: "চতুর্থ" },
-    { key: "5", classes: [5], label: "পঞ্চম" },
-    { key: "6", classes: [6], label: "ষষ্ঠ" },
-    { key: "7", classes: [7], label: "সপ্তম" },
-    { key: "8", classes: [8], label: "অষ্টম" },
-    { key: "9-10", classes: [9, 10], label: "নবম–দশম" },
-    { key: "11-12", classes: [11, 12], label: "একাদশ–দ্বাদশ" }
+    { key: "1", classes: [1], book: "আমার বাংলা বই", label: "প্রথম" },
+    { key: "2", classes: [2], book: "আমার বাংলা বই", label: "দ্বিতীয়" },
+    { key: "3", classes: [3], book: "আমার বাংলা বই", label: "তৃতীয়" },
+    { key: "4", classes: [4], book: "আমার বাংলা বই", label: "চতুর্থ" },
+    { key: "5", classes: [5], book: "আমার বাংলা বই", label: "পঞ্চম" },
+    { key: "6", classes: [6], book: "চারুপাঠ", label: "ষষ্ঠ" },
+    { key: "7", classes: [7], book: "সপ্তবর্ণা", label: "সপ্তম" },
+    { key: "8", classes: [8], book: "সাহিত্য-কণিকা", label: "অষ্টম" },
+    { key: "9-10", classes: [9, 10], book: "বাংলা সাহিত্য", label: "নবম–দশম" },
+    { key: "11-12", classes: [11, 12], book: "সাহিত্যপাঠ", label: "একাদশ–দ্বাদশ" }
   ];
 
   classGroups.forEach(group => {
@@ -1391,7 +1391,7 @@ function buildClassNav(){
 
     btn.type = "button";
 
-    btn.innerHTML = `<span class="nav-icon">📚</span><span class="nav-label">${group.label} শ্রেণি</span><small class="class-count">কবিতা: ০টি</small>`;
+    btn.innerHTML = `<span class="nav-book-name">${group.book}</span><span class="nav-label">${group.label} শ্রেণি</span><small class="class-count">কবিতা: ০টি</small>`;
 
     btn.addEventListener("click", function(){
 

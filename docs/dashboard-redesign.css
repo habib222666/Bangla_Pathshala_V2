@@ -2994,3 +2994,24 @@ body.dark #favoritePage .poet-page-header h2 { color: #f1f5f9; }
   color: #000000 !important;
   -webkit-text-fill-color: #000000 !important;
 }
+
+
+/* Homepage class cards: book names replace book icons */
+#navClasses .nav-class .nav-book-name {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  flex: 0 1 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #16834b;
+  -webkit-text-fill-color: #16834b;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.5;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
