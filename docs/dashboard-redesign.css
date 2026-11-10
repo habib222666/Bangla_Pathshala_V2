@@ -2285,12 +2285,13 @@ body.dark #adminLoginForm input {
 /* ===== POET BIOGRAPHY READER ===== */
 #poetBioButton {
   display: inline-block;
-  margin: 12px 0 16px;
-  padding: 9px 15px;
+  margin: 8px 0 12px;
+  padding: 6px 11px;
   border: 0;
-  border-radius: 9px;
+  border-radius: 7px;
   background: #be123c;
   color: #fff;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
 }
