@@ -19,3 +19,12 @@ captures/
 /_all class _poem/*illustrations.zip
 /_all class _poem/*Android-Project.zip
 /Bangla_Pathshala_2026.zip
+
+# Exclude selected local files from GitHub
+/BanglaPathshala_TTS_Test/output/bangla_test.wav
+/Backup_8nov_poems_rows.csv
+/APK_Backup/Bangla-Pathshala-Viewer.apk
+/_all class _poem/old apk/Bangla-Pathshala-Viewer.apk
+
+# Keep only SolaimanLipi and TeeshtaMJ font files in Git
+**/HindSiliguri-*.ttf
