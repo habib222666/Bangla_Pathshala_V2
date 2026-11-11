@@ -3436,3 +3436,69 @@ body.dark .poem-category-card:hover { border-color: #64748b; }
   .poem-category-title { font-size: 16px; }
   .poem-category-description { font-size: 11px; line-height: 1.55; }
 }
+
+/* Home: current and old all-class contents / print cards */
+.home-category-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  flex: 1 1 100%;
+  width: 100%;
+}
+
+.home-category-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 14px 16px;
+  border: 1px solid var(--bp-border);
+  border-radius: 14px;
+  background: var(--bp-card);
+  color: var(--bp-navy);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.55;
+  text-align: left;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.home-category-action:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--bp-shadow);
+}
+
+.home-category-icon {
+  flex: 0 0 auto;
+  font-size: 27px;
+}
+
+.current-category-action {
+  border-left: 4px solid #16a34a;
+}
+
+.old-category-action {
+  border-left: 4px solid #b45309;
+}
+
+body.dark .home-category-action {
+  background: #1f2937;
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+@media (max-width: 600px) {
+  .home-category-actions {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+  .home-category-action {
+    min-height: 64px;
+    padding: 11px 13px;
+    font-size: 12px;
+  }
+  .home-category-icon {
+    font-size: 24px;
+  }
+}

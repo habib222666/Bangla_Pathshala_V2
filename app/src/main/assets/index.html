@@ -69,8 +69,24 @@
           <input id="homeSearch" class="search-box" placeholder="⌕ সব শ্রেণির কবিতা খুঁজুন" autocomplete="off">
 <button id="homeFavoriteBtn" class="soft-btn" type="button">♡ প্রিয় কবিতা</button>
           <button id="homeDarkModeBtn" class="soft-btn" type="button">🌙 ডার্ক মোড</button>
-          <button id="homeContentsBtn" class="soft-btn" type="button">📖 সকল শ্রেণির সূচিপত্র</button>
-          <button id="printAllBtn" class="soft-btn" type="button">📚 সব কবিতা পিডিএফ / মুদ্রণ</button>
+          <div id="homeCategoryActions" class="home-category-actions">
+  <button id="currentAllContentsBtn" class="home-category-action current-category-action" type="button">
+    <span class="home-category-icon">📖</span>
+    <span>বর্তমান সকল শ্রেণির কবিতার সূচিপত্র</span>
+  </button>
+  <button id="currentAllPrintBtn" class="home-category-action current-category-action" type="button">
+    <span class="home-category-icon">🖨️</span>
+    <span>বর্তমান সকল শ্রেণির কবিতার PDF / মুদ্রণ</span>
+  </button>
+  <button id="oldAllContentsBtn" class="home-category-action old-category-action" type="button">
+    <span class="home-category-icon">📖</span>
+    <span>পুরোনো সকল শ্রেণির কবিতার সূচিপত্র</span>
+  </button>
+  <button id="oldAllPrintBtn" class="home-category-action old-category-action" type="button">
+    <span class="home-category-icon">🖨️</span>
+    <span>পুরোনো সকল শ্রেণির কবিতার PDF / মুদ্রণ</span>
+  </button>
+</div>
         </div>
         <div id="homeList" class="poem-grid"></div>
       </section>

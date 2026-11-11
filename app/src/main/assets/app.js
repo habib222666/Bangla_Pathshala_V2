@@ -2032,17 +2032,21 @@ function renderContents(classes, category){
   });
 }
 
-const homeContentsBtn=document.querySelector("#homeContentsBtn");
-
-if(homeContentsBtn){
-  homeContentsBtn.addEventListener("click", function(){
-    home.classList.add("hidden");
-    library.classList.add("hidden");
-    reader.classList.add("hidden");
-    document.querySelector("#contents").classList.remove("hidden");
-    renderContents(Array.from({length:12}, (_,i) => i+1));
-  });
+function openAllCategoryContents(category){
+  home.classList.add("hidden");
+  library.classList.add("hidden");
+  reader.classList.add("hidden");
+  document.querySelector("#contents").classList.remove("hidden");
+  renderContents(Array.from({length:12}, (_,i) => i+1), category);
 }
+
+document.getElementById("currentAllContentsBtn")?.addEventListener("click", function(){
+  openAllCategoryContents("current");
+});
+
+document.getElementById("oldAllContentsBtn")?.addEventListener("click", function(){
+  openAllCategoryContents("old");
+});
 
 const navHome=document.querySelector("#navHome");
 const homeBtn=document.querySelector("#homeBtn");
@@ -3118,12 +3122,26 @@ function bpPrintPoems(poems, documentTitle) {
   }
 }
 
-document.getElementById("printAllBtn")?.addEventListener("click", function() {
+function printAllCategoryPoems(category){
   const allPoems = [];
-  for (let c = 1; c <= 12; c++) {
+  for(let c = 1; c <= 12; c++){
     allPoems.push(...(classData[String(c)] || []));
   }
-  bpPrintPoems(allPoems, "বাংলাপাঠশালা — সকল শ্রেণির কবিতা");
+  const poems = allPoems.filter(poem =>
+    category === "old" ? poem.oldBook === true : poem.oldBook !== true
+  );
+  const title = category === "old"
+    ? "বাংলাপাঠশালা — পুরোনো সকল শ্রেণির কবিতা"
+    : "বাংলাপাঠশালা — বর্তমান সকল শ্রেণির কবিতা";
+  bpPrintPoems(poems, title);
+}
+
+document.getElementById("currentAllPrintBtn")?.addEventListener("click", function(){
+  printAllCategoryPoems("current");
+});
+
+document.getElementById("oldAllPrintBtn")?.addEventListener("click", function(){
+  printAllCategoryPoems("old");
 });
 
 document.getElementById("printClassBtn")?.addEventListener("click", function() {
