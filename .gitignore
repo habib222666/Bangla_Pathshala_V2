@@ -28,3 +28,6 @@ captures/
 
 # Keep only SolaimanLipi and TeeshtaMJ font files in Git
 **/HindSiliguri-*.ttf
+
+# Exclude local Photoshop source file
+/app icon/new-logo.psd

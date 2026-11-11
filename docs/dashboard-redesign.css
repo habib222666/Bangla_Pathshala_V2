@@ -2693,7 +2693,7 @@ body.dark #poetProfileList .poet-admin-item span {
 }
 .poet-public-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 13px;
 }
 .poet-public-card {
@@ -2724,27 +2724,44 @@ body.dark #poetProfileList .poet-admin-item span {
   color: #273b52;
 }
 .poet-detail-heading {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
+  display: block;
   margin: 20px 0;
+}
+
+.poet-detail-heading::after {
+  content: "";
+  display: block;
+  clear: both;
 }
 .poet-public-photo {
   width: 145px;
   height: 165px;
-  flex: 0 0 auto;
+  float: left;
+  margin: 0 20px 10px 0;
   object-fit: cover;
   border-radius: 12px;
 }
 #publicPoetName { margin: 0 0 8px; font-size: 25px; }
 #publicPoetYears { color: #718096; font-weight: 700; }
-#publicPoetShort { text-align: justify; line-height: 1.8; }
-.poet-public-detail h3 { margin: 20px 0 9px; }
-.poet-public-biography,
-/* Restore biography font size; keep sources smaller */
-.poet-public-detail .poet-public-biography {
+#publicPoetShort,
+#publicPoetBiography {
   font-size: inherit;
+  text-align: justify;
+  line-height: 1.65;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
+
+#publicPoetBiography {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.poet-public-detail h3 { margin: 20px 0 9px; }
 
 #publicPoetSources {
   font-size: 10px;
@@ -2775,10 +2792,10 @@ body.dark .poet-back-btn {
   #home .poet-home-card { flex-wrap: wrap; gap: 8px 11px; padding: 13px; }
   #home .poet-home-title { font-size: 17px; }
   #home .poet-home-subtitle { flex-basis: calc(100% - 42px); margin-left: 42px; }
-  .poet-public-grid { grid-template-columns: 1fr; }
+  .poet-public-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .poet-public-detail { padding: 14px; }
   .poet-detail-heading { gap: 12px; }
-  .poet-public-photo { width: 105px; height: 125px; }
+  .poet-public-photo { width: 105px; height: 125px; margin-right: 12px; }
   #publicPoetName { font-size: 20px; }
 }
 
