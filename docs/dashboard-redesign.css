@@ -3381,3 +3381,58 @@ body.dark #favoritePage .poet-page-header h2 { color: #f1f5f9; }
   box-sizing: border-box !important;
 }
 /* END FINAL FIX */
+
+
+/* ===== Current and Old Poem Category Cards ===== */
+.poem-category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 18px 0;
+}
+.poem-category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 190px;
+  padding: 22px 16px;
+  border: 1px solid var(--bp-border);
+  border-radius: 18px;
+  background: var(--bp-card);
+  color: var(--bp-navy);
+  box-shadow: var(--bp-shadow);
+  text-align: center;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.poem-category-card:hover {
+  transform: translateY(-3px);
+  border-color: #86b99a;
+  box-shadow: 0 10px 24px rgba(30,41,59,.12);
+}
+.poem-category-icon { font-size: 46px; line-height: 1.2; }
+.poem-category-title { font-size: 20px; font-weight: 800; line-height: 1.5; }
+.poem-category-description {
+  max-width: 300px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.poem-category-back { margin: 12px 0; }
+body.dark .poem-category-card {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+body.dark .poem-category-description { color: #cbd5e1; }
+body.dark .poem-category-card:hover { border-color: #64748b; }
+@media (max-width: 520px) {
+  .poem-category-grid { gap: 10px; margin: 14px 0; }
+  .poem-category-card { min-height: 165px; padding: 15px 9px; gap: 8px; }
+  .poem-category-icon { font-size: 38px; }
+  .poem-category-title { font-size: 16px; }
+  .poem-category-description { font-size: 11px; line-height: 1.55; }
+}

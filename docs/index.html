@@ -161,10 +161,23 @@
           </div>
           <div class="banner-art">☁️ ☀️ 🌿</div>
         </div>
-        <div class="section-tools">
-<button id="classContentsBtn" class="soft-btn" type="button">📖 সূচিপত্র</button>
-          <button id="printClassBtn" class="soft-btn" type="button">📄 এই শ্রেণির পিডিএফ / মুদ্রণ</button>
+        <div id="poemCategoryCards" class="poem-category-grid">
+          <button id="currentPoemsCard" class="poem-category-card" type="button">
+            <span class="poem-category-icon">📚</span>
+            <span class="poem-category-title">বর্তমান কবিতা</span>
+            <span class="poem-category-description">বর্তমানে ব্যবহৃত ও নতুন যোগ করা কবিতাগুলো</span>
+          </button>
+          <button id="oldPoemsCard" class="poem-category-card" type="button">
+            <span class="poem-category-icon">📖</span>
+            <span class="poem-category-title">পুরোনো কবিতা</span>
+            <span class="poem-category-description">আগের সংরক্ষিত কবিতাগুলো</span>
+          </button>
         </div>
+        <div id="poemCategoryBack" class="poem-category-back hidden">
+          <button id="backToPoemCategories" class="soft-btn" type="button">← কবিতার ধরন</button>
+          <button id="categoryContentsBtn" class="soft-btn" type="button">📖 বর্তমান কবিতার সূচিপত্র</button>
+        </div>
+
         <div id="list" class="poem-grid"></div>
       </section>
 

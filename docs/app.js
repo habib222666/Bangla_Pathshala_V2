@@ -6,6 +6,8 @@ let speaking=false;
 let globalSearchMode=false;
 let globalSearchResults=[];
 let selectedClasses=[1];
+let selectedPoemCategory = null;
+let selectedClassTitle = "";
 let poetBioRequestId = 0;
 
 const SUPABASE_URL = "https" + String.fromCharCode(58,47,47) + "gycyxkieruvqvlucxzkl" + ".supabase.co";
@@ -1523,7 +1525,9 @@ if(backBtn){
     if(window.speechSynthesis) window.speechSynthesis.cancel();
     if(window.Android && Android.stop) Android.stop();
     reader.classList.add("hidden");
-    if(readerReturnPage === "favorites"){
+    if(readerReturnPage === "contents"){
+      document.querySelector("#contents")?.classList.remove("hidden");
+    } else if(readerReturnPage === "favorites"){
       openFavoritesPage();
     } else {
       library.classList.remove("hidden");
@@ -1732,6 +1736,7 @@ function openClass(c){
 
   const classes = Array.isArray(c) ? c.map(Number) : [Number(c)];
   selectedClasses = classes;
+  selectedPoemCategory = null;
 
 
   items = classes.flatMap(cls => classData[String(cls)] || []);
@@ -1758,6 +1763,7 @@ function openClass(c){
 
   }
 
+  selectedClassTitle = title;
   document.querySelector('#classTitle').textContent = title;
 
   document.querySelector('#classCount').textContent = `${toBanglaNumber(items.length)} টি কবিতা`;
@@ -1957,13 +1963,20 @@ function toBanglaNumber(n){
   return String(n).replace(/[0-9]/g, function(d){ return "০১২৩৪৫৬৭৮৯"[Number(d)]; });
 }
 
-function renderContents(classes){
-
+function renderContents(classes, category){
   const contents=document.querySelector("#contents");
   const className=document.querySelector("#contentsClassName");
   const wrap=document.querySelector("#contentsTableWrap");
-
+  const heading=document.querySelector("#contentsHeading");
   if(!contents || !className || !wrap) return;
+
+  const categoryLabel = category === "old" ? "পুরোনো কবিতা"
+    : category === "current" ? "বর্তমান কবিতা" : "";
+
+  if(heading){
+    heading.textContent = category === "old" ? "📖 পুরোনো কবিতার সূচিপত্র"
+      : category === "current" ? "📖 বর্তমান কবিতার সূচিপত্র" : "📖 সূচিপত্র";
+  }
 
   const classList = Array.isArray(classes) ? classes.map(Number) : [];
   const allClasses = classList.length === 12 &&
@@ -1978,37 +1991,33 @@ function renderContents(classes){
   } else {
     className.textContent=(classNames[classList[0]] || classList[0])+" শ্রেণি";
   }
+  if(categoryLabel) className.textContent += " — " + categoryLabel;
 
   const poems=[];
-
   classList.forEach(function(c){
     (classData[String(c)] || []).forEach(function(poem,index){
-      poems.push({poem:poem,classNo:c,index:index});
+      const matches = !category ||
+        (category === "old" ? poem.oldBook === true : poem.oldBook !== true);
+      if(matches) poems.push({poem:poem,classNo:c,index:index});
     });
   });
 
   if(poems.length===0){
-    wrap.innerHTML=allClasses
-      ? "<div class=\"contents-empty\">কোনো কবিতা পাওয়া যায়নি।</div>"
-      : "<div class=\"contents-empty\">এই শ্রেণিতে কোনো কবিতা পাওয়া যায়নি।</div>";
+    wrap.innerHTML="<div class=\"contents-empty\">এই বিভাগে কোনো কবিতা পাওয়া যায়নি।</div>";
     return;
   }
 
-  const lastColumn = allClasses ? "শ্রেণি" : "কবিতার ধরন";
-
+  const lastColumn = allClasses ? "<th>শ্রেণি</th>" : "";
   wrap.innerHTML=`<table class="contents-table">
-    <thead><tr><th>নং</th><th>কবিতার নাম</th><th>কবি</th><th>${lastColumn}</th></tr></thead>
+    <thead><tr><th>নং</th><th>কবিতার নাম</th><th>কবির নাম</th>${lastColumn}</tr></thead>
     <tbody>${poems.map(function(entry,i){
       const poem=entry.poem;
-      const typeText = allClasses
-        ? displayClassName(entry.classNo)
-        : (poem.oldBook ? "পুরোনো কবিতা" : "");
-
+      const typeText = allClasses ? displayClassName(entry.classNo) : "";
       return `<tr data-class="${entry.classNo}" data-index="${entry.index}">
         <td>${toBanglaNumber(i+1)}</td>
         <td>${poem.title || "নাম নেই"}</td>
         <td>${poem.poet || "—"}</td>
-        <td>${typeText}</td>
+        ${allClasses ? `<td>${typeText}</td>` : ""}
       </tr>`;
     }).join("")}</tbody>
   </table>`;
@@ -2056,6 +2065,7 @@ function runGlobalSearch(q){
     return;
   }
   globalSearchMode=true;
+  selectedPoemCategory = null;
   globalSearchResults=[];
   for(let c=1;c<=12;c++){
     (classData[String(c)]||[]).forEach(x=>{
@@ -2075,24 +2085,102 @@ function runGlobalSearch(q){
 }
 
 function render(){
-  const q=(search ? search.value : '').trim().toLowerCase();
-  let a=items.filter(x=>(x.title+" "+(x.poet||"")).toLowerCase().includes(q));
-  if(showingFavorites) a=a.filter(isFavorite);
-  renderPoems(list,a);
-  const c=items[0] ? Number(items[0].class) : 1;
-  const countEl=document.querySelector('#classCount');
-  if(countEl) countEl.textContent=poemCountText(c);
+  const categoryCards = document.getElementById("poemCategoryCards");
+  const categoryBack = document.getElementById("poemCategoryBack");
+  const poemList = document.getElementById("list");
+  const adminRow = document.getElementById("poemAdminButtonRow");
+
+  const choosingCategory = !globalSearchMode && !showingFavorites && !selectedPoemCategory;
+
+  if (categoryCards) categoryCards.classList.toggle("hidden", !choosingCategory);
+  if (categoryBack) categoryBack.classList.toggle("hidden", choosingCategory || globalSearchMode);
+  const categoryContentsBtn = document.getElementById("categoryContentsBtn");
+  if(categoryContentsBtn){
+    categoryContentsBtn.textContent = selectedPoemCategory === "old"
+      ? "📖 পুরোনো কবিতার সূচিপত্র"
+      : "📖 বর্তমান কবিতার সূচিপত্র";
+  }
+  if (poemList) poemList.classList.toggle("hidden", choosingCategory);
+
+  if (adminRow) {
+    adminRow.classList.toggle("hidden", choosingCategory || globalSearchMode);
+    const currentButton = document.getElementById("addPoemBtn");
+    const oldButton = document.getElementById("oldBookPoemBtn");
+    if (currentButton) currentButton.classList.toggle("hidden", selectedPoemCategory === "old");
+    if (oldButton) oldButton.classList.toggle("hidden", selectedPoemCategory !== "old");
+  }
+
+  const q = (search ? search.value : '').trim().toLowerCase();
+  let a = items.filter(x =>
+    (String(x.title || "") + " " + (x.poet || "")).toLowerCase().includes(q)
+  );
+
+  if (!globalSearchMode && selectedPoemCategory) {
+    a = a.filter(x =>
+      selectedPoemCategory === "old" ? x.oldBook === true : x.oldBook !== true
+    );
+  }
+
+  if (showingFavorites) a = a.filter(isFavorite);
+  if (poemList) renderPoems(poemList, a);
+
+  if (!globalSearchMode && !showingFavorites) {
+    const categoryName = selectedPoemCategory === "old"
+      ? "পুরোনো কবিতা"
+      : selectedPoemCategory === "current" ? "বর্তমান কবিতা" : "";
+
+    const titleEl = document.querySelector('#classTitle');
+    if (titleEl) {
+      titleEl.textContent = categoryName
+        ? `${selectedClassTitle} — ${categoryName}`
+        : selectedClassTitle;
+    }
+
+    const countEl = document.querySelector('#classCount');
+    if (countEl) {
+      countEl.textContent = choosingCategory
+        ? `মোট কবিতা: ${toBanglaNumber(items.length)} টি`
+        : `পাওয়া গেছে: ${toBanglaNumber(a.length)} টি`;
+    }
+  } else if (globalSearchMode) {
+    const countEl = document.querySelector('#classCount');
+    if (countEl) countEl.textContent = `পাওয়া গেছে: ${toBanglaNumber(a.length)} টি`;
+  }
 }
 
 let readerReturnPage = "library";
 
+
+const currentPoemsCard = document.getElementById("currentPoemsCard");
+if (currentPoemsCard) currentPoemsCard.addEventListener("click", function(){
+  selectedPoemCategory = "current";
+  render();
+});
+
+const oldPoemsCard = document.getElementById("oldPoemsCard");
+if (oldPoemsCard) oldPoemsCard.addEventListener("click", function(){
+  selectedPoemCategory = "old";
+  render();
+});
+
+const backToPoemCategories = document.getElementById("backToPoemCategories");
+if (backToPoemCategories) backToPoemCategories.addEventListener("click", function(){
+  selectedPoemCategory = null;
+  const box = document.getElementById("newPoemBox");
+  if (box) box.remove();
+  render();
+});
+
 function show(x){
   stopPoemAudio();
-  readerReturnPage = document.querySelector("#favoritePage")?.classList.contains("hidden")
-    ? "library" : "favorites";
+  readerReturnPage = document.querySelector("#contents")?.classList.contains("hidden") === false
+    ? "contents"
+    : document.querySelector("#favoritePage")?.classList.contains("hidden")
+      ? "library" : "favorites";
   currentPoem=x;
 
   library.classList.add("hidden");
+  document.querySelector("#contents")?.classList.add("hidden");
   reader.classList.remove("hidden");
 
   document.querySelector("#meta").textContent=
@@ -2329,10 +2417,14 @@ window.addEventListener("beforeunload",()=>{
       "display:inline-block;flex:1;min-width:0;margin:0;padding:12px 10px;border:0;border-radius:12px;font-size:16px;cursor:pointer;background:#e8e0ff;";
 
     const buttonRow = document.createElement("div");
-
+    buttonRow.id = "poemAdminButtonRow";
     buttonRow.style.cssText = "display:flex;gap:10px;width:100%;margin:12px 0;";
-    btn.parentNode.insertBefore(buttonRow, btn);
+    const tools = library.querySelector(".section-tools");
+    if (tools) tools.after(buttonRow);
+    else library.prepend(buttonRow);
     buttonRow.append(btn, oldBookBtn);
+    buttonRow.classList.add("hidden");
+    render();
 
     oldBookBtn.onclick = function () {
       showOldBookPoemForm();
@@ -2855,15 +2947,14 @@ initializeCloudSync();
   }
 })();
 
-const classContentsBtn=document.querySelector("#classContentsBtn");
-
-if(classContentsBtn){
-  classContentsBtn.addEventListener("click", function(){
+const categoryContentsBtn=document.querySelector("#categoryContentsBtn");
+if(categoryContentsBtn){
+  categoryContentsBtn.addEventListener("click", function(){
     home.classList.add("hidden");
     library.classList.add("hidden");
     reader.classList.add("hidden");
     document.querySelector("#contents").classList.remove("hidden");
-    renderContents(selectedClasses);
+    renderContents(selectedClasses, selectedPoemCategory);
   });
 }
 
