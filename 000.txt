@@ -1,0 +1,33 @@
+Class-1 আমার বাংলা বই
+Class-2 আমার বাংলা বই
+Class-3 আমার বাংলা বই
+Class-4 আমার বাংলা বই
+Class-5 আমার বাংলা বই
+Class-6 চারুপাঠ 
+Class-7 সপ্তবর্ণা 
+Class-8 সাহিত্য-কণিকা 
+Class-9-10 বাংলা সাহিত্য 
+Class-11-12 সাহিত্যপাঠ 
+
+
+কাজের পরবর্তী ধাপ
+1. ওয়েবসাইট ও Android সমন্বয়: Favorites Page এবং সংশ্লিষ্ট JS, HTML, CSS-এর পার্থক্য ঠিক করা।
+2. ডিজাইন যাচাই: Dashboard, কবি পরিচিতি, সূচিপত্র ও Dark/Light Mode পরীক্ষা।
+3. Admin পরীক্ষা: Admin Login, Add/Edit/Delete এবং সাধারণ ব্যবহারকারীর Read-only সুবিধা যাচাই।
+4. Professional Voice: নির্বাচিত ৩টি কবিতায় পুরুষ ও নারী কণ্ঠের আবেগপূর্ণ আবৃত্তি যুক্ত করা।
+5. চূড়ান্ত পরীক্ষা: Website ও Android উভয় জায়গায় পরীক্ষা।
+6. Commit ও APK: প্রয়োজনীয় ফাইল Commit করে একটি চূড়ান্ত APK তৈরি।
+
+Kobitar button card design
+
+Book icon- remove.    Bin. Favorite
+
+Poem
+Kobir name
+
+Kobitar ongso
+Only 2lin
+
+.....             Aro porun
+
+Button card er height choto hobe

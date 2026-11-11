@@ -1,0 +1,1377 @@
+*{box-sizing:border-box}
+:root{
+  --blue:#24569a;
+  --blue-dark:#173d72;
+  --green:#16834b;
+  --text:#14243a;
+  --muted:#64758b;
+  --line:#e2e8f0;
+  --panel:#ffffff;
+  --page:#fbfcff;
+  --sidebar:#ffffff;
+}
+html,body{margin:0;min-height:100%;background:var(--page);color:var(--text);font-family:"Noto Sans Bengali","Noto Sans",system-ui,sans-serif}
+body{overflow-x:hidden}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+.topbar{height:96px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px 0 34px;position:sticky;top:0;z-index:20}
+.brand-wrap{display:flex;align-items:center;gap:14px}
+.brand-logo{width:68px;height:68px;position:relative;display:flex;align-items:center;justify-content:center}
+.brand-logo .book{font-size:49px;filter:saturate(.9)}
+.brand-logo .leaf{position:absolute;top:3px;right:7px;font-size:25px}
+.brand-name{font-size:32px;line-height:1.05;font-weight:900;color:#15519a;letter-spacing:-.8px}
+.brand-tagline{font-size:16px;color:#5f7da4;margin-top:5px}
+.top-actions{display:flex;gap:30px;align-items:center}
+.top-action{border:0;background:transparent;color:#2d5e98;display:flex;flex-direction:column;align-items:center;gap:0;padding:5px 4px;box-shadow:none}
+.top-action span{font-family:Arial,sans-serif;font-size:34px;line-height:32px;font-weight:300}
+.top-action small{font-size:15px;margin-top:4px}
+
+.app-shell{display:flex;min-height:calc(100vh - 96px)}
+.sidebar{width:284px;flex:0 0 284px;background:var(--sidebar);border-right:1px solid var(--line);position:sticky;top:96px;height:calc(100vh - 96px);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.side-nav{padding:23px 16px 8px}
+.nav-item{width:100%;border:0;background:transparent;color:#274b74;text-align:left;display:flex;align-items:center;gap:18px;border-radius:15px;padding:13px 13px;margin:3px 0;font-size:21px;box-shadow:none}
+.nav-item:hover{background:#f3f7ff}
+.nav-item.active{background:linear-gradient(90deg,#e6e5ff,#e8e9ff);color:#173fc1;font-weight:800}
+.nav-icon{width:30px;text-align:center;font-family:Arial,sans-serif;font-size:28px;line-height:1;color:#35659a}
+.nav-item.active .nav-icon{color:#1e46bf}
+.nav-classes{margin:2px 0 10px}
+.nav-class{width:100%;border:0;background:transparent;color:#315b8d;text-align:left;display:flex;align-items:center;gap:18px;border-radius:14px;padding:10px 13px;font-size:20px;box-shadow:none}
+.nav-class:hover{background:#f5f8fd}
+.nav-class.active{color:#183fbd;background:#ecebff;font-weight:800}
+.nav-class .nav-icon{font-size:23px}
+.sidebar-art{text-align:center;color:#2460a0;font-size:18px;padding:20px 10px 25px;background:radial-gradient(circle at 20% 20%,#edf6ff,transparent 48%),linear-gradient(180deg,transparent,#f1f8ff)}
+.books{font-size:82px;line-height:1;margin-bottom:12px}
+
+.content{flex:1;min-width:0;padding:14px 28px 44px;background:linear-gradient(180deg,#fbfcff,#fff)}
+.dashboard{max-width:1250px;margin:0 auto}
+.class-banner{height:100px;border-radius:24px;background:linear-gradient(105deg,#edf2ff,#f4f6ff 58%,#e7f4ff);display:flex;align-items:center;padding:15px 28px;position:relative;overflow:hidden;margin-bottom:24px}
+.class-banner:after{content:"";position:absolute;right:-35px;bottom:-75px;width:310px;height:130px;border-radius:50%;background:#5fd0aa55;box-shadow:-90px 10px 0 #76d9bd55,-170px 17px 0 #8ce7d355}
+.banner-icon{font-size:50px;width:82px;text-align:center;margin-right:14px;z-index:1}
+.class-banner h1{margin:0;color:#1747a6;font-size:34px;line-height:1.1;position:relative;z-index:2}
+.class-banner p{margin:7px 0 0;color:#5f78a1;font-size:20px;position:relative;z-index:2}
+.banner-art{margin-left:auto;font-size:29px;letter-spacing:5px;z-index:2;opacity:.8}
+.section-tools{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.welcome{font-size:21px;font-weight:800;color:#294d79;margin-right:auto}
+.soft-btn{border:0;border-radius:24px;padding:10px 17px;background:#f0f5ff;color:#245da1;box-shadow:none;font-weight:700}
+.soft-btn:hover{background:#e6efff}
+.search-box{width:280px;height:44px;border:1px solid #dce5ef;border-radius:22px;padding:0 17px;background:#fff;outline:none;color:var(--text)}
+.search-box:focus{border-color:#8fb2df;box-shadow:0 0 0 3px #eaf2ff}
+
+.poem-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.card{position:relative;min-height:300px;border:0;border-radius:18px;padding:14px 18px 14px;overflow:hidden;box-shadow:0 8px 24px rgba(39,65,100,.08);transition:transform .16s ease,box-shadow .16s ease;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(39,65,100,.13)}
+.card:after{content:"";position:absolute;right:-25px;bottom:-30px;width:130px;height:130px;border-radius:55% 45% 55% 45%;background:rgba(255,255,255,.34);transform:rotate(-20deg)}
+
+.card-illustration{width:100%;height:96px;display:flex;align-items:center;justify-content:flex-start;font-size:76px;line-height:1;position:relative;z-index:1}
+.card-illustration img{max-height:95px;max-width:155px;object-fit:contain}
+.favoriteBtn{position:absolute;right:17px;top:17px;width:38px;height:38px;padding:0;border:0;background:transparent;box-shadow:none;font-size:31px;line-height:1;color:#d72a72;z-index:3}
+.card:nth-child(2) .favoriteBtn{color:#168b39}.card:nth-child(3) .favoriteBtn{color:#006bb9}.card:nth-child(4) .favoriteBtn{color:#6c1ec6}.card:nth-child(5) .favoriteBtn{color:#ef6e00}.card:nth-child(6) .favoriteBtn{color:#118d8c}
+.card h3{margin:2px 0 3px;font-size:31px;line-height:1.15;font-weight:900;color:#7a159b;position:relative;z-index:1}
+
+.card .poet{font-size:17px;color:#168448;font-weight:800;position:relative;z-index:1}
+.card .excerpt{font-size:18px;line-height:1.55;margin:17px 0 14px;color:#162235;white-space:pre-line;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;position:relative;z-index:1}
+.read-btn{margin-top:auto;border:0;border-radius:25px;background:rgba(255,255,255,.48);padding:10px 23px;color:#a3008f;font-size:18px;font-weight:900;position:relative;z-index:2;box-shadow:none}
+.card:nth-child(2) .read-btn{color:#09873c}.card:nth-child(3) .read-btn{color:#0b6db8}.card:nth-child(4) .read-btn{color:#6516c7}.card:nth-child(5) .read-btn{color:#f06b00}.card:nth-child(6) .read-btn{color:#008d8c}
+.deleteUserPoem{position:absolute!important;right:12px;bottom:12px;z-index:5;background:#ffffffaa!important;color:#8a3940!important;padding:5px 8px!important;border-radius:10px!important;font-size:11px!important}
+
+.reader-view{max-width:900px;margin:0 auto}
+.reader-actions{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px}
+.paper{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px 32px;box-shadow:0 8px 24px rgba(39,65,100,.07)}
+.paper h1{text-align:center;color:#1747a6;font-size:34px;margin:8px 0}.paper #poet{text-align:center;margin:0 0 24px}.paper pre{white-space:pre-wrap;font-family:"Noto Sans Bengali",sans-serif;font-size:19px;line-height:1.9;margin:0;color:#172338}
+.recite-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.recite-controls button{border:0;border-radius:16px;padding:9px 12px;background:#eef5ff;color:#245da1}
+#editText{width:100%;min-height:300px;border:1px solid #dce5ef;border-radius:16px;padding:14px;line-height:1.8;resize:vertical}.editActions{display:flex;gap:10px;margin-top:10px}.editActions button{flex:1;border:0;border-radius:14px;padding:11px}.editActions #saveBtn{background:#e2f7e7;color:#28713d}.editActions #cancelBtn{background:#f4f4f4;color:#555}
+.empty{grid-column:1/-1;background:#fff;border:1px dashed #d9e2ed;border-radius:20px;padding:35px;text-align:center;color:#718096}
+.muted{color:#687991;font-size:15px}
+
+body.dark{--text:#eef4ff;--muted:#aab8ce;--line:#2b3b52;--panel:#162234;--page:#0f1724;--sidebar:#111b2a;background:#0f1724;color:#eef4ff}.dark .topbar,.dark .paper,.dark .card{color:#eef4ff}.dark .topbar,.dark .sidebar,.dark .paper{background:#111b2a}.dark .content{background:#0f1724}.dark .nav-item,.dark .nav-class{color:#c7d7ef}.dark .class-banner{background:linear-gradient(105deg,#1b2940,#18263b)}.dark .search-box{background:#172438;color:#fff;border-color:#31445e}.dark .soft-btn{background:#1d304a;color:#cfe1ff}.dark .card .excerpt{color:#172338}
+
+@media(max-width:1000px){.sidebar{width:225px;flex-basis:225px}.poem-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.brand-name{font-size:27px}.top-actions{gap:15px}}
+@media(max-width:720px){
+  .topbar{height:78px;padding:0 13px}.brand-logo{width:46px;height:46px}.brand-logo .book{font-size:36px}.brand-logo .leaf{font-size:18px;top:0}.brand-name{font-size:23px}.brand-tagline{font-size:11px}.top-actions{gap:4px}.top-action span{font-size:27px;line-height:25px}.top-action small{font-size:10px}
+  .app-shell{display:block;min-height:calc(100vh - 78px)}.sidebar{position:static;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--line);display:block}.side-nav{display:flex;gap:4px;overflow-x:auto;padding:7px 8px}.nav-item{width:auto;white-space:nowrap;padding:8px 11px;font-size:14px;gap:5px}.nav-item .nav-icon{font-size:20px;width:auto}.nav-classes{display:flex;gap:4px;margin:0}.nav-class{width:auto;white-space:nowrap;padding:8px 10px;font-size:13px;gap:5px}.nav-class .nav-icon{font-size:16px}.sidebar-art{display:none}
+  .content{padding:10px 10px 28px}.class-banner{height:84px;border-radius:18px;padding:10px 14px;margin-bottom:14px}.banner-icon{font-size:35px;width:50px;margin-right:4px}.class-banner h1{font-size:24px}.class-banner p{font-size:14px;margin-top:3px}.banner-art{font-size:20px;letter-spacing:0}
+  .section-tools{flex-wrap:wrap}.welcome{font-size:17px}.search-box{order:3;width:100%}
+  .poem-grid{grid-template-columns:1fr 1fr;gap:10px}.card{min-height:315px;padding:12px 13px;border-radius:18px}.card-illustration{height:72px;font-size:54px}.card-illustration img{max-height:70px;max-width:110px}.card h3{font-size:23px}.card .poet{font-size:13px}.card .excerpt{font-size:14px;line-height:1.5;margin:10px 0}.read-btn{font-size:14px;padding:8px 14px}.favoriteBtn{right:7px;top:7px;font-size:26px}
+  .paper{padding:20px 16px;border-radius:18px}.paper h1{font-size:26px}.paper pre{font-size:17px}.reader-actions{flex-direction:column}.recite-controls button{font-size:13px}
+}
+@media(max-width:430px){.poem-grid{grid-template-columns:1fr}.card{min-height:300px}.top-action:nth-child(3){display:none}.brand-name{font-size:20px}}
+
+
+/* Final UI fixes: smaller read button + global search class label */
+.read-btn{padding:6px 12px!important;font-size:13px!important;border-radius:16px!important;min-height:30px!important}
+.global-class-label{font-size:12px;color:#5d6f86;margin:2px 0 6px;font-weight:700}
+
+
+/* Fix poem read button tap/click on phone */
+.card:after{pointer-events:none !important;}
+.read-btn{position:relative !important;z-index:20 !important;pointer-events:auto !important;cursor:pointer !important;touch-action:manipulation !important;}
+
+
+/* FINAL: compact poem read buttons */
+.card .readBtn,
+.card button.readBtn,
+.globalSearchCard .readBtn,
+.globalSearchCard button.readBtn {
+  display: inline-flex !important;
+  width: fit-content !important;
+  min-width: 0 !important;
+  max-width: max-content !important;
+  min-height: 0 !important;
+  height: 30px !important;
+  padding: 4px 9px !important;
+  margin: 8px 0 0 !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+
+/* FINAL FIX: illustration must never intercept the Read button tap */
+.card-illustration,
+.card-illustration img {
+  pointer-events: none !important;
+}
+
+
+/* ===== Class 1-12 Grid Layout ===== */
+#classList,
+.classList,
+#classes,
+.classes {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#classList button,
+.classList button,
+#classes button,
+.classes button {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+
+/* ===== Class 1-12: FINAL 3-column layout ===== */
+@media(max-width:720px){
+  .side-nav{
+    display:block !important;
+    overflow:visible !important;
+    padding:7px 8px !important;
+  }
+
+  .nav-classes{
+    display:grid !important;
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    gap:4px !important;
+    width:100% !important;
+    margin:4px 0 8px !important;
+    padding:0 !important;
+    box-sizing:border-box !important;
+  }
+
+  .nav-classes .nav-class{
+    width:100% !important;
+    height:42px !important;
+    min-height:42px !important;
+    margin:0 !important;
+    padding:5px 3px !important;
+    box-sizing:border-box !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:3px !important;
+    white-space:nowrap !important;
+    font-size:14px !important;
+    border-radius:9px !important;
+  }
+
+  .nav-classes .nav-class .nav-icon{
+    font-size:15px !important;
+    width:auto !important;
+  }
+
+  /* Different color for each class */
+  .nav-classes .nav-class:nth-child(1){background:#e8f4ff !important;}
+  .nav-classes .nav-class:nth-child(2){background:#eaf8ed !important;}
+  .nav-classes .nav-class:nth-child(3){background:#fff3e6 !important;}
+  .nav-classes .nav-class:nth-child(4){background:#f3ebff !important;}
+  .nav-classes .nav-class:nth-child(5){background:#fff0f3 !important;}
+  .nav-classes .nav-class:nth-child(6){background:#e8f8f7 !important;}
+  .nav-classes .nav-class:nth-child(7){background:#fff8df !important;}
+  .nav-classes .nav-class:nth-child(8){background:#eaf0ff !important;}
+  .nav-classes .nav-class:nth-child(9){background:#f1f7e8 !important;}
+  .nav-classes .nav-class:nth-child(10){background:#ffedf5 !important;}
+  .nav-classes .nav-class:nth-child(11){background:#e9f6ff !important;}
+  .nav-classes .nav-class:nth-child(12){background:#f5edff !important;}
+
+  .nav-classes .nav-class.active{
+    font-weight:800 !important;
+  }
+}
+
+/* ===== Smaller Class Buttons ===== */
+@media(max-width:720px){
+  .nav-classes{
+    gap:3px !important;
+    margin:3px 0 6px !important;
+  }
+
+  .nav-classes .nav-class{
+    height:36px !important;
+    min-height:36px !important;
+    padding:3px 2px !important;
+    gap:2px !important;
+    font-size:14px !important;
+    border-radius:7px !important;
+  }
+
+  .nav-classes .nav-class .nav-icon{
+    font-size:14px !important;
+  }
+}
+
+/* Dark mode: poem text must remain visible */
+.dark .paper pre{
+  color:#eef4ff !important;
+  background:transparent !important;
+}
+
+.dark .paper h1{
+  color:#8fc4ff !important;
+}
+
+.dark .paper #poet{
+  color:#9fe3b1 !important;
+}
+
+.dark .paper{
+  color:#eef4ff !important;
+}
+
+/* DARK MODE READER - FINAL TEXT VISIBILITY FIX */
+body.dark .paper,
+body.dark .paper h1,
+body.dark .paper #poet,
+body.dark .paper pre {
+  background-color: #111b2a !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark .paper pre {
+  display: block !important;
+  white-space: pre-wrap !important;
+  overflow: visible !important;
+}
+
+/* FINAL DARK MODE READER TEXT */
+body.dark .paper pre#text {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark .paper #poet {
+  color: #9fe3b1 !important;
+}
+
+body.dark .paper h1 {
+  color: #8fc4ff !important;
+}
+
+/* ===== WEB DASHBOARD = PHONE DASHBOARD ===== */
+@media(min-width:721px){
+
+  .topbar{
+    height:78px !important;
+    padding:0 18px !important;
+  }
+
+  .brand-logo{
+    width:46px !important;
+    height:46px !important;
+  }
+
+  .brand-logo .book{
+    font-size:36px !important;
+  }
+
+  .brand-logo .leaf{
+    font-size:18px !important;
+    top:0 !important;
+  }
+
+  .brand-name{
+    font-size:23px !important;
+  }
+
+  .brand-tagline{
+    font-size:11px !important;
+  }
+
+  .top-actions{
+    gap:4px !important;
+  }
+
+  .top-action span{
+    font-size:27px !important;
+    line-height:25px !important;
+  }
+
+  .top-action small{
+    font-size:10px !important;
+  }
+
+  .app-shell{
+    display:block !important;
+    min-height:calc(100vh - 78px) !important;
+  }
+
+  .sidebar{
+    position:static !important;
+    width:100% !important;
+    height:auto !important;
+    border-right:0 !important;
+    border-bottom:1px solid var(--line) !important;
+    display:block !important;
+  }
+
+  .side-nav{
+    display:block !important;
+    overflow:visible !important;
+    padding:7px 8px !important;
+  }
+
+  .nav-item{
+    width:auto !important;
+    white-space:nowrap !important;
+    display:inline-flex !important;
+    padding:8px 11px !important;
+    font-size:14px !important;
+    gap:5px !important;
+    margin:0 3px 0 0 !important;
+  }
+
+  .nav-item .nav-icon{
+    font-size:20px !important;
+    width:auto !important;
+  }
+
+  .nav-classes{
+    display:grid !important;
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    gap:3px !important;
+    width:100% !important;
+    margin:3px 0 6px !important;
+    padding:0 !important;
+  }
+
+  .nav-classes .nav-class{
+    width:100% !important;
+    height:36px !important;
+    min-height:36px !important;
+    padding:3px 2px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:2px !important;
+    white-space:nowrap !important;
+    font-size:14px !important;
+    border-radius:7px !important;
+  }
+
+  .nav-classes .nav-class .nav-icon{
+    font-size:14px !important;
+    width:auto !important;
+  }
+
+  .sidebar-art{
+    display:none !important;
+  }
+
+  .content{
+    padding:10px 10px 28px !important;
+  }
+
+  .dashboard{
+    max-width:none !important;
+    width:100% !important;
+  }
+
+  .class-banner{
+    height:84px !important;
+    border-radius:18px !important;
+    padding:10px 14px !important;
+    margin-bottom:14px !important;
+  }
+
+  .banner-icon{
+    font-size:35px !important;
+    width:50px !important;
+    margin-right:4px !important;
+  }
+
+  .class-banner h1{
+    font-size:24px !important;
+  }
+
+  .class-banner p{
+    font-size:14px !important;
+    margin-top:3px !important;
+  }
+
+  .banner-art{
+    font-size:20px !important;
+    letter-spacing:0 !important;
+  }
+
+  .section-tools{
+    flex-wrap:wrap !important;
+  }
+
+  .welcome{
+    font-size:17px !important;
+  }
+
+  .search-box{
+    order:3 !important;
+    width:100% !important;
+  }
+
+  .poem-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:10px !important;
+  }
+
+  .card{
+    min-height:315px !important;
+    padding:12px 13px !important;
+    border-radius:18px !important;
+  }
+
+  .card-illustration{
+    height:72px !important;
+    font-size:54px !important;
+  }
+
+  .card-illustration img{
+    max-height:70px !important;
+    max-width:110px !important;
+  }
+
+  .card h3{
+    font-size:23px !important;
+  }
+
+  .card .poet{
+    font-size:13px !important;
+  }
+
+  .card .excerpt{
+    font-size:14px !important;
+    line-height:1.5 !important;
+    margin:10px 0 !important;
+  }
+
+  .favoriteBtn{
+    right:7px !important;
+    top:7px !important;
+    font-size:26px !important;
+  }
+
+}
+
+
+/* Class buttons: centered book icon on top, class name below */
+@media(max-width:720px){
+  .nav-classes .nav-class{
+    height:58px !important;
+    min-height:58px !important;
+    padding:5px 2px !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    align-items:center !important;
+    gap:2px !important;
+    line-height:1.1 !important;
+    text-align:center !important;
+    white-space:normal !important;
+    font-size:14px !important;
+  }
+
+  .nav-classes .nav-class .nav-icon{
+    width:auto !important;
+    font-size:20px !important;
+    line-height:1 !important;
+    display:block !important;
+  }
+}
+
+/* Web/Desktop: different color for each class button */
+@media(min-width:721px){
+
+  .nav-classes .nav-class:nth-child(1){background:#e8f4ff !important;}
+  .nav-classes .nav-class:nth-child(2){background:#eaf8ed !important;}
+  .nav-classes .nav-class:nth-child(3){background:#fff3e6 !important;}
+  .nav-classes .nav-class:nth-child(4){background:#f3ebff !important;}
+  .nav-classes .nav-class:nth-child(5){background:#fff0f3 !important;}
+  .nav-classes .nav-class:nth-child(6){background:#e8f8f7 !important;}
+  .nav-classes .nav-class:nth-child(7){background:#fff8df !important;}
+  .nav-classes .nav-class:nth-child(8){background:#eaf0ff !important;}
+  .nav-classes .nav-class:nth-child(9){background:#f1f7e8 !important;}
+  .nav-classes .nav-class:nth-child(10){background:#ffedf5 !important;}
+
+}
+
+/* Poem cards: 3 cards per row on Web and Phone */
+.poem-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+}
+
+@media(max-width:720px){
+  .poem-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:10px !important;
+  }
+}
+
+@media(max-width:430px){
+  .poem-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:6px !important;
+  }
+}
+
+/* Keep poem card color unchanged after click/tap */
+.card:nth-child(1),
+.card:nth-child(1):hover,
+.card:nth-child(1):active,
+.card:nth-child(1):focus {
+  background:#ffe8ef !important;
+}
+
+.card:nth-child(2),
+.card:nth-child(2):hover,
+.card:nth-child(2):active,
+.card:nth-child(2):focus {
+  background:#e3f7d9 !important;
+}
+
+.card:nth-child(3),
+.card:nth-child(3):hover,
+.card:nth-child(3):active,
+.card:nth-child(3):focus {
+  background:#dff3ff !important;
+}
+
+.card:nth-child(4),
+.card:nth-child(4):hover,
+.card:nth-child(4):active,
+.card:nth-child(4):focus {
+  background:#eee1ff !important;
+}
+
+.card:nth-child(5),
+.card:nth-child(5):hover,
+.card:nth-child(5):active,
+.card:nth-child(5):focus {
+  background:#fff1bd !important;
+}
+
+.card:nth-child(6),
+.card:nth-child(6):hover,
+.card:nth-child(6):active,
+.card:nth-child(6):focus {
+  background:#d9f7f1 !important;
+}
+
+/* Android WebView: prevent tap highlight from changing poem card appearance */
+.card,
+.card:active,
+.card:focus,
+.card:focus-visible {
+  -webkit-tap-highlight-color: transparent !important;
+  outline: none !important;
+}
+
+
+/* Compact poem cards */
+.card{
+  min-height:180px !important;
+  padding:8px 12px 10px !important;
+  border-radius:14px !important;
+}
+
+.card-illustration{
+  height:48px !important;
+  font-size:38px !important;
+}
+
+.card-illustration img{
+  max-height:46px !important;
+  max-width:85px !important;
+}
+
+.card h3{
+  margin:1px 0 2px !important;
+  font-size:24px !important;
+  line-height:1.1 !important;
+}
+
+.card .poet{
+  font-size:14px !important;
+}
+
+.card .excerpt{
+  font-size:15px !important;
+  line-height:1.35 !important;
+  margin:7px 0 5px !important;
+}
+
+@media(max-width:430px){
+  .card{
+    min-height:165px !important;
+    padding:7px 9px 8px !important;
+  }
+
+  .card-illustration{
+    height:40px !important;
+    font-size:32px !important;
+  }
+
+  .card-illustration img{
+    max-height:38px !important;
+    max-width:70px !important;
+  }
+
+  .card h3{
+    font-size:20px !important;
+  }
+
+  .card .poet{
+    font-size:12px !important;
+  }
+
+  .card .excerpt{
+    font-size:13px !important;
+    line-height:1.3 !important;
+    margin:5px 0 3px !important;
+  }
+}
+
+/* Keep delete button slightly lower on Phone and Web */
+.deleteUserPoem{
+  bottom:5px !important;
+}
+
+
+/* Delete button beside favorite button */
+.deleteUserPoem{
+  top:8px !important;
+  right:42px !important;
+  bottom:auto !important;
+  padding:4px 7px !important;
+  font-size:11px !important;
+  z-index:6 !important;
+}
+
+
+/* Compact delete bin icon */
+.deleteUserPoem{
+  top:8px !important;
+  right:38px !important;
+  bottom:auto !important;
+  width:28px !important;
+  height:28px !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:50% !important;
+  background:transparent !important;
+  color:#8a3940 !important;
+  font-size:17px !important;
+  line-height:28px !important;
+  text-align:center !important;
+  z-index:6 !important;
+}
+
+@media(max-width:430px){
+  .deleteUserPoem{
+    top:6px !important;
+    right:34px !important;
+    width:24px !important;
+    height:24px !important;
+    font-size:15px !important;
+    line-height:24px !important;
+  }
+}
+
+
+/* Favorite + Delete icons: larger boxed buttons */
+.favoriteBtn,
+.deleteUserPoem{
+  width:32px !important;
+  height:32px !important;
+  padding:0 !important;
+  border:1px solid rgba(100,100,100,.15) !important;
+  border-radius:8px !important;
+  background:rgba(255,255,255,.75) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  line-height:1 !important;
+}
+
+.favoriteBtn{
+  top:7px !important;
+  right:7px !important;
+  font-size:22px !important;
+}
+
+.deleteUserPoem{
+  top:7px !important;
+  right:45px !important;
+  bottom:auto !important;
+  font-size:18px !important;
+}
+
+@media(max-width:430px){
+  .favoriteBtn,
+  .deleteUserPoem{
+    width:29px !important;
+    height:29px !important;
+    border-radius:7px !important;
+  }
+
+  .favoriteBtn{
+    top:6px !important;
+    right:6px !important;
+    font-size:20px !important;
+  }
+
+  .deleteUserPoem{
+    top:6px !important;
+    right:40px !important;
+    font-size:17px !important;
+  }
+}
+
+
+/* Make book icon visually match the two action icons */
+.card-illustration{
+  font-size:28px !important;
+}
+
+@media(max-width:430px){
+  .card-illustration{
+    font-size:25px !important;
+  }
+}
+
+
+/* Align Book + Delete + Favorite icons in one top row */
+.card-illustration{
+  width:32px !important;
+  height:32px !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:22px !important;
+  line-height:1 !important;
+}
+
+.card-illustration img{
+  max-width:28px !important;
+  max-height:28px !important;
+}
+
+@media(max-width:430px){
+  .card-illustration{
+    width:29px !important;
+    height:29px !important;
+    font-size:20px !important;
+  }
+
+  .card-illustration img{
+    max-width:25px !important;
+    max-height:25px !important;
+  }
+}
+
+
+/* ===== সূচিপত্র ===== */
+#contentsHeading{
+  width:100%;
+  margin:8px 0 4px;
+  text-align:center;
+  font-size:28px;
+  font-weight:900;
+}
+
+#contentsClassName{
+  width:100%;
+  margin:0 0 18px;
+  text-align:center;
+  font-size:21px;
+  font-weight:800;
+}
+
+#contentsTableWrap{
+  width:100%;
+  overflow-x:auto;
+}
+
+.contents-table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 6px 20px rgba(39,65,100,.08);
+}
+
+.contents-table th,
+.contents-table td{
+  border:1px solid rgba(100,100,100,.18);
+  padding:10px 12px;
+  text-align:left;
+  font-size:17px;
+  line-height:1.4;
+}
+
+.contents-table th{
+  text-align:center;
+  font-weight:900;
+}
+
+.contents-table th:first-child,
+.contents-table td:first-child{
+  width:70px;
+  text-align:center;
+}
+
+.contents-table th:last-child,
+.contents-table td:last-child{
+  width:30%;
+}
+
+.contents-table tbody tr{
+  cursor:pointer;
+}
+
+.contents-table tbody tr:active{
+  opacity:.7;
+}
+
+.contents-empty{
+  text-align:center;
+  padding:30px 10px;
+  font-size:18px;
+}
+
+@media(max-width:430px){
+  #contentsHeading{
+    font-size:24px;
+  }
+
+  #contentsClassName{
+    font-size:19px;
+    margin-bottom:14px;
+  }
+
+  .contents-table th,
+  .contents-table td{
+    padding:8px 7px;
+    font-size:14px;
+  }
+
+  .contents-table th:first-child,
+  .contents-table td:first-child{
+    width:45px;
+  }
+
+  .contents-table th:last-child,
+  .contents-table td:last-child{
+    width:32%;
+  }
+}
+
+/* ===== সূচিপত্র button visibility ===== */
+#homeContentsBtn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+@media(max-width:720px){
+  #homeContentsBtn{
+    flex-basis:100% !important;
+    width:100% !important;
+    margin-top:2px !important;
+  }
+}
+
+/* ===== সূচিপত্রের কবিতা row color ===== */
+.contents-table tbody tr:nth-child(6n+1){
+  background:#ffe8ef !important;
+}
+.contents-table tbody tr:nth-child(6n+2){
+  background:#e3f7d9 !important;
+}
+.contents-table tbody tr:nth-child(6n+3){
+  background:#dff3ff !important;
+}
+.contents-table tbody tr:nth-child(6n+4){
+  background:#eee1ff !important;
+}
+.contents-table tbody tr:nth-child(6n+5){
+  background:#fff1bd !important;
+}
+.contents-table tbody tr:nth-child(6n+6){
+  background:#d9f7f1 !important;
+}
+
+.contents-table tbody tr:active{
+  opacity:.72;
+}
+
+/* ===== সূচিপত্র heading color + column size ===== */
+.contents-table thead th{
+  background:#dcecff !important;
+  color:#245da1 !important;
+}
+
+.contents-table thead th:first-child{
+  color:#d72a72 !important;
+}
+
+.contents-table thead th:nth-child(2){
+  color:#6c18be !important;
+}
+
+.contents-table thead th:nth-child(3){
+  color:#008d8c !important;
+}
+
+.contents-table th:nth-child(2),
+.contents-table td:nth-child(2){
+  width:50% !important;
+}
+
+.contents-table th:nth-child(3),
+.contents-table td:nth-child(3){
+  width:30% !important;
+}
+
+/* ===== সূচিপত্র column fixed size ===== */
+.contents-table{
+  table-layout:fixed !important;
+}
+
+.contents-table th:nth-child(1),
+.contents-table td:nth-child(1){
+  width:12% !important;
+}
+
+.contents-table th:nth-child(2),
+.contents-table td:nth-child(2){
+  width:35% !important;
+}
+
+.contents-table th:nth-child(3),
+.contents-table td:nth-child(3){
+  width:53% !important;
+}
+
+/* ===== Dashboard কবিতার নামের font size ===== */
+.card h3{
+  font-size:24px !important;
+}
+
+/* Dashboard কবিতার নাম */
+.card h3{
+  font-size:20px !important;
+}
+
+/* ===== Dashboard কবিতা ও কবির নাম center ===== */
+.card h3,
+.card .poet{
+  text-align:center !important;
+}
+
+/* ===== Dashboard কবিতা ও কবির নাম পুরো card-এর মাঝখানে ===== */
+.card h3,
+.card .poet{
+  width:100% !important;
+  text-align:center !important;
+}
+
+/* ===== সূচিপত্র center alignment fix ===== */
+#contents .section-tools{display:block!important;width:100%;text-align:center!important;margin-bottom:18px}
+#contents #contentsHeading{display:block!important;width:100%!important;text-align:center!important;margin:8px 0 4px!important}
+#contents #contentsClassName{display:block!important;width:100%!important;text-align:center!important;margin:0 0 18px!important}
+
+/* ===== Mobile top controls: actions above, searches below ===== */
+@media(max-width:720px){
+  .top-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    grid-template-rows:auto auto !important;
+    gap:5px 6px !important;
+    align-items:center !important;
+    flex:1 !important;
+  }
+
+  #topFavorites,
+  #topSettings{
+    grid-row:1 !important;
+  }
+
+  #topSearchTitle,
+  #topSearchPoet{
+    grid-row:2 !important;
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    font-size:12px !important;
+    padding:9px 7px !important;
+  }
+
+  #topSearchTitle{
+    grid-column:1 !important;
+  }
+
+  #topSearchPoet{
+    grid-column:2 !important;
+  }
+}
+
+@media(max-width:720px){
+  .top-actions{
+    row-gap:12px !important;
+  }
+
+  #topSearchTitle,
+  #topSearchPoet{
+    margin-top:4px !important;
+  }
+}
+
+@media(max-width:720px){
+  .top-actions{
+    row-gap:34px !important;
+  }
+
+  #topSearchTitle,
+  #topSearchPoet{
+    margin-top:10px !important;
+  }
+}
+
+@media(max-width:720px){
+  .top-actions{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:stretch !important;
+    gap:14px !important;
+    flex:1 !important;
+  }
+
+  .top-action-row{
+    display:flex !important;
+    justify-content:flex-end !important;
+    align-items:center !important;
+    gap:18px !important;
+  }
+
+  .top-search-row{
+    display:flex !important;
+    width:100% !important;
+    gap:8px !important;
+  }
+
+  #topSearchTitle,
+  #topSearchPoet{
+    flex:1 1 50% !important;
+    width:50% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    font-size:12px !important;
+    padding:9px 8px !important;
+  }
+}
+
+@media(max-width:720px){
+  .topbar{
+    height:auto !important;
+    min-height:150px !important;
+    padding:12px 13px 16px !important;
+    flex-direction:column !important;
+    align-items:stretch !important;
+    justify-content:flex-start !important;
+    gap:18px !important;
+  }
+
+  .brand-wrap{
+    width:100% !important;
+  }
+
+  .top-actions{
+    width:100% !important;
+    flex:none !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:stretch !important;
+    gap:16px !important;
+    margin-top:8px !important;
+  }
+
+  .top-action-row{
+    width:100% !important;
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+    gap:34px !important;
+  }
+
+  .top-search-row{
+    width:100% !important;
+    display:flex !important;
+    gap:10px !important;
+  }
+
+  #topSearchTitle,
+  #topSearchPoet{
+    flex:1 1 0 !important;
+    width:auto !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    font-size:12px !important;
+    padding:10px 9px !important;
+  }
+}
+
+@media(max-width:720px){
+  .top-action-row{
+    justify-content:flex-end !important;
+    gap:22px !important;
+  }
+
+  .top-search-row{
+    width:70% !important;
+    margin-left:auto !important;
+    gap:8px !important;
+  }
+
+  #topSearchTitle,
+  #topSearchPoet{
+    padding:9px 7px !important;
+    font-size:11px !important;
+  }
+}
+
+@media(max-width:720px){
+  .top-actions{
+    align-items:flex-start !important;
+    margin-top:-8px !important;
+    gap:10px !important;
+  }
+
+  .top-action-row{
+    width:auto !important;
+    justify-content:flex-start !important;
+    gap:22px !important;
+  }
+
+  .top-search-row{
+    width:70% !important;
+    margin-left:0 !important;
+    gap:8px !important;
+  }
+}
+
+@media(max-width:720px){
+  .top-actions{
+    align-items:flex-end !important;
+    margin-top:-8px !important;
+    width:100% !important;
+  }
+
+  .top-action-row{
+    width:auto !important;
+    justify-content:flex-end !important;
+    align-self:flex-end !important;
+    gap:22px !important;
+  }
+
+  .top-search-row{
+    width:70% !important;
+    margin-left:auto !important;
+    margin-right:0 !important;
+    align-self:flex-end !important;
+    gap:8px !important;
+  }
+}
+
+@media(max-width:720px){
+  .top-actions{
+    margin-top:-28px !important;
+  }
+}
+
+@media(max-width:720px){
+  .top-actions{
+    margin-top:-42px !important;
+  }
+
+  #topSearchTitle,
+  #topSearchPoet{
+    padding:6px 7px !important;
+    line-height:1.1 !important;
+    min-height:0 !important;
+  }
+}
+
+@media(max-width:720px){
+  .top-actions{
+    margin-top:-52px !important;
+  }
+
+  .topbar{
+    min-height:135px !important;
+    padding-bottom:8px !important;
+  }
+}
+
+@media(min-width:721px){
+  .top-actions{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-end !important;
+    justify-content:center !important;
+    gap:10px !important;
+    width:auto !important;
+  }
+
+  .top-action-row{
+    display:flex !important;
+    justify-content:flex-end !important;
+    align-items:center !important;
+    gap:22px !important;
+  }
+
+  .top-action span{
+    font-size:27px !important;
+    line-height:25px !important;
+  }
+
+  .top-action small{
+    font-size:10px !important;
+    margin-top:4px !important;
+  }
+
+  .top-search-row{
+    display:flex !important;
+    width:70% !important;
+    margin-left:auto !important;
+    margin-right:0 !important;
+    gap:8px !important;
+  }
+
+  #topSearchTitle,
+  #topSearchPoet{
+    flex:1 1 0 !important;
+    width:auto !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    padding:6px 7px !important;
+    font-size:11px !important;
+    line-height:1.1 !important;
+    min-height:0 !important;
+  }
+}
+
+@media(min-width:721px){
+  .top-search-row{
+    width:430px !important;
+    max-width:48vw !important;
+  }
+}
+
+#topSearchTitle,
+#topSearchPoet{
+  font-size:13px !important;
+  text-align:center !important;
+  line-height:1.2 !important;
+}
+
+
+@media(max-width:720px){
+  .top-search-row{
+    width:77% !important;
+  }
+
+  #topSearchTitle,
+  #topSearchPoet{
+    height:35px !important;
+    padding:0 7px !important;
+  }
+
+  .top-action small{
+    font-size:12px !important;
+  }
+}
+
+@media(min-width:721px){
+  .top-search-row{
+    width:473px !important;
+    max-width:52vw !important;
+  }
+
+  #topSearchTitle,
+  #topSearchPoet{
+    height:35px !important;
+    padding:0 7px !important;
+  }
+
+  .top-action small{
+    font-size:17px !important;
+  }
+}
+
+.old-book-label {
+  display: block;
+  width: fit-content;
+  margin: 42px 8px 0 auto;
+  padding: 5px 9px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.88);
+  color: #6a1b9a;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+
+/* OLD BOOK CARD - ALL ACTION BUTTONS SAME ASH COLOR */
+.card:has(.old-book-label) .favoriteBtn,
+.card:has(.old-book-label) .deleteUserPoem {
+  color: #666 !important;
+  background: rgba(120,120,120,.12) !important;
+  border-color: rgba(100,100,100,.25) !important;
+}
+
+.card:has(.old-book-label) .old-book-label {
+  background: rgba(120,120,120,.14) !important;
+  color: #666 !important;
+  border-color: rgba(100,100,100,.25) !important;
+}

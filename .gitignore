@@ -8,3 +8,14 @@ captures/
 .cxx/
 
 .DS_Store
+
+# TTS local environment and large model files
+/BanglaPathshala_TTS_Test/.venv/
+/BanglaPathshala_TTS_Test/pretrained_models/*.safetensors
+/BanglaPathshala_TTS_Test/pretrained_models/.cache/
+
+# Local PDF and archive files excluded from GitHub
+/_all class _poem/pdf/*.pdf
+/_all class _poem/*illustrations.zip
+/_all class _poem/*Android-Project.zip
+/Bangla_Pathshala_2026.zip

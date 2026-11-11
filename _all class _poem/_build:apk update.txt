@@ -1,0 +1,72 @@
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+./gradlew assembleDebug
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+
+
+
+For web check 
+
+Terminal-এ চালান
+
+cd ~/Desktop/BanglaPathshala-Web
+python3 -m http.server 8080
+
+cd /Users/md.habiburrahman/Desktop/BanglaPathshala-Android-Project && python3 -m http.server 8080 --directory app/src/main/assets
+
+Chrome/Safari-তে যান:
+http://localhost:8080
+
+
+3. Phone থেকে Web check করতে চাইলে
+
+Mac-এর IP বের করুন:
+
+ipconfig getifaddr en0
+
+যদি আসে, যেমন:
+
+192.168.2.205
+
+তাহলে ফোনের Chrome-এ লিখবেন:
+
+http://192.168.2.205:8080
+
+
+
+==============
+Phone update
+
+Web-এ সব ঠিক থাকলে আমরা:
+
+./gradlew assembleDebug
+
+তারপর:
+
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+
+করব।
+
+এখন এই একটাই command চালাও:
+
+cd /Users/md.habiburrahman/Desktop/BanglaPathshala-Android-Project && export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home" && ./gradlew assembleDebug
+
+যদি শেষে:
+
+BUILD SUCCESSFUL
+দারুণ 👍 APK তৈরি হয়েছে।
+
+এখন Phone-এ নতুন APK install করি। এই command চালাও:
+
+cd /Users/md.habiburrahman/Desktop/BanglaPathshala-Android-Project && adb install -r app/build/outputs/apk/debug/app-debug.apk
+
+যদি শেষে:
+
+Success
+========================
+
+Finder খুলে ⌘ + Shift + G চাপো এবং এই path দাও:
+
+/Users/md.habiburrahman/Desktop/BanglaPathshala-Android-Project/app/build/outputs/apk/debug/
+
+সেখানে app-debug.apk পাবে।
+========+++++++++

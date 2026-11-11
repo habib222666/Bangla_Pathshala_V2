@@ -3095,3 +3095,289 @@ body.dark #favoritePage .poet-page-header h2 { color: #f1f5f9; }
     font-size: 11px !important;
   }
 }
+
+
+/* ===== Compact poem card redesign: 10 Nov 2026 ===== */
+.card {
+  box-sizing: border-box !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 11px 12px 9px !important;
+  position: relative !important;
+}
+.card-illustration,
+.card .old-book-label {
+  display: none !important;
+}
+.card h3 {
+  margin: 2px 58px 4px 0 !important;
+  font-size: 20px !important;
+  line-height: 1.35 !important;
+}
+.card .poet {
+  margin: 0 0 5px !important;
+  font-size: 13px !important;
+}
+.card .excerpt {
+  max-height: none !important;
+  overflow: visible !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+  margin: 5px 0 0 !important;
+}
+.card .excerpt-lines {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+}
+.card .read-more {
+  display: block !important;
+  color: #be123c !important;
+  font-weight: 700 !important;
+}
+.card .favoriteBtn,
+.card .deleteUserPoem {
+  position: absolute !important;
+  top: 7px !important;
+  bottom: auto !important;
+  width: 27px !important;
+  height: 27px !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.card .favoriteBtn {
+  right: 7px !important;
+  color: #e11d48 !important;
+  font-size: 22px !important;
+}
+.card .deleteUserPoem {
+  right: 36px !important;
+  color: #64748b !important;
+  font-size: 18px !important;
+}
+@media (max-width: 430px) {
+  .card {
+    padding: 9px 9px 8px !important;
+  }
+  .card h3 {
+    font-size: 18px !important;
+  }
+  .card .poet,
+  .card .excerpt {
+    font-size: 12px !important;
+  }
+}
+/* ===== End compact poem card redesign ===== */
+
+
+/* POEM EXCERPT FINAL FIX - 10 NOV 2026 */
+.card .excerpt,
+.card .excerpt *,
+.card .excerpt-lines,
+.card .excerpt-lines * {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+.card .excerpt-lines {
+  display: block !important;
+  max-height: 2.8em !important;
+  overflow: hidden !important;
+}
+
+.card .excerpt-lines > * {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.card .read-more {
+  display: block !important;
+  text-align: right !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  white-space: nowrap !important;
+}
+
+
+/* POEM EXCERPT + FAVORITE ROW FINAL FIX - 10 NOV 2026 */
+.card .excerpt,
+.card .excerpt * {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+.card .excerpt-lines {
+  display: block !important;
+  max-height: 2.8em !important;
+  overflow: hidden !important;
+}
+.card .excerpt-lines > * {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.card .excerpt-footer {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 5px !important;
+  width: 100% !important;
+  margin-top: 3px !important;
+}
+.card .excerpt-footer .read-more {
+  display: inline-block !important;
+  margin: 0 !important;
+  text-align: right !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  font-weight: 700 !important;
+  color: #be123c !important;
+  white-space: nowrap !important;
+}
+.card .excerpt-footer .favoriteBtn {
+  position: static !important;
+  inset: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #e11d48 !important;
+  font-size: 19px !important;
+  line-height: 1 !important;
+}
+.card .deleteUserPoem {
+  right: 7px !important;
+}
+/* End poem excerpt + favorite row fix */
+
+
+/* POEM CARD: RESTORE FAVORITE TO TOP-RIGHT */
+.card .excerpt-footer .favoriteBtn {
+  position: absolute !important;
+  top: 7px !important;
+  right: 7px !important;
+  bottom: auto !important;
+}
+
+.card .deleteUserPoem {
+  position: absolute !important;
+  top: 7px !important;
+  right: 36px !important;
+  bottom: auto !important;
+}
+
+.card .excerpt-footer .read-more {
+  margin-left: auto !important;
+  text-align: right !important;
+}
+/* END FAVORITE POSITION FIX */
+
+
+/* POEM CARD: DELETE + FAVORITE LEFT, READ MORE RIGHT */
+.card .excerpt-footer {
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  width: 100% !important;
+  gap: 5px !important;
+}
+
+.card .excerpt-footer .deleteUserPoem,
+.card .excerpt-footer .favoriteBtn {
+  position: static !important;
+  inset: auto !important;
+  flex: 0 0 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  margin: 0 !important;
+}
+
+.card .excerpt-footer .read-more {
+  margin-left: auto !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+/* END DELETE + FAVORITE + READ MORE ALIGNMENT */
+
+
+/* POEM CARD: ACTIONS TOP-RIGHT, READ MORE BOTTOM-RIGHT */
+.card {
+  position: relative !important;
+}
+
+.card .card-actions {
+  position: absolute !important;
+  top: 7px !important;
+  right: 7px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 5px !important;
+  z-index: 5 !important;
+}
+
+.card .card-actions .deleteUserPoem,
+.card .card-actions .favoriteBtn {
+  position: static !important;
+  inset: auto !important;
+  flex: 0 0 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  margin: 0 !important;
+}
+
+.card .excerpt-footer {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.card .excerpt-footer .read-more {
+  margin-left: auto !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+/* END ACTIONS TOP-RIGHT, READ MORE BOTTOM-RIGHT */
+
+
+/* FINAL FIX: READ MORE RIGHT EDGE ON EVERY POEM CARD */
+.card > .excerpt {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.card .excerpt-footer {
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: right !important;
+}
+
+.card .excerpt-footer .read-more {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  text-align: right !important;
+  box-sizing: border-box !important;
+}
+/* END FINAL FIX */

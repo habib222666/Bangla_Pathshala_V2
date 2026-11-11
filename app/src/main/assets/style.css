@@ -6,6 +6,23 @@
   font-display: swap;
 }
 
+@font-face{
+  font-family:"TeeshtaMJ-Regular";
+  src:url("./fonts/TeeshtaMJ-Regular.otf") format("opentype");
+  font-weight:400;
+  font-style:normal;
+  font-display:block;
+}
+
+@font-face{
+  font-family:"TeeshtaMJ-Bold";
+  src:url("./fonts/TeeshtaMJ-Bold.otf") format("opentype");
+  font-weight:700;
+  font-style:normal;
+  font-display:block;
+}
+
+
 *{box-sizing:border-box}
 :root{
   --blue:#24569a;
@@ -29,7 +46,7 @@ button{cursor:pointer}
 .brand-logo{width:68px;height:68px;position:relative;display:flex;align-items:center;justify-content:center}
 .brand-logo .book{font-size:49px;filter:saturate(.9)}
 .brand-logo .leaf{position:absolute;top:3px;right:7px;font-size:25px}
-.brand-name{font-size:32px;line-height:1.05;font-weight:900;color:#15519a;letter-spacing:-.8px}
+.brand-name{font-size:32px;line-height:1.05;font-weight:900;color:#ff0000;letter-spacing:-.8px}
 .brand-tagline{font-size:16px;color:#5f7da4;margin-top:5px}
 .top-actions{display:flex;gap:30px;align-items:center}
 .top-action{border:0;background:transparent;color:#2d5e98;display:flex;flex-direction:column;align-items:center;gap:0;padding:5px 4px;box-shadow:none}
@@ -87,8 +104,78 @@ button{cursor:pointer}
 .reader-view{max-width:900px;margin:0 auto}
 .reader-actions{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px}
 .paper{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px 32px;box-shadow:0 8px 24px rgba(39,65,100,.07)}
-.paper h1{text-align:center;color:#1747a6;font-size:34px;margin:8px 0}.paper #poet{text-align:center;margin:0 0 24px}.paper pre{white-space:pre-wrap;font-family:"SolaimanLipi",sans-serif;font-size:19px;line-height:1.9;margin:0;color:#172338}
+.paper h1{text-align:center;color:#1747a6;font-size:34px;margin:8px 0;font-family:"SolaimanLipi",sans-serif}.paper #poet{text-align:center;margin:0 0 24px;font-family:"SolaimanLipi",sans-serif}.paper pre{white-space:pre-wrap;font-family:"SolaimanLipi",sans-serif;font-size:19px;line-height:1.9;margin:0;color:#172338}
 .recite-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.recite-controls button{border:0;border-radius:16px;padding:9px 12px;background:#eef5ff;color:#245da1}
+.richToolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:10px;
+  margin-bottom:8px;
+  background:#f5f8fc;
+  border:1px solid #dce5ef;
+  border-radius:14px;
+  align-items:center;
+}
+
+.richToolbar button,
+.richToolbar select{
+  border:1px solid #d5deea;
+  background:#fff;
+  color:#24364d;
+  border-radius:9px;
+  min-height:34px;
+  padding:5px 9px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.richToolbar button:hover{
+  background:#eef5ff;
+}
+
+#editText{
+  width:100%;
+  min-height:300px;
+  box-sizing:border-box;
+  border:1px solid #dce5ef;
+  border-radius:16px;
+  padding:14px;
+  line-height:1.8;
+  resize:vertical;
+  background:#fff;
+  color:#172338;
+  font-family:"SolaimanLipi",sans-serif;
+  font-size:19px;
+  outline:none;
+  overflow:auto;
+}
+
+#editText:focus{
+  border-color:#6d9ee8;
+  box-shadow:0 0 0 3px rgba(66,133,244,.10);
+}
+
+#editText p{
+  margin:0 0 10px;
+}
+
+#editText h2{
+  margin:12px 0 8px;
+  font-size:28px;
+}
+
+#editText h3{
+  margin:10px 0 6px;
+  font-size:23px;
+}
+
+#editText ul,
+#editText ol{
+  margin:8px 0;
+  padding-left:28px;
+}
+
 #editText{width:100%;min-height:300px;border:1px solid #dce5ef;border-radius:16px;padding:14px;line-height:1.8;resize:vertical}.editActions{display:flex;gap:10px;margin-top:10px}.editActions button{flex:1;border:0;border-radius:14px;padding:11px}.editActions #saveBtn{background:#e2f7e7;color:#28713d}.editActions #cancelBtn{background:#f4f4f4;color:#555}
 .empty{grid-column:1/-1;background:#fff;border:1px dashed #d9e2ed;border-radius:20px;padding:35px;text-align:center;color:#718096}
 .muted{color:#687991;font-size:15px}
@@ -536,21 +623,21 @@ body.dark .paper h1 {
 
 }
 
-/* Poem cards: 3 cards per row on Web and Phone */
+/* Poem cards: 3 columns on Web, 2 columns on Phone */
 .poem-grid{
   grid-template-columns:repeat(3,minmax(0,1fr)) !important;
 }
 
 @media(max-width:720px){
   .poem-grid{
-    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
     gap:10px !important;
   }
 }
 
 @media(max-width:430px){
   .poem-grid{
-    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
     gap:6px !important;
   }
 }
@@ -818,7 +905,7 @@ body.dark .paper h1 {
   width:100%;
   margin:8px 0 4px;
   text-align:center;
-  font-size:28px;
+  font-size:26px;
   font-weight:900;
 }
 
@@ -826,7 +913,7 @@ body.dark .paper h1 {
   width:100%;
   margin:0 0 18px;
   text-align:center;
-  font-size:21px;
+  font-size:17px;
   font-weight:800;
 }
 
@@ -885,7 +972,7 @@ body.dark .paper h1 {
 
 @media(max-width:430px){
   #contentsHeading{
-    font-size:24px;
+    font-size:22px;
   }
 
   #contentsClassName{
@@ -1384,6 +1471,40 @@ body.dark .paper h1 {
   border-color: rgba(100,100,100,.25) !important;
 }
 
+/* SOLAIMANLIPI-FORCE */
+.card h3,
+.paper h1{
+  font-family:"TeeshtaMJ-Bold" !important;
+}
+
+.card .poet,
+.paper #poet{
+  font-family:"TeeshtaMJ-Regular" !important;
+}
+
+/* Mobile: keep Home and Library on the same row */
+@media (max-width: 720px) {
+  .side-nav {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+
+  .side-nav > #navHome,
+  .side-nav > #navLibrary {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  .side-nav > #navClasses {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+  }
+}
+
 
 
 
@@ -1443,3 +1564,184 @@ body.dark .paper h1 {
     width: 100%;
   }
 }
+
+/* Center align all contents table headings */
+.contents-table thead th {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+
+/* Prerecorded poem audio panel */
+.poem-audio-panel{box-sizing:border-box;width:100%;max-width:100%}
+.poem-audio-panel audio{display:block;width:100%;max-width:100%;margin:6px 0}
+.poem-audio-panel input[type="file"]{max-width:100%;box-sizing:border-box}
+
+
+/* ===== Compact poem card redesign: 10 Nov 2026 ===== */
+.card {
+  box-sizing: border-box !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 14px 12px 12px !important;
+  position: relative !important;
+}
+.card-illustration,
+.card .old-book-label {
+  display: none !important;
+}
+.card h3 {
+  margin: 2px 58px 4px 0 !important;
+  font-size: 20px !important;
+  line-height: 1.35 !important;
+}
+.card .poet {
+  margin: 0 0 5px !important;
+  font-size: 13px !important;
+}
+.card .excerpt {
+  max-height: none !important;
+  overflow: visible !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+  margin: 5px 0 0 !important;
+}
+.card .excerpt-lines {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+}
+.card .read-more {
+  display: block !important;
+  color: #be123c !important;
+  font-weight: 700 !important;
+}
+.card .favoriteBtn,
+.card .deleteUserPoem {
+  position: absolute !important;
+  top: 7px !important;
+  bottom: auto !important;
+  width: 27px !important;
+  height: 27px !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.card .favoriteBtn {
+  right: 7px !important;
+  color: #e11d48 !important;
+  font-size: 22px !important;
+}
+.card .deleteUserPoem {
+  right: 36px !important;
+  color: #64748b !important;
+  font-size: 18px !important;
+}
+@media (max-width: 430px) {
+  .card {
+    padding: 11px 9px 10px !important;
+  }
+  .card h3 {
+    font-size: 18px !important;
+  }
+  .card .poet,
+  .card .excerpt {
+    font-size: 12px !important;
+  }
+}
+/* ===== End compact poem card redesign ===== */
+
+
+/* POEM EXCERPT FINAL FIX - 10 NOV 2026 */
+.card .excerpt,
+.card .excerpt *,
+.card .excerpt-lines,
+.card .excerpt-lines * {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+.card .excerpt-lines {
+  display: block !important;
+  max-height: 2.8em !important;
+  overflow: hidden !important;
+}
+
+.card .excerpt-lines > * {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.card .read-more {
+  display: block !important;
+  text-align: right !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  white-space: nowrap !important;
+}
+
+
+/* POEM EXCERPT + FAVORITE ROW FINAL FIX - 10 NOV 2026 */
+.card .excerpt,
+.card .excerpt * {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+.card .excerpt-lines {
+  display: block !important;
+  max-height: 2.8em !important;
+  overflow: hidden !important;
+}
+.card .excerpt-lines > * {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.card .excerpt-footer {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 5px !important;
+  width: 100% !important;
+  margin-top: 3px !important;
+}
+.card .excerpt-footer .read-more {
+  display: inline-block !important;
+  margin: 0 !important;
+  text-align: right !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  font-weight: 700 !important;
+  color: #be123c !important;
+  white-space: nowrap !important;
+}
+.card .excerpt-footer .favoriteBtn {
+  position: static !important;
+  inset: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #e11d48 !important;
+  font-size: 19px !important;
+  line-height: 1 !important;
+}
+.card .deleteUserPoem {
+  right: 7px !important;
+}
+/* End poem excerpt + favorite row fix */

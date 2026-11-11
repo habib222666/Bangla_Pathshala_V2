@@ -591,7 +591,9 @@ async function loadPoemsFromSupabase() {
         is_excerpt: !!row.is_excerpt,
         text: row.text,
         userAdded: !!row.user_added,
-        oldBook: !!row.old_book
+        oldBook: !!row.old_book,
+        maleAudioUrl: row.male_audio_url || "",
+        femaleAudioUrl: row.female_audio_url || ""
       };
 
       if (!classData[String(poem.class)]) {
@@ -662,7 +664,277 @@ updateDarkModeButton();
 const favoriteFilter=document.querySelector("#favoriteFilter");
 const editBtn=document.querySelector("#editBtn");
 const speakBtn=document.querySelector("#speakBtn");
+const reciteControls=document.querySelector("#reciteControls");
+const pauseBtn=document.querySelector("#pauseBtn");
+const resumeBtn=document.querySelector("#resumeBtn");
+const stopBtn=document.querySelector("#stopBtn");
 const editArea=document.querySelector("#editArea");
+
+let activePoemAudio = null;
+
+function stopPoemAudio() {
+  if (activePoemAudio) {
+    activePoemAudio.pause();
+    activePoemAudio.currentTime = 0;
+    activePoemAudio = null;
+  }
+}
+
+async function uploadPoemAudio(poem, gender, file, button) {
+  if (!isPoetAdmin()) {
+    alert("শুধু Admin অডিও আপলোড করতে পারবেন।");
+    return;
+  }
+
+  if (!poem || !poem.id || !file) return;
+
+  const isMp3 = file.type === "audio/mpeg" ||
+    file.name.toLowerCase().endsWith(".mp3");
+
+  if (!isMp3) {
+    alert("শুধু MP3 অডিও ফাইল নির্বাচন করুন।");
+    return;
+  }
+
+  if (file.size > 10 * 1024 * 1024) {
+    alert("MP3 ফাইলের আকার ১০ MB-এর বেশি হতে পারবে না।");
+    return;
+  }
+
+  const oldLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "আপলোড হচ্ছে...";
+
+  try {
+    const session = await getValidAdminSession();
+
+    if (!session || !session.access_token) {
+      throw new Error("Admin session পাওয়া যায়নি। আবার Admin Login করুন।");
+    }
+
+    const objectPath = String(poem.id) + "/" + gender + ".mp3";
+    const encodedPath = objectPath.split("/").map(encodeURIComponent).join("/");
+
+    const uploadResponse = await fetch(
+      SUPABASE_URL + "/storage/v1/object/poem-audio/" + encodedPath,
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + session.access_token,
+          "Content-Type": "audio/mpeg",
+          "x-upsert": "true"
+        },
+        body: file
+      }
+    );
+
+    if (!uploadResponse.ok) {
+      throw new Error("Storage upload failed: " +
+        uploadResponse.status + " " + await uploadResponse.text());
+    }
+
+    const publicUrl =
+      SUPABASE_URL + "/storage/v1/object/public/poem-audio/" + encodedPath;
+
+    const field = gender + "_audio_url";
+
+    await supabaseRequest(
+      "poems?id=eq." + encodeURIComponent(poem.id),
+      {
+        method: "PATCH",
+        headers: { "Prefer": "return=minimal" },
+        body: JSON.stringify({ [field]: publicUrl })
+      }
+    );
+
+    poem[gender + "AudioUrl"] = publicUrl;
+
+    renderPoemAudioPanel(poem);
+
+    alert("MP3 সফলভাবে আপলোড ও সংরক্ষণ হয়েছে।");
+
+  } catch (error) {
+    console.error("Poem audio upload error:", error);
+    alert("অডিও আপলোড করা যায়নি: " + error.message);
+  } finally {
+    button.disabled = false;
+    button.textContent = oldLabel;
+  }
+}
+
+async function deletePoemAudio(poem, gender) {
+  if (!isPoetAdmin() || !poem || !poem.id) return;
+
+  const label = gender === "male" ? "পুরুষ কণ্ঠ" : "নারী কণ্ঠ";
+  if (!confirm(label + " MP3 মুছে ফেলতে চান?")) return;
+
+  try {
+    const session = await getValidAdminSession();
+    if (!session || !session.access_token) {
+      throw new Error("Admin session পাওয়া যায়নি।");
+    }
+
+    const field = gender + "_audio_url";
+    const objectPath = String(poem.id) + "/" + gender + ".mp3";
+
+    // প্রথমে Storage থেকে MP3 মুছতে হবে।
+    const deleteResponse = await fetch(
+      SUPABASE_URL + "/storage/v1/object/poem-audio",
+      {
+        method: "DELETE",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + session.access_token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ prefixes: [objectPath] })
+      }
+    );
+
+    if (!deleteResponse.ok) {
+      throw new Error("Storage থেকে MP3 মুছতে ব্যর্থ: " +
+        deleteResponse.status + " " + await deleteResponse.text());
+    }
+
+    // Storage delete সফল হলে Database URL পরিষ্কার হবে।
+    await supabaseRequest(
+      "poems?id=eq." + encodeURIComponent(poem.id),
+      {
+        method: "PATCH",
+        headers: { "Prefer": "return=minimal" },
+        body: JSON.stringify({ [field]: null })
+      }
+    );
+
+    poem[gender + "AudioUrl"] = "";
+    stopPoemAudio();
+    renderPoemAudioPanel(poem);
+
+    alert("অডিও মুছে ফেলা হয়েছে।");
+  } catch (error) {
+    console.error("Poem audio delete error:", error);
+    alert("অডিও মুছতে সমস্যা হয়েছে: " + error.message);
+  }
+}
+
+function renderPoemAudioPanel(poem) {
+  if (!poem) return;
+
+  const readerEl = document.querySelector("#reader");
+  const paper = readerEl ? readerEl.querySelector(".paper") : null;
+
+  if (!readerEl || !paper) return;
+
+  const previous = document.getElementById("poemAudioPanel");
+  if (previous) previous.remove();
+
+  const panel = document.createElement("section");
+  panel.id = "poemAudioPanel";
+  panel.className = "poem-audio-panel";
+  panel.style.cssText =
+    "margin:12px 0;padding:14px;border:1px solid #dce5ef;" +
+    "border-radius:14px;background:#f7faff;";
+
+  const heading = document.createElement("h3");
+  heading.textContent = "🎧 কবিতার অডিও আবৃত্তি";
+  heading.style.margin = "0 0 12px";
+  panel.appendChild(heading);
+
+  let hasAudio = false;
+
+  [
+    { gender: "male", label: "পুরুষ কণ্ঠ", property: "maleAudioUrl" },
+    { gender: "female", label: "নারী কণ্ঠ", property: "femaleAudioUrl" }
+  ].forEach(function (voice) {
+    const url = poem[voice.property] || "";
+
+    const section = document.createElement("div");
+    section.style.cssText =
+      "padding:10px;margin:8px 0;background:#fff;" +
+      "border:1px solid #e1e8f0;border-radius:10px;";
+
+    const label = document.createElement("strong");
+    label.textContent = voice.label;
+    label.style.display = "block";
+    label.style.marginBottom = "8px";
+    section.appendChild(label);
+
+    if (url) {
+      hasAudio = true;
+
+      const audio = document.createElement("audio");
+      audio.controls = true;
+      audio.preload = "metadata";
+      audio.src = url;
+      audio.style.cssText = "width:100%;max-width:100%;";
+
+      audio.addEventListener("play", function () {
+        if (activePoemAudio && activePoemAudio !== audio) {
+          activePoemAudio.pause();
+        }
+        activePoemAudio = audio;
+      });
+
+      audio.addEventListener("ended", function () {
+        if (activePoemAudio === audio) activePoemAudio = null;
+      });
+
+      section.appendChild(audio);
+    } else if (!isPoetAdmin()) {
+      section.style.display = "none";
+    } else {
+      const empty = document.createElement("p");
+      empty.textContent = "এখনো অডিও যোগ করা হয়নি।";
+      section.appendChild(empty);
+    }
+
+    if (isPoetAdmin()) {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "audio/mpeg,.mp3";
+      input.style.cssText = "display:block;width:100%;margin:8px 0;";
+
+      const uploadButton = document.createElement("button");
+      uploadButton.type = "button";
+      uploadButton.textContent = url ? "🔄 MP3 পরিবর্তন করুন" : "⬆️ MP3 আপলোড করুন";
+      uploadButton.style.cssText =
+        "padding:8px 12px;margin:4px;border:0;border-radius:8px;" +
+        "background:#e1edff;color:#174b91;";
+
+      uploadButton.addEventListener("click", function () {
+        if (!input.files || !input.files[0]) {
+          alert("প্রথমে একটি MP3 ফাইল নির্বাচন করুন।");
+          return;
+        }
+        uploadPoemAudio(poem, voice.gender, input.files[0], uploadButton);
+      });
+
+      section.appendChild(input);
+      section.appendChild(uploadButton);
+
+      if (url) {
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.textContent = "🗑️ অডিও মুছুন";
+        deleteButton.style.cssText =
+          "padding:8px 12px;margin:4px;border:0;border-radius:8px;" +
+          "background:#ffe8e8;color:#9b2525;";
+
+        deleteButton.addEventListener("click", function () {
+          deletePoemAudio(poem, voice.gender);
+        });
+
+        section.appendChild(deleteButton);
+      }
+    }
+
+    panel.appendChild(section);
+  });
+
+  panel.style.display = (hasAudio || isPoetAdmin()) ? "block" : "none";
+  readerEl.insertBefore(panel, paper);
+}
 const editText=document.querySelector("#editText");
 const saveBtn=document.querySelector("#saveBtn");
 
@@ -1275,61 +1547,52 @@ function poemCardColor(x, i){
   return "#" + [r,g,b].map(tint).map(v=>v.toString(16).padStart(2,"0")).join("");
 }
 
-function poemCardExcerpt(x){
+function poemCardExcerpt(x, i){
   const raw = savedText(x) || x.text || "";
   const temp = document.createElement("div");
   temp.innerHTML = raw;
-
   if(!temp.textContent.trim()) return "";
 
   const blocks = [...temp.children];
+  let previewHTML = "";
 
-  if(!blocks.length){
-    return temp.textContent
-      .replace(/\\r/g, "")
-      .trim()
-      .split("\\n")
-      .slice(0, 3)
-      .join("<br>");
+  if(blocks.length){
+    const previewBox = document.createElement("div");
+    blocks.forEach(block => {
+      const clone = block.cloneNode(true);
+      if(document.body.classList.contains("dark")){
+        [clone, ...clone.querySelectorAll("*")].forEach(el => {
+          el.style.removeProperty("color");
+          el.style.removeProperty("background");
+          el.style.removeProperty("background-color");
+          el.style.removeProperty("-webkit-text-fill-color");
+        });
+      }
+      previewBox.appendChild(clone);
+    });
+    previewHTML = previewBox.innerHTML;
+  } else {
+    previewHTML = temp.innerHTML.replace(/\r/g, "").replace(/\n/g, "<br>");
   }
 
-  const previewBox = document.createElement("div");
-
-  blocks.slice(0, 3).forEach(block => {
-    const clone = block.cloneNode(true);
-
-    if(document.body.classList.contains("dark")){
-      [clone, ...clone.querySelectorAll("*")].forEach(el => {
-        el.style.removeProperty("color");
-        el.style.removeProperty("background");
-        el.style.removeProperty("background-color");
-        el.style.removeProperty("-webkit-text-fill-color");
-      });
-    }
-
-    previewBox.appendChild(clone);
-  });
-
-  const hasMore = blocks.length > 3;
-
-  return previewBox.innerHTML + (hasMore ? " …" : "");
+  return `<div class="excerpt-lines">${previewHTML}</div>` +
+    `<div class="excerpt-footer"><span class="read-more">..... আরও পড়ুন</span></div>`;
 }
 function poemCardHTML(x, i){
-  const image = x.image ? `<img src="${x.image}" alt="" onerror="this.style.display='none'">` : "📚";
   const realIndex=(classData[String(x.class)]||[]).indexOf(x);
   const isDark = document.body.classList.contains("dark");
   const cardColor = isDark ? "#1e293b" : poemCardColor(x, i);
   const titleColor = isDark ? "#f8fafc" : ["#7a159b","#0574d0","#dc214f","#6c18be","#e86b00","#cf0a8b","#168b39","#006bb9","#8a3ffc","#b44b00","#087f5b","#9c2c77","#3454d1","#a23e48","#2b9348","#7b2cbf","#c44536","#15616d","#9a031e","#4f772d","#6a4c93","#9c6644","#386641","#7f5539","#3a506b","#5f0f40","#3d405b","#8338ec","#006d77","#9b5de5"][(Number(i)) % 30];
   const poetColor = isDark ? "#86efac" : ["#00695c","#ad1457","#283593","#ef6c00","#2e7d32","#6d4c41","#00838f","#c62828","#4527a0","#558b2f","#5d4037","#0277bd","#6a1b9a","#9e9d24","#37474f","#d84315","#1b5e20","#1565c0","#880e4f","#4e342e","#00897b","#bf360c","#303f9f","#33691e","#795548","#00796b","#e65100","#512da8","#827717","#263238"][(Number(i)) % 30];
   return `<div class="card" data-i="${i}" data-class="${x.class}" style="background:${cardColor} !important;">
-    <button class="favoriteBtn" data-fav="${i}" aria-label="প্রিয় কবিতা">${isFavorite(x) ? "♥" : "♡"}</button>
-    ${!isPoetAdmin() ? "" : `<button class="deleteUserPoem" data-index="${realIndex}" data-class="${x.class}" type="button" onclick="event.preventDefault();event.stopPropagation();deleteUserPoem(this.dataset.class,this.dataset.index);return false;">🗑</button>`}
-    ${x.oldBook ? `<div class="old-book-label">📚 পুরোনো কবিতা</div>` : ""}
-    <div class="card-illustration">${image}</div>
+    <div class="card-actions">
+      ${!isPoetAdmin() ? "" : `<button class="deleteUserPoem" data-index="${realIndex}" data-class="${x.class}" type="button" onclick="event.preventDefault();event.stopPropagation();deleteUserPoem(this.dataset.class,this.dataset.index);return false;">🗑</button>`}
+      <button class="favoriteBtn" data-fav="${i}" aria-label="প্রিয় কবিতা">${isFavorite(x) ? "❤️" : "♡"}</button>
+    </div>
     <h3 style="color:${titleColor} !important;font-family:'SolaimanLipi',sans-serif;">${x.title}</h3>
     <div class="poet" style="color:${poetColor} !important;font-family:'SolaimanLipi',sans-serif;">${x.poet || "উল্লেখ নেই"}</div>
 
-    <div class="excerpt">${poemCardExcerpt(x).replace(/\n/g, "<br>")}</div>
+    <div class="excerpt">${poemCardExcerpt(x, i)}</div>
 
     ${globalSearchMode ? `<div class="global-class-label">শ্রেণি: ${classNames[Number(x.class)] || x.class}</div>` : ""}
 
@@ -1824,6 +2087,7 @@ function render(){
 let readerReturnPage = "library";
 
 function show(x){
+  stopPoemAudio();
   readerReturnPage = document.querySelector("#favoritePage")?.classList.contains("hidden")
     ? "library" : "favorites";
   currentPoem=x;
@@ -1857,11 +2121,15 @@ function show(x){
   if(reciteControls){
     reciteControls.classList.remove("hidden");
   }
+
+  renderPoemAudioPanel(x);
+
   if(speakBtn){
 
   speakBtn.onclick=()=>{
 
     if(!currentPoem) return;
+    stopPoemAudio();
 
     const title=currentPoem.title || "";
 
@@ -1935,18 +2203,20 @@ let isPaused=false;
 
 if(pauseBtn){
   pauseBtn.onclick=()=>{
-    if(!window.Android) return;
-
-    if(isPaused){
-      if(Android.resume){
-        Android.resume();
-      }
-      isPaused=false;
-      pauseBtn.textContent="⏸️ বিরতি";
-    }else{
-      if(Android.pause){
-        Android.pause();
-      }
+    if(activePoemAudio){
+      activePoemAudio.pause();
+      isPaused=true;
+      pauseBtn.textContent="▶️ চালাও";
+      return;
+    }
+    if(window.Android && typeof Android.pause === "function"){
+      Android.pause();
+      isPaused=true;
+      pauseBtn.textContent="▶️ চালাও";
+      return;
+    }
+    if(window.speechSynthesis){
+      window.speechSynthesis.pause();
       isPaused=true;
       pauseBtn.textContent="▶️ চালাও";
     }
@@ -1955,30 +2225,51 @@ if(pauseBtn){
 
 if(resumeBtn){
   resumeBtn.onclick=()=>{
-    if(window.Android && Android.resume){
+    if(activePoemAudio && activePoemAudio.paused){
+      const result=activePoemAudio.play();
+      if(result && typeof result.catch === "function"){
+        result.catch(error=>console.error("Audio resume error:",error));
+      }
+      isPaused=false;
+      pauseBtn.textContent="Ⅱ বিরতি";
+      return;
+    }
+    if(window.Android && typeof Android.resume === "function"){
       Android.resume();
+      isPaused=false;
+      pauseBtn.textContent="Ⅱ বিরতি";
+      return;
+    }
+    if(window.speechSynthesis){
+      window.speechSynthesis.resume();
+      isPaused=false;
+      pauseBtn.textContent="Ⅱ বিরতি";
     }
   };
 }
 
 if(stopBtn){
   stopBtn.onclick=()=>{
-    if(window.Android && Android.stop){
+    stopPoemAudio();
+    if(window.Android && typeof Android.stop === "function"){
       Android.stop();
     }
+    if(window.speechSynthesis){
+      window.speechSynthesis.cancel();
+    }
+    isPaused=false;
+    if(pauseBtn) pauseBtn.textContent="Ⅱ বিরতি";
     if(speakBtn) speakBtn.textContent="🎙️ আবৃত্তি শুরু";
   };
 }
 
 window.addEventListener("beforeunload",()=>{
-  if(window.Android && Android.stop){
+  stopPoemAudio();
+  if(window.Android && typeof Android.stop === "function"){
     Android.stop();
   }
-});
-
-window.addEventListener("beforeunload",()=>{
-  if(window.Android && Android.stop){
-    Android.stop();
+  if(window.speechSynthesis){
+    window.speechSynthesis.cancel();
   }
 });
 
@@ -2002,6 +2293,11 @@ window.addEventListener("beforeunload",()=>{
   } else {
   document.getElementById("addPoemBtn")?.parentElement?.remove();
   document.querySelectorAll(".deleteUserPoem").forEach(button => button.remove());
+  }
+
+  const reader = document.getElementById("reader");
+  if (currentPoem && reader && !reader.classList.contains("hidden")) {
+    renderPoemAudioPanel(currentPoem);
   }
   });
 
@@ -2188,7 +2484,9 @@ window.addEventListener("beforeunload",()=>{
           is_excerpt: !!row.is_excerpt,
           text: row.text,
           userAdded: !!row.user_added,
-          oldBook: true
+          oldBook: true,
+          maleAudioUrl: row.male_audio_url || "",
+          femaleAudioUrl: row.female_audio_url || ""
         };
 
         if (!classData[addPoemClass]) {
@@ -2367,7 +2665,10 @@ window.addEventListener("beforeunload",()=>{
           source_page: row.source_page,
           is_excerpt: !!row.is_excerpt,
           text: row.text,
-          userAdded: !!row.user_added
+          userAdded: !!row.user_added,
+          oldBook: !!row.old_book,
+          maleAudioUrl: row.male_audio_url || "",
+          femaleAudioUrl: row.female_audio_url || ""
         };
 
         if (!classData[addPoemClass]) {

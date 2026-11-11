@@ -1,0 +1,17 @@
+ls -lh "/Users/md.habiburrahman/Desktop/BanglaPathshala-Android-Project/app icon"
+
+cp "/Users/md.habiburrahman/Desktop/BanglaPathshala-Android-Project/app icon/new-logo.png" "/Users/md.habiburrahman/Desktop/BanglaPathshala-Android-Project/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+
+cp "/Users/md.habiburrahman/Desktop/BanglaPathshala-Android-Project/app icon/new_logo_500x500.png" "/Users/md.habiburrahman/Desktop/BanglaPathshala-Android-Project/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+
+Build করুন
+
+cd ~/Desktop/BanglaPathshala-Android-Project && JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home" ./gradlew assembleDebug
+
+BUILD SUCCESSFUL
+
+ফোনে নতুন APK install করুন
+
+adb -s ZD22225CCV install -r ~/Desktop/BanglaPathshala-Android-Project/app/build/outputs/apk/debug/app-debug.apk
+
+Success

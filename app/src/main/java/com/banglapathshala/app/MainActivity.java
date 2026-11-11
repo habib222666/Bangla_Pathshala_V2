@@ -1,6 +1,8 @@
 package com.banglapathshala.app;
 
 import android.app.Activity;
+import android.content.Context;
+import android.print.PrintManager;
 import android.os.Build;
 import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
@@ -71,6 +73,8 @@ private OnBackInvokedCallback backCallback;
             if (status == TextToSpeech.SUCCESS) {
 
                 Log.d(TAG, "Google TTS initialized");
+                textToSpeech.setSpeechRate(0.88f);
+                textToSpeech.setPitch(1.0f);
 
                 Locale banglaLocale = new Locale("bn", "BD");
 
@@ -133,13 +137,47 @@ private OnBackInvokedCallback backCallback;
 
         // Cache-busting URL so WebView requests the latest deployed web source.
         webView.loadUrl(
-                "https://habib222666.github.io/BanglaPathshala/?v="
+                "https://habib222666.github.io/Bangla_Pathshala_V2/?v="
                         + System.currentTimeMillis()
         );
     }
 
 
     private class TTSBridge {
+
+        @JavascriptInterface
+        public void printPage() {
+            Log.d(TAG, "PRINT_BRIDGE_CALLED");
+
+            runOnUiThread(() -> {
+                try {
+                    Log.d(TAG, "PRINT_UI_THREAD_STARTED");
+
+                    if (webView == null) {
+                        Log.e(TAG, "PRINT_FAILED: WebView is null");
+                        return;
+                    }
+
+                    PrintManager printManager =
+                            (PrintManager) getSystemService(Context.PRINT_SERVICE);
+
+                    if (printManager == null) {
+                        Log.e(TAG, "PRINT_FAILED: Print service is unavailable");
+                        return;
+                    }
+
+                    android.print.PrintDocumentAdapter adapter =
+                            webView.createPrintDocumentAdapter("BanglaPathshala");
+
+                    Log.d(TAG, "PRINT_ADAPTER_CREATED");
+                    printManager.print("BanglaPathshala", adapter, null);
+                    Log.d(TAG, "PRINT_DIALOG_REQUESTED");
+
+                } catch (Exception e) {
+                    Log.e(TAG, "PRINT_FAILED: " + e.getMessage(), e);
+                }
+            });
+        }
 
         private String[] lines = new String[0];
         private int currentLine = 0;
@@ -149,7 +187,7 @@ private OnBackInvokedCallback backCallback;
 
         @JavascriptInterface
         public boolean isViewer() {
-            return BuildConfig.FLAVOR.equals("viewer");
+            return false;
         }
 
         @JavascriptInterface
@@ -340,9 +378,24 @@ private OnBackInvokedCallback backCallback;
                 "var reader=document.getElementById('reader');" +
                 "var contents=document.getElementById('contents');" +
                 "var library=document.getElementById('library');" +
+                "var poets=document.getElementById('poetProfilesPage');" +
+                "var poetDetail=document.getElementById('poetProfileDetail');" +
+                "var poetList=document.getElementById('poetProfilesList');" +
+                "var favorites=document.getElementById('favoritePage');" +
                 "if(reader && !reader.classList.contains('hidden')) {" +
                 "var b=document.getElementById('back');" +
                 "if(b) { b.click(); return true; }" +
+                "}" +
+                "if(poets && !poets.classList.contains('hidden')) {" +
+                "if(poetDetail && !poetDetail.classList.contains('hidden')) {" +
+                "poetDetail.classList.add('hidden');" +
+                "if(poetList) poetList.classList.remove('hidden');" +
+                "return true;" +
+                "}" +
+                "if(typeof showHome === 'function') { showHome(); return true; }" +
+                "}" +
+                "if(favorites && !favorites.classList.contains('hidden')) {" +
+                "if(typeof showHome === 'function') { showHome(); return true; }" +
                 "}" +
                 "if(contents && !contents.classList.contains('hidden')) {" +
                 "if(typeof showHome === 'function') { showHome(); return true; }" +

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BanglaPathshala TTS Test</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+  background: #f4f7fb;
+}
+.player {
+  background: white;
+  padding: 24px;
+  border-radius: 14px;
+}
+button {
+  padding: 12px 20px;
+  margin: 6px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+audio { width: 100%; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="player">
+  <h2>সকালের পাখি</h2>
+  <p>কণ্ঠ নির্বাচন করুন</p>
+  <button onclick="selectVoice('male')">Male – Pradeep</button>
+  <button onclick="selectVoice('female')">Female – Nabanita</button>
+  <p id="voiceName">Male কণ্ঠ নির্বাচিত</p>
+  <audio id="player" controls>
+    আপনার ব্রাউজার অডিও প্লেব্যাক সমর্থন করে না।
+  </audio>
+</div>
+<script>
+const player = document.getElementById("player");
+
+function selectVoice(voice) {
+  player.pause();
+  player.currentTime = 0;
+
+  if (voice === "male") {
+    player.src = "output/class1_male.mp3";
+    document.getElementById("voiceName").textContent =
+      "Male – Pradeep নির্বাচিত";
+  } else {
+    player.src = "output/class1_female.mp3";
+    document.getElementById("voiceName").textContent =
+      "Female – Nabanita নির্বাচিত";
+  }
+
+  player.load();
+}
+selectVoice("male");
+</script>
+</body>
+</html>

@@ -18,17 +18,5 @@ android {
         buildConfig true
     }
 
-    flavorDimensions "mode"
 
-    productFlavors {
-
-        admin {
-            dimension "mode"
-        }
-
-        viewer {
-            dimension "mode"
-            applicationId "com.banglapathshala.viewer"
-        }
-    }
 }
